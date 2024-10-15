@@ -1,0 +1,20 @@
+{
+    "$schema": "https://json.schemastore.org/prettierrc",
+    "arrowParens": "always",
+    "bracketSpacing": true,
+    "plugins": [
+        "@trivago/prettier-plugin-sort-imports",
+        "prettier-plugin-tailwindcss"
+    ],
+    "importOrder": [
+        "<THIRD_PARTY_MODULES>",
+        "^@/lib(.*)$",
+        "^@/services(.*)$",
+        "^@/components(.*)$",
+        "^@/app(.*)$",
+        "^./(.*)$"
+    ],
+    "importOrderSeparation": true,
+    "importOrderSortSpecifiers": true,
+    "tabWidth": 4
+}

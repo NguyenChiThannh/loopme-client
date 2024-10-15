@@ -1,7 +1,5 @@
 import { Outlet, useLoaderData } from "react-router";
 
-import "./App.css";
-
 function App() {
     const data = useLoaderData();
     console.log(data);

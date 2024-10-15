@@ -29,6 +29,14 @@ export default tseslint.config(
                     allowInterfaces: "always",
                 },
             ],
+            "@typescript-eslint/no-unused-vars": [
+                "warn",
+                {
+                    args: "all",
+                    caughtErrors: "all",
+                    ignoreRestSiblings: true,
+                },
+            ],
         },
     },
 );

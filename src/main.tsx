@@ -4,7 +4,8 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import App from "./App.tsx";
 import "./index.css";
-import Login from "./pages/login/login.tsx";
+import AuthLayout from "./layouts/auth.layout.tsx";
+import LoginPage from "./pages/login.page.tsx";
 
 async function action() {
     const test = { name: "abc" };
@@ -13,8 +14,13 @@ async function action() {
 
 const router = createBrowserRouter([
     {
-        path: "/login",
-        element: <Login />,
+        element: <AuthLayout />,
+        children: [
+            {
+                path: "/login",
+                element: <LoginPage />,
+            },
+        ],
     },
     {
         path: "/",

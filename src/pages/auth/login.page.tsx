@@ -1,4 +1,5 @@
 import { LockIcon } from "lucide-react";
+import { Link } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -11,7 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
-import LoginForm from "@/features/auth/components/login-form";
+import { LoginForm } from "@/features/auth/components/login-form";
 
 export default function LoginPage() {
     return (
@@ -36,7 +37,15 @@ export default function LoginPage() {
                     </Button>
                 </div>
             </CardContent>
-            <CardFooter>
+            <CardFooter className="flex flex-col items-center justify-start">
+                <div className="flex items-center space-x-2">
+                    <p>Create new Account?</p>
+                    <Link to={"/sign-up"}>
+                        <Button variant="link" className="p-0 underline">
+                            Sign up
+                        </Button>
+                    </Link>
+                </div>
                 <Button variant="link" className="w-full">
                     Forgot password?
                 </Button>

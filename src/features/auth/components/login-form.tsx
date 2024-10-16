@@ -22,7 +22,7 @@ const formSchema = z.object({
         .min(8, { message: "Password must be at least 8 characters" }),
 });
 
-export default function LoginForm() {
+export function LoginForm() {
     const [isLoading, setIsLoading] = useState(false);
 
     const form = useForm<z.infer<typeof formSchema>>({

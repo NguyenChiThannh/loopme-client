@@ -33,7 +33,7 @@ const formSchema = z
         path: ["repeatPassword"],
     });
 
-export default function SignUpForm() {
+export function SignUpForm() {
     const [isLoading, setIsLoading] = useState(false);
 
     const form = useForm<z.infer<typeof formSchema>>({

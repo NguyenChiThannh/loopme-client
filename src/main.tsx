@@ -5,8 +5,10 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import App from "./App.tsx";
 import "./index.css";
 import AuthLayout from "./layouts/auth.layout.tsx";
+import ForgetPasswordPage from "./pages/auth/forget-password.page.tsx";
 import LoginPage from "./pages/auth/login.page.tsx";
 import SignUpPage from "./pages/auth/signup.page.tsx";
+import VerifyPage from "./pages/auth/verify.page.tsx";
 
 async function action() {
     const test = { name: "abc" };
@@ -24,6 +26,14 @@ const router = createBrowserRouter([
             {
                 path: "/sign-up",
                 element: <SignUpPage />,
+            },
+            {
+                path: "/verify",
+                element: <VerifyPage />,
+            },
+            {
+                path: "/forget-password",
+                element: <ForgetPasswordPage />,
             },
         ],
     },

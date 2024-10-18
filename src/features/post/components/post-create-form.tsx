@@ -15,36 +15,20 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
+import { ImageForm } from "./image-form";
+
+interface FileWithPreview extends File {
+    preview: string;
+}
+
 export default function PostCreateForm() {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
-    const [image, setImage] = useState<File | null>(null);
-    const [isDragging, setIsDragging] = useState(false);
+    const [image, setImage] = useState<FileWithPreview | null>(null);
     const [error, setError] = useState("");
 
-    const handleDrag = useCallback((e: React.DragEvent<HTMLDivElement>) => {
-        e.preventDefault();
-        e.stopPropagation();
-        if (e.type === "dragenter" || e.type === "dragover") {
-            setIsDragging(true);
-        } else if (e.type === "dragleave") {
-            setIsDragging(false);
-        }
-    }, []);
-
-    const handleDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
-        e.preventDefault();
-        e.stopPropagation();
-        setIsDragging(false);
-        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-            setImage(e.dataTransfer.files[0]);
-        }
-    }, []);
-
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            setImage(e.target.files[0]);
-        }
+    const handleImageSelect = (selectedFile: FileWithPreview | null) => {
+        setImage(selectedFile);
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -65,7 +49,7 @@ export default function PostCreateForm() {
     };
 
     return (
-        <Card className="mx-auto w-full max-w-5xl">
+        <Card className="mx-auto w-full max-w-2xl">
             <CardHeader>
                 <CardTitle className="text-3xl">Create a New Post</CardTitle>
                 <CardDescription>
@@ -102,40 +86,10 @@ export default function PostCreateForm() {
                         <Label htmlFor="image" className="text-lg">
                             Upload Image (optional)
                         </Label>
-                        <div
-                            className={`rounded-lg border-2 border-dashed p-6 text-center ${
-                                isDragging
-                                    ? "border-primary"
-                                    : "border-muted-foreground"
-                            }`}
-                            onDragEnter={handleDrag}
-                            onDragLeave={handleDrag}
-                            onDragOver={handleDrag}
-                            onDrop={handleDrop}
-                        >
-                            <Input
-                                id="image"
-                                type="file"
-                                accept="image/*"
-                                onChange={handleImageChange}
-                                className="hidden"
-                            />
-                            <Label
-                                htmlFor="image"
-                                className="flex cursor-pointer flex-col items-center"
-                            >
-                                <Upload className="mb-2 h-12 w-12 text-muted-foreground" />
-                                <span className="text-lg">
-                                    Drag & drop an image here, or click to
-                                    select
-                                </span>
-                            </Label>
-                        </div>
-                        {image && (
-                            <p className="mt-2 text-sm text-muted-foreground">
-                                Selected: {image.name}
-                            </p>
-                        )}
+                        <ImageForm
+                            onImageSelect={handleImageSelect}
+                            selectedImage={image}
+                        />
                     </div>
                 </form>
             </CardContent>

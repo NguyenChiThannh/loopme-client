@@ -1,5 +1,5 @@
 import { Upload, X } from "lucide-react";
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 
 import { Button } from "@/components/ui/button";
 

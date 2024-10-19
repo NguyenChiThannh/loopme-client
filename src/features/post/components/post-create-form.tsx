@@ -1,6 +1,6 @@
 import { Label } from "@radix-ui/react-label";
-import { AlertCircle, Upload } from "lucide-react";
-import { useCallback, useState } from "react";
+import { AlertCircle } from "lucide-react";
+import { useState } from "react";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";

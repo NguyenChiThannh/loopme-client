@@ -9,6 +9,7 @@ import ForgetPasswordPage from "./pages/auth/forget-password.page.tsx";
 import LoginPage from "./pages/auth/login.page.tsx";
 import SignUpPage from "./pages/auth/signup.page.tsx";
 import VerifyPage from "./pages/auth/verify.page.tsx";
+import PostPage from "./pages/post/post.page.tsx";
 
 async function action() {
     const test = { name: "abc" };
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
                 element: <div>I am here</div>,
             },
         ],
+    },
+    {
+        path: "/post",
+        element: <PostPage />,
     },
 ]);
 

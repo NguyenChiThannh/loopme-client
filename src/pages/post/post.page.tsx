@@ -6,7 +6,7 @@ import {
     Share2,
     X,
 } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -32,6 +32,12 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip";
 
+import HoverUsername from "@/features/post/components/hover-username";
+import PostComment from "@/features/post/components/post-comment";
+import PostReply from "@/features/post/components/post-reply";
+import PostReplyForm from "@/features/post/components/post-reply-form";
+import PostCommentForm from "@/features/post/components/post-comment-form";
+
 type Comment = {
     id: number;
     author: string;
@@ -46,7 +52,30 @@ type UserProfile = {
     joinDate: string;
 };
 
-export default function Component() {
+type Post = {
+    id: number;
+    title: string;
+    content: string;
+    author: string;
+    imageUrl?: string;
+    upvotes: number;
+    commentCount: number;
+    postedAt: string;
+};
+
+export default function PostPage() {
+    const [post, setPost] = useState<Post>({
+        id: 1,
+        title: "Interesting Post Title",
+        content:
+            "This is the main content of the post. It can be quite long and detailed, discussing various topics or sharing information.",
+        author: "original_poster",
+        imageUrl: "/placeholder.svg?height=600&width=800",
+        upvotes: 256,
+        commentCount: 45,
+        postedAt: "5 hours ago",
+    });
+
     const [comments, setComments] = useState<Comment[]>([
         {
             id: 1,
@@ -91,13 +120,16 @@ export default function Component() {
     ]);
 
     const [newComment, setNewComment] = useState("");
-    const [postVotes, setPostVotes] = useState(256);
     const [selectedUser, setSelectedUser] = useState<UserProfile | null>(null);
     const [replyingTo, setReplyingTo] = useState<number | null>(null);
     const [replyContent, setReplyContent] = useState("");
+    const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+    const commentSectionRef = useRef<HTMLDivElement>(null);
 
-    const handleUpvote = () => setPostVotes((prev) => prev + 1);
-    const handleDownvote = () => setPostVotes((prev) => prev - 1);
+    const handleUpvote = () =>
+        setPost((prev) => ({ ...prev, upvotes: prev.upvotes + 1 }));
+    const handleDownvote = () =>
+        setPost((prev) => ({ ...prev, upvotes: prev.upvotes - 1 }));
 
     const handleCommentSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -111,6 +143,10 @@ export default function Component() {
             };
             setComments((prev) => [...prev, newCommentObj]);
             setNewComment("");
+            setPost((prev) => ({
+                ...prev,
+                commentCount: prev.commentCount + 1,
+            }));
         }
     };
 
@@ -159,6 +195,10 @@ export default function Component() {
             });
             setReplyingTo(null);
             setReplyContent("");
+            setPost((prev) => ({
+                ...prev,
+                commentCount: prev.commentCount + 1,
+            }));
         }
     };
 
@@ -173,227 +213,23 @@ export default function Component() {
                 className={`mb-2 ${isReply ? `ml-${depth * 4} border-l border-gray-200 pl-2` : ""}`}
             >
                 {isReply ? (
-                    <div className="bg-transparent">
-                        <div className="flex items-center gap-2 py-2">
-                            <Avatar className="h-5 w-5">
-                                <AvatarFallback>
-                                    {comment.author[0].toUpperCase()}
-                                </AvatarFallback>
-                            </Avatar>
-                            <TooltipProvider>
-                                <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <Dialog>
-                                            <DialogTrigger asChild>
-                                                <Button
-                                                    variant="link"
-                                                    className="h-auto p-0 text-sm font-semibold"
-                                                    onClick={() =>
-                                                        handleUserClick(
-                                                            comment.author,
-                                                        )
-                                                    }
-                                                >
-                                                    {comment.author}
-                                                </Button>
-                                            </DialogTrigger>
-                                            <DialogContent>
-                                                <DialogHeader>
-                                                    <DialogTitle>
-                                                        User Profile
-                                                    </DialogTitle>
-                                                </DialogHeader>
-                                                {selectedUser && (
-                                                    <div className="mt-4">
-                                                        <p>
-                                                            <strong>
-                                                                Username:
-                                                            </strong>{" "}
-                                                            {
-                                                                selectedUser.username
-                                                            }
-                                                        </p>
-                                                        <p>
-                                                            <strong>
-                                                                Karma:
-                                                            </strong>{" "}
-                                                            {selectedUser.karma}
-                                                        </p>
-                                                        <p>
-                                                            <strong>
-                                                                Join Date:
-                                                            </strong>{" "}
-                                                            {
-                                                                selectedUser.joinDate
-                                                            }
-                                                        </p>
-                                                    </div>
-                                                )}
-                                            </DialogContent>
-                                        </Dialog>
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                        <p>Click to view profile</p>
-                                    </TooltipContent>
-                                </Tooltip>
-                            </TooltipProvider>
-                            <CornerDownRight className="h-3 w-3 text-muted-foreground" />
-                        </div>
-                        <div className="py-1">
-                            <p className="text-sm">{comment.content}</p>
-                        </div>
-                        <div className="flex items-center gap-2 py-1">
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-6 w-6"
-                            >
-                                <ChevronUp className="h-4 w-4" />
-                            </Button>
-                            <span className="text-xs">{comment.upvotes}</span>
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-6 w-6"
-                            >
-                                <ChevronDown className="h-4 w-4" />
-                            </Button>
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                className="h-6 text-xs"
-                                onClick={() => handleReplyClick(comment.id)}
-                            >
-                                {replyingTo === comment.id
-                                    ? "Cancel Reply"
-                                    : "Reply"}
-                            </Button>
-                        </div>
-                    </div>
+                    <PostReply
+                        author={comment.author}
+                        commentContent={comment.content}
+                        commentId={comment.id}
+                        handleReplyClick={handleReplyClick}
+                        commentUpvote={comment.upvotes}
+                    />
                 ) : (
-                    <Card>
-                        <CardHeader className="flex flex-row items-center gap-2 px-3 py-2">
-                            <Avatar className="h-5 w-5">
-                                <AvatarFallback>
-                                    {comment.author[0].toUpperCase()}
-                                </AvatarFallback>
-                            </Avatar>
-                            <TooltipProvider>
-                                <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <Dialog>
-                                            <DialogTrigger asChild>
-                                                <Button
-                                                    variant="link"
-                                                    className="h-auto p-0 text-sm font-semibold"
-                                                    onClick={() =>
-                                                        handleUserClick(
-                                                            comment.author,
-                                                        )
-                                                    }
-                                                >
-                                                    {comment.author}
-                                                </Button>
-                                            </DialogTrigger>
-                                            <DialogContent>
-                                                <DialogHeader>
-                                                    <DialogTitle>
-                                                        User Profile
-                                                    </DialogTitle>
-                                                </DialogHeader>
-                                                {selectedUser && (
-                                                    <div className="mt-4">
-                                                        <p>
-                                                            <strong>
-                                                                Username:
-                                                            </strong>{" "}
-                                                            {
-                                                                selectedUser.username
-                                                            }
-                                                        </p>
-                                                        <p>
-                                                            <strong>
-                                                                Karma:
-                                                            </strong>{" "}
-                                                            {selectedUser.karma}
-                                                        </p>
-                                                        <p>
-                                                            <strong>
-                                                                Join Date:
-                                                            </strong>{" "}
-                                                            {
-                                                                selectedUser.joinDate
-                                                            }
-                                                        </p>
-                                                    </div>
-                                                )}
-                                            </DialogContent>
-                                        </Dialog>
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                        <p>Click to view profile</p>
-                                    </TooltipContent>
-                                </Tooltip>
-                            </TooltipProvider>
-                        </CardHeader>
-                        <CardContent className="px-3 py-2">
-                            <p className="text-sm">{comment.content}</p>
-                        </CardContent>
-                        <CardFooter className="flex items-center gap-2 px-3 py-1">
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-6 w-6"
-                            >
-                                <ChevronUp className="h-4 w-4" />
-                            </Button>
-                            <span className="text-xs">{comment.upvotes}</span>
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-6 w-6"
-                            >
-                                <ChevronDown className="h-4 w-4" />
-                            </Button>
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                className="h-6 text-xs"
-                                onClick={() => handleReplyClick(comment.id)}
-                            >
-                                {replyingTo === comment.id
-                                    ? "Cancel Reply"
-                                    : "Reply"}
-                            </Button>
-                        </CardFooter>
-                    </Card>
+                    <PostComment
+                        author={comment.author}
+                        commentContent={comment.content}
+                        commentId={comment.id}
+                        handleReplyClick={handleReplyClick}
+                        commentUpvote={comment.upvotes}
+                    />
                 )}
-                {replyingTo === comment.id && (
-                    <div className="ml-4 mt-2">
-                        <Textarea
-                            placeholder="Write your reply..."
-                            value={replyContent}
-                            onChange={(e) => setReplyContent(e.target.value)}
-                            className="mb-2 text-sm"
-                            rows={3}
-                        />
-                        <div className="flex gap-2">
-                            <Button
-                                size="sm"
-                                onClick={() => handleReplySubmit(comment.id)}
-                            >
-                                Submit Reply
-                            </Button>
-                            <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => setReplyingTo(null)}
-                            >
-                                Cancel
-                            </Button>
-                        </div>
-                    </div>
-                )}
+                {replyingTo === comment.id && <PostReplyForm />}
                 {comment.replies.length > 0 && (
                     <div>
                         {renderComments(comment.replies, true, depth + 1)}
@@ -401,6 +237,10 @@ export default function Component() {
                 )}
             </div>
         ));
+    };
+
+    const scrollToComments = () => {
+        commentSectionRef.current?.scrollIntoView({ behavior: "smooth" });
     };
 
     return (
@@ -416,7 +256,9 @@ export default function Component() {
                         >
                             <ChevronUp className="h-4 w-4" />
                         </Button>
-                        <span className="text-sm font-bold">{postVotes}</span>
+                        <span className="text-sm font-bold">
+                            {post.upvotes}
+                        </span>
                         <Button
                             variant="ghost"
                             size="icon"
@@ -426,75 +268,58 @@ export default function Component() {
                             <ChevronDown className="h-4 w-4" />
                         </Button>
                     </div>
-                    <div>
-                        <h1 className="text-xl font-bold">
-                            Interesting Post Title
-                        </h1>
-                        <TooltipProvider>
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <Dialog>
-                                        <DialogTrigger asChild>
-                                            <Button
-                                                variant="link"
-                                                className="h-auto p-0 text-xs text-muted-foreground"
-                                                onClick={() =>
-                                                    handleUserClick(
-                                                        "original_poster",
-                                                    )
-                                                }
-                                            >
-                                                Posted by u/original_poster 5
-                                                hours ago
-                                            </Button>
-                                        </DialogTrigger>
-                                        <DialogContent>
-                                            <DialogHeader>
-                                                <DialogTitle>
-                                                    User Profile
-                                                </DialogTitle>
-                                            </DialogHeader>
-                                            {selectedUser && (
-                                                <div className="mt-4">
-                                                    <p>
-                                                        <strong>
-                                                            Username:
-                                                        </strong>{" "}
-                                                        {selectedUser.username}
-                                                    </p>
-                                                    <p>
-                                                        <strong>Karma:</strong>{" "}
-                                                        {selectedUser.karma}
-                                                    </p>
-                                                    <p>
-                                                        <strong>
-                                                            Join Date:
-                                                        </strong>{" "}
-                                                        {selectedUser.joinDate}
-                                                    </p>
-                                                </div>
-                                            )}
-                                        </DialogContent>
-                                    </Dialog>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                    <p>Click to view profile</p>
-                                </TooltipContent>
-                            </Tooltip>
-                        </TooltipProvider>
+                    <div className="flex-grow">
+                        <h1 className="text-xl font-bold">{post.title}</h1>
+                        Posted by{" "}
+                        <HoverUsername
+                            name={post.author}
+                            avatarSrc={""}
+                            karma={0}
+                            joinDate={""}
+                            cakeDay={""}
+                            description={""}
+                        />{" "}
+                        {post.postedAt}
                     </div>
                 </CardHeader>
                 <CardContent className="py-3">
-                    <p className="text-sm">
-                        This is the main content of the post. It can be quite
-                        long and detailed, discussing various topics or sharing
-                        information.
-                    </p>
+                    <p className="mb-4 text-sm">{post.content}</p>
+                    {post.imageUrl && (
+                        <Dialog
+                            open={isImageModalOpen}
+                            onOpenChange={setIsImageModalOpen}
+                        >
+                            <DialogTrigger asChild>
+                                <div className="relative mb-4 w-full cursor-pointer overflow-hidden rounded-md">
+                                    <img
+                                        src={post.imageUrl}
+                                        alt="Post image"
+                                        className="h-auto w-full object-cover"
+                                        style={{ maxHeight: "600px" }}
+                                    />
+                                </div>
+                            </DialogTrigger>
+                            <DialogContent className="w-full max-w-3xl p-0">
+                                <div className="relative h-[80vh] w-full">
+                                    <img
+                                        src={post.imageUrl}
+                                        alt="Enlarged post image"
+                                        className="max-h-full max-w-full object-contain"
+                                    />
+                                </div>
+                            </DialogContent>
+                        </Dialog>
+                    )}
                 </CardContent>
                 <CardFooter className="flex justify-between py-2">
-                    <Button variant="ghost" size="sm" className="h-8 text-xs">
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-8 text-xs"
+                        onClick={scrollToComments}
+                    >
                         <MessageSquare className="mr-1 h-3 w-3" />
-                        {comments.length} Comments
+                        {post.commentCount} Comments
                     </Button>
                     <Button variant="ghost" size="sm" className="h-8 text-xs">
                         <Share2 className="mr-1 h-3 w-3" />
@@ -503,20 +328,9 @@ export default function Component() {
                 </CardFooter>
             </Card>
 
-            <form onSubmit={handleCommentSubmit} className="mb-6">
-                <Textarea
-                    placeholder="What are your thoughts?"
-                    value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
-                    className="mb-2 text-sm"
-                    rows={3}
-                />
-                <Button type="submit" size="sm">
-                    Comment
-                </Button>
-            </form>
+            <PostCommentForm />
 
-            <div>{renderComments(comments)}</div>
+            <div ref={commentSectionRef}>{renderComments(comments)}</div>
         </div>
     );
 }

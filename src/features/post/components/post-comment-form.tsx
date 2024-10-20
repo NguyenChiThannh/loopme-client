@@ -3,14 +3,31 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
-interface CommentFormProps {
-    handleCommentSubmit: (e: React.FormEvent) => void;
-}
+type Comment = {
+    id: number;
+    author: string;
+    content: string;
+    upvotes: number;
+    replies: Comment[];
+};
 
-export default function PostCommentForm({
-    handleCommentSubmit,
-}: CommentFormProps) {
+export default function PostCommentForm() {
     const [newComment, setNewComment] = useState("");
+
+    const handleCommentSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (newComment.trim()) {
+            const newCommentObj: Comment = {
+                id: Date.now(),
+                author: "current_user",
+                content: newComment,
+                upvotes: 0,
+                replies: [],
+            };
+            setNewComment("");
+            console.log(newCommentObj);
+        }
+    };
 
     return (
         <form onSubmit={handleCommentSubmit} className="mb-6">

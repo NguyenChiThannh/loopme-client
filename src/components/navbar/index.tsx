@@ -32,8 +32,8 @@ export function Navbar() {
                         <div className="flex-shrink-0">
                             <img
                                 className="w-8 h-8"
-                                src="/placeholder.svg?height=32&width=32"
-                                alt="Reddit"
+                                src="/logo.svg"
+                                alt="Logo"
                             />
                         </div>
                         <div className="hidden md:block">
@@ -59,7 +59,7 @@ export function Navbar() {
                         <div className="w-full max-w-lg mx-auto">
                             <Input
                                 type="search"
-                                placeholder="Search Reddit"
+                                placeholder="Search"
                                 className="w-full bg-muted"
                             />
                         </div>

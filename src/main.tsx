@@ -10,6 +10,7 @@ import ForgetPasswordPage from "./pages/auth/forget-password.page.tsx";
 import LoginPage from "./pages/auth/login.page.tsx";
 import SignUpPage from "./pages/auth/signup.page.tsx";
 import VerifyPage from "./pages/auth/verify.page.tsx";
+import HomePage from "./pages/home/home.page.tsx";
 import CreatePostPage from "./pages/post/create-post.page.tsx";
 import PostPage from "./pages/post/post.page.tsx";
 import ProfilePage from "./pages/user/profile.page.tsx";
@@ -41,7 +42,7 @@ const router = createBrowserRouter([
         children: [
             {
                 path: "/",
-                element: <App />,
+                element: <HomePage />,
             },
             {
                 path: "/post",

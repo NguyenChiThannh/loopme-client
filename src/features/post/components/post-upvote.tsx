@@ -27,7 +27,7 @@ export default function PostUpvote({ upvote, downvote, post }: PostUpvote) {
         downvote();
     };
     return (
-        <div className="flex items-center">
+        <div className="flex items-center rounded-2xl bg-slate-100 px-2 py-1">
             <Button
                 variant="ghost"
                 size="icon"

@@ -1,6 +1,7 @@
+import { MessageSquare, Share2 } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import { CardFooter } from "@/components/ui/card";
-import { MessageSquare, Share2 } from "lucide-react";
 
 type Post = {
     id: number;
@@ -14,11 +15,11 @@ type Post = {
 };
 
 interface PostAction {
-    post: Post,
+    post: Post;
     postCommentAction: () => void;
 }
 
-export default function PostAction({post, postCommentAction}: PostAction) {
+export default function PostAction({ post, postCommentAction }: PostAction) {
     return (
         <CardFooter className="flex justify-between py-2">
             <Button

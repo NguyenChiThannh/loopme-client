@@ -138,7 +138,7 @@ export default function PostPage() {
 
     return (
         <div className="mx-auto max-w-2xl p-4">
-            <PostCard commentSectionRef={commentSectionRef} />
+            <PostCard commentSectionRef={commentSectionRef} post={post} />
             <PostCommentForm />
             <div ref={commentSectionRef}>{renderComments(comments)}</div>
         </div>

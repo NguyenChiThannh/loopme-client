@@ -1,11 +1,17 @@
 import { useState } from "react";
 
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+    Card,
+    CardContent,
+    CardFooter,
+    CardHeader,
+} from "@/components/ui/card";
 
+import PostUpvote from "./post-upvote";
 import HoverUsername from "@/features/post/components/hover-username";
 import PostAction from "@/features/post/components/post-action";
 import PostImage from "@/features/post/components/post-image";
-import PostUpvote from "@/features/post/components/post-upvote";
 
 type Post = {
     id: number;
@@ -19,54 +25,58 @@ type Post = {
 };
 
 interface PostCardProps {
-    commentSectionRef: React.RefObject<HTMLDivElement>
+    commentSectionRef?: React.RefObject<HTMLDivElement>;
+    post: Post;
 }
 
-export default function PostCard({commentSectionRef}: PostCardProps) {
-    const [post, setPost] = useState<Post>({
-        id: 1,
-        title: "Interesting Post Title",
-        content:
-            "This is the main content of the post. It can be quite long and detailed, discussing various topics or sharing information.",
-        author: "original_poster",
-        imageUrl: "/placeholder.svg?height=600&width=800",
-        upvotes: 256,
-        commentCount: 45,
-        postedAt: "5 hours ago",
-    });
-
+export default function PostCard({ commentSectionRef, post }: PostCardProps) {
     const [isImageModalOpen, setIsImageModalOpen] = useState(false);
 
-    const handleUpvote = () =>
-        setPost((prev) => ({ ...prev, upvotes: prev.upvotes + 1 }));
-    const handleDownvote = () =>
-        setPost((prev) => ({ ...prev, upvotes: prev.upvotes - 1 }));
-
+    // const handleUpvote = () =>
+    //     setPost((prev) => ({ ...prev, upvotes: prev.upvotes + 1 }));
+    // const handleDownvote = () =>
+    //     setPost((prev) => ({ ...prev, upvotes: prev.upvotes - 1 }));
 
     const scrollToComments = () => {
-        commentSectionRef.current?.scrollIntoView({ behavior: "smooth" });
+        commentSectionRef?.current?.scrollIntoView({ behavior: "smooth" });
     };
 
     return (
-        <Card className="mb-6">
-            <CardHeader className="flex flex-row items-start gap-4 py-3">
-                <PostUpvote
+        <Card>
+            <CardHeader className="flex flex-row items-center gap-4 py-3">
+                {/* <PostUpvote
                     post={post}
                     downvote={handleDownvote}
                     upvote={handleUpvote}
-                />
-                <div className="flex-grow">
-                    <h1 className="text-xl font-bold">{post.title}</h1>
-                    Posted by{" "}
-                    <HoverUsername
-                        name={post.author}
-                        avatarSrc={""}
-                        karma={0}
-                        joinDate={""}
-                        cakeDay={""}
-                        description={""}
-                    />{" "}
-                    {post.postedAt}
+                /> */}
+                <Avatar className="size-12">
+                    <AvatarImage
+                        src="/placeholder.svg?height=40&width=40"
+                        alt="u/RedditUser123"
+                    />
+                    <AvatarFallback>RU</AvatarFallback>
+                </Avatar>
+                <div className="flex-1">
+                    <div className="flex items-center space-x-2">
+                        <span className="font-semibold">r/AskReddit</span>
+                        <span className="text-sm text-muted-foreground">•</span>
+                        <span className="text-sm text-muted-foreground">
+                            Post by
+                        </span>
+                        <span className="text-sm text-muted-foreground">
+                            <HoverUsername
+                                name={post.author}
+                                avatarSrc={""}
+                                karma={0}
+                                joinDate={""}
+                                cakeDay={""}
+                                description={""}
+                            />
+                        </span>
+                    </div>
+                    <span className="text-sm text-muted-foreground">
+                        {post.postedAt}
+                    </span>
                 </div>
             </CardHeader>
             <CardContent className="py-3">
@@ -78,8 +88,18 @@ export default function PostCard({commentSectionRef}: PostCardProps) {
                         setIsImageModalOpen={setIsImageModalOpen}
                     />
                 )}
+                <CardFooter>
+                    <PostUpvote
+                        post={post}
+                        downvote={() => {}}
+                        upvote={() => {}}
+                    />
+                    <PostAction
+                        post={post}
+                        postCommentAction={scrollToComments}
+                    />
+                </CardFooter>
             </CardContent>
-            <PostAction post={post} postCommentAction={scrollToComments} />
         </Card>
     );
 }

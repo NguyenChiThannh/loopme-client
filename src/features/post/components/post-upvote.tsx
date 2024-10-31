@@ -1,4 +1,4 @@
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ArrowBigDown, ArrowBigUp, ChevronDown, ChevronUp } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
@@ -27,23 +27,23 @@ export default function PostUpvote({ upvote, downvote, post }: PostUpvote) {
         downvote();
     };
     return (
-        <div className="flex flex-col items-center">
+        <div className="flex items-center">
             <Button
                 variant="ghost"
                 size="icon"
                 className="h-6 w-6"
                 onClick={handleUpvote}
             >
-                <ChevronUp className="h-4 w-4" />
+                <ArrowBigUp className="h-4 w-4" />
             </Button>
-            <span className="text-sm font-bold">{post.upvotes}</span>
+            <span className="mx-2 text-sm">{post.upvotes}</span>
             <Button
                 variant="ghost"
                 size="icon"
                 className="h-6 w-6"
                 onClick={handleDownvote}
             >
-                <ChevronDown className="h-4 w-4" />
+                <ArrowBigDown className="h-4 w-4" />
             </Button>
         </div>
     );

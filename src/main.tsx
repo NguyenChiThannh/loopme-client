@@ -12,6 +12,7 @@ import SignUpPage from "./pages/auth/signup.page.tsx";
 import VerifyPage from "./pages/auth/verify.page.tsx";
 import CreatePostPage from "./pages/post/create-post.page.tsx";
 import PostPage from "./pages/post/post.page.tsx";
+import ProfilePage from "./pages/user/profile.page.tsx";
 
 const router = createBrowserRouter([
     {
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
             {
                 path: "/create-post",
                 element: <CreatePostPage />,
+            },
+            {
+                path: "/user/:username",
+                element: <ProfilePage />,
             },
         ],
     },

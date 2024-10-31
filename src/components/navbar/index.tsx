@@ -26,37 +26,10 @@ export function Navbar() {
 
     return (
         <nav className="border-b bg-background">
-            <div className="px-4 mx-auto sm:px-6 lg:max-w-7xl lg:px-8 xl:max-w-full">
-                <div className="flex items-center justify-between h-16">
-                    <div className="flex items-center">
-                        <div className="flex-shrink-0">
-                            <img
-                                className="w-8 h-8"
-                                src="/logo.svg"
-                                alt="Logo"
-                            />
-                        </div>
-                        <div className="hidden md:block">
-                            <div className="flex items-baseline ml-10 space-x-4">
-                                <Button
-                                    variant="ghost"
-                                    className="text-muted-foreground"
-                                >
-                                    <Home className="w-5 h-5 mr-2" />
-                                    Home
-                                </Button>
-                                <Button
-                                    variant="ghost"
-                                    className="text-muted-foreground"
-                                >
-                                    <Flame className="w-5 h-5 mr-2" />
-                                    Popular
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="flex-1 hidden px-4 md:block">
-                        <div className="w-full max-w-lg mx-auto">
+            <div className="mx-auto px-4">
+                <div className="flex h-16 items-center justify-between">
+                    <div className="hidden flex-1 px-4 md:block">
+                        <div className="mx-auto w-full max-w-lg">
                             <Input
                                 type="search"
                                 placeholder="Search"
@@ -65,9 +38,9 @@ export function Navbar() {
                         </div>
                     </div>
                     <div className="hidden md:block">
-                        <div className="flex items-center ml-4 md:ml-6">
+                        <div className="ml-4 flex items-center md:ml-6">
                             <Button variant="ghost">
-                                <PlusCircle className="w-5 h-5 mr-2" />
+                                <PlusCircle className="mr-2 h-5 w-5" />
                                 Create Post
                             </Button>
                             <Button
@@ -75,20 +48,20 @@ export function Navbar() {
                                 size="icon"
                                 className="ml-2"
                             >
-                                <Bell className="w-5 h-5" />
+                                <Bell className="h-5 w-5" />
                             </Button>
                             <Button
                                 variant="ghost"
                                 size="icon"
                                 className="ml-2"
                             >
-                                <MessageSquare className="w-5 h-5" />
+                                <MessageSquare className="h-5 w-5" />
                             </Button>
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                     <Button variant="ghost" className="ml-2">
-                                        <User className="w-5 h-5 mr-2" />
-                                        <ChevronDown className="w-4 h-4" />
+                                        <User className="mr-2 h-5 w-5" />
+                                        <ChevronDown className="h-4 w-4" />
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
@@ -115,7 +88,7 @@ export function Navbar() {
                                 setIsSearchExpanded(!isSearchExpanded)
                             }
                         >
-                            <Search className="w-5 h-5" />
+                            <Search className="h-5 w-5" />
                         </Button>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
@@ -124,20 +97,20 @@ export function Navbar() {
                                     size="icon"
                                     className="ml-2"
                                 >
-                                    <User className="w-5 h-5" />
+                                    <User className="h-5 w-5" />
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
                                 <DropdownMenuItem>
-                                    <Home className="w-4 h-4 mr-2" />
+                                    <Home className="mr-2 h-4 w-4" />
                                     Home
                                 </DropdownMenuItem>
                                 <DropdownMenuItem>
-                                    <Flame className="w-4 h-4 mr-2" />
+                                    <Flame className="mr-2 h-4 w-4" />
                                     Popular
                                 </DropdownMenuItem>
                                 <DropdownMenuItem>
-                                    <PlusCircle className="w-4 h-4 mr-2" />
+                                    <PlusCircle className="mr-2 h-4 w-4" />
                                     Create Post
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />

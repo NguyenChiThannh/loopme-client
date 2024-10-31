@@ -42,15 +42,15 @@ const router = createBrowserRouter([
                 path: "/",
                 element: <App />,
             },
+            {
+                path: "/post",
+                element: <PostPage />,
+            },
+            {
+                path: "/create-post",
+                element: <CreatePostPage />,
+            },
         ],
-    },
-    {
-        path: "/post",
-        element: <PostPage />,
-    },
-    {
-        path: "/create-post",
-        element: <CreatePostPage />,
     },
 ]);
 

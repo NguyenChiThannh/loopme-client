@@ -20,6 +20,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import GroupCreateButton from "@/features/group/components/group-create-button";
 
 export function Navbar() {
     const [isSearchExpanded, setIsSearchExpanded] = useState(false);
@@ -39,6 +40,7 @@ export function Navbar() {
                     </div>
                     <div className="hidden md:block">
                         <div className="ml-4 flex items-center md:ml-6">
+                            <GroupCreateButton />
                             <Button variant="ghost">
                                 <PlusCircle className="mr-2 h-5 w-5" />
                                 Create Post
@@ -112,6 +114,9 @@ export function Navbar() {
                                 <DropdownMenuItem>
                                     <PlusCircle className="mr-2 h-4 w-4" />
                                     Create Post
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    <GroupCreateButton />
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem>Profile</DropdownMenuItem>

@@ -5,16 +5,16 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import App from "./App.tsx";
 import "./index.css";
 import AuthLayout from "./layouts/auth.layout.tsx";
+import RootLayout from "./layouts/root.layout.tsx";
 import ForgetPasswordPage from "./pages/auth/forget-password.page.tsx";
 import LoginPage from "./pages/auth/login.page.tsx";
 import SignUpPage from "./pages/auth/signup.page.tsx";
 import VerifyPage from "./pages/auth/verify.page.tsx";
 import GroupHomePage from "./pages/group/group.page.tsx";
-
-async function action() {
-    const test = { name: "abc" };
-    return test;
-}
+import HomePage from "./pages/home/home.page.tsx";
+import CreatePostPage from "./pages/post/create-post.page.tsx";
+import PostPage from "./pages/post/post.page.tsx";
+import ProfilePage from "./pages/user/profile.page.tsx";
 
 const router = createBrowserRouter([
     {
@@ -39,13 +39,23 @@ const router = createBrowserRouter([
         ],
     },
     {
-        path: "/",
-        element: <App />,
-        loader: action,
+        element: <RootLayout />,
         children: [
             {
-                path: "/:id",
-                element: <div>I am here</div>,
+                path: "/",
+                element: <HomePage />,
+            },
+            {
+                path: "/post",
+                element: <PostPage />,
+            },
+            {
+                path: "/create-post",
+                element: <CreatePostPage />,
+            },
+            {
+                path: "/user/:username",
+                element: <ProfilePage />,
             },
         ],
     },

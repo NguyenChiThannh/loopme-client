@@ -30,7 +30,7 @@ export default function HoverUsername({
         <HoverCard>
             <HoverCardTrigger asChild>
                 <Link
-                    to={"/"}
+                    to={`/user/${name}`}
                     className="h-auto p-0 text-sm font-semibold hover:underline"
                 >
                     u/{name}

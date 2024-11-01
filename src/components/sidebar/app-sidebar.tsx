@@ -46,7 +46,7 @@ const DEFAULT_ITEMS: MenuItemType[] = [
 const items: MenuItemType[] = [
     {
         title: "Home",
-        url: "#",
+        url: "/",
         icon: Home,
     },
     {

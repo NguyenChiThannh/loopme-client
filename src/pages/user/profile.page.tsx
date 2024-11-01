@@ -1,5 +1,6 @@
 import { PlusCircleIcon } from "lucide-react";
 import { useParams } from "react-router";
+import { Link } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -159,10 +160,12 @@ export function ProfileBody() {
 export function ProfileActions() {
     return (
         <div>
-            <Button variant={"outline"}>
-                <PlusCircleIcon />
-                Create post
-            </Button>
+            <Link to={"/create-post"}>
+                <Button variant={"outline"}>
+                    <PlusCircleIcon />
+                    Create post
+                </Button>
+            </Link>
         </div>
     );
 }

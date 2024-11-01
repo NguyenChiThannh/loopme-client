@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -52,7 +53,12 @@ export default function PostCard({ commentSectionRef, post }: PostCardProps) {
                 </Avatar>
                 <div className="flex-1">
                     <div className="flex items-center space-x-2">
-                        <span className="font-semibold">r/AskReddit</span>
+                        <Link
+                            to={"/group"}
+                            className="h-auto p-0 text-sm font-semibold hover:underline"
+                        >
+                            <span className="font-semibold">r/AskReddit</span>
+                        </Link>
                         <span className="text-sm text-muted-foreground">•</span>
                         <span className="text-sm text-muted-foreground">
                             Post by

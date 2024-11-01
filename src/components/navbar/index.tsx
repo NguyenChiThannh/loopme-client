@@ -9,6 +9,7 @@ import {
     User,
 } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -20,11 +21,12 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+
 import GroupCreateButton from "@/features/group/components/group-create-button";
 
 export function Navbar() {
     const [isSearchExpanded, setIsSearchExpanded] = useState(false);
-
+    const username = "testnav";
     return (
         <nav className="border-b bg-background">
             <div className="mx-auto px-4">
@@ -41,10 +43,12 @@ export function Navbar() {
                     <div className="hidden md:block">
                         <div className="ml-4 flex items-center md:ml-6">
                             <GroupCreateButton />
-                            <Button variant="ghost">
-                                <PlusCircle className="mr-2 h-5 w-5" />
-                                Create Post
-                            </Button>
+                            <Link to={"/create-post"}>
+                                <Button variant="ghost">
+                                    <PlusCircle className="mr-2 h-5 w-5" />
+                                    Create Post
+                                </Button>
+                            </Link>
                             <Button
                                 variant="ghost"
                                 size="icon"
@@ -52,13 +56,15 @@ export function Navbar() {
                             >
                                 <Bell className="h-5 w-5" />
                             </Button>
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                className="ml-2"
-                            >
-                                <MessageSquare className="h-5 w-5" />
-                            </Button>
+                            <Link to={"/chat"}>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="ml-2"
+                                >
+                                    <MessageSquare className="h-5 w-5" />
+                                </Button>
+                            </Link>
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                     <Button variant="ghost" className="ml-2">
@@ -71,13 +77,19 @@ export function Navbar() {
                                         My Account
                                     </DropdownMenuLabel>
                                     <DropdownMenuSeparator />
-                                    <DropdownMenuItem>Profile</DropdownMenuItem>
+                                    <Link to={`/user/${username}`}>
+                                        <DropdownMenuItem>
+                                            Profile
+                                        </DropdownMenuItem>
+                                    </Link>
                                     <DropdownMenuItem>
                                         Settings
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem>
-                                        Sign out
-                                    </DropdownMenuItem>
+                                    <Link to={"/login"}>
+                                        <DropdownMenuItem>
+                                            Sign out
+                                        </DropdownMenuItem>
+                                    </Link>
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         </div>

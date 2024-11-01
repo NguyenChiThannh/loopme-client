@@ -1,5 +1,6 @@
-import { PlusCircle, Search } from "lucide-react";
+import { PlusCircle, Search, Undo2 } from "lucide-react";
 import React from "react";
+import { Link } from "react-router-dom";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -46,10 +47,22 @@ export default function ContactList({
             <CardContent className="flex h-full flex-col p-4">
                 <div className="mb-4 flex items-center justify-between">
                     <h2 className="text-2xl font-bold">Chats</h2>
-                    <Button variant="outline" size="icon" onClick={onNewChat}>
-                        <PlusCircle className="h-5 w-5" />
-                        <span className="sr-only">New Chat</span>
-                    </Button>
+                    <div className="space-x-2">
+                        <Link to={"/"}>
+                            <Button variant="outline" size="icon">
+                                <Undo2 className="h-5 w-5" />
+                                <span className="sr-only">New Chat</span>
+                            </Button>
+                        </Link>
+                        <Button
+                            variant="outline"
+                            size="icon"
+                            onClick={onNewChat}
+                        >
+                            <PlusCircle className="h-5 w-5" />
+                            <span className="sr-only">New Chat</span>
+                        </Button>
+                    </div>
                 </div>
                 {contacts.length > 0 ? (
                     <>

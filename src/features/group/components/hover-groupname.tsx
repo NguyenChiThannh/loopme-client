@@ -8,6 +8,7 @@ import {
     HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { Separator } from "@/components/ui/separator";
+
 import { GroupInfoCard } from "./group-info-card";
 
 interface GroupHoverInfoProps {
@@ -28,7 +29,7 @@ export function GroupHoverInfo({
     return (
         <HoverCard>
             <HoverCardTrigger asChild>
-                <Link to={`/r/${name}`} className="font-medium hover:underline">
+                <Link to={`/group`} className="font-medium hover:underline">
                     r/{name}
                 </Link>
             </HoverCardTrigger>

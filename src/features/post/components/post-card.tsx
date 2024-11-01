@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Navigate, useNavigate } from "react-router";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -31,24 +32,17 @@ interface PostCardProps {
 
 export default function PostCard({ commentSectionRef, post }: PostCardProps) {
     const [isImageModalOpen, setIsImageModalOpen] = useState(false);
-
-    // const handleUpvote = () =>
-    //     setPost((prev) => ({ ...prev, upvotes: prev.upvotes + 1 }));
-    // const handleDownvote = () =>
-    //     setPost((prev) => ({ ...prev, upvotes: prev.upvotes - 1 }));
+    const navigator = useNavigate();
 
     const scrollToComments = () => {
-        commentSectionRef?.current?.scrollIntoView({ behavior: "smooth" });
+        if (commentSectionRef)
+            commentSectionRef?.current?.scrollIntoView({ behavior: "smooth" });
+        else navigator("/post");
     };
 
     return (
         <Card>
             <CardHeader className="flex flex-row items-center gap-4 py-3">
-                {/* <PostUpvote
-                    post={post}
-                    downvote={handleDownvote}
-                    upvote={handleUpvote}
-                /> */}
                 <Avatar className="size-12">
                     <AvatarImage
                         src="/placeholder.svg?height=40&width=40"

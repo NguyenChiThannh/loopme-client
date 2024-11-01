@@ -15,6 +15,7 @@ import HomePage from "./pages/home/home.page.tsx";
 import CreatePostPage from "./pages/post/create-post.page.tsx";
 import PostPage from "./pages/post/post.page.tsx";
 import ProfilePage from "./pages/user/profile.page.tsx";
+import GroupLayout from "./layouts/group.layout.tsx";
 
 const router = createBrowserRouter([
     {
@@ -46,10 +47,6 @@ const router = createBrowserRouter([
                 element: <HomePage />,
             },
             {
-                path: "/post",
-                element: <PostPage />,
-            },
-            {
                 path: "/create-post",
                 element: <CreatePostPage />,
             },
@@ -57,12 +54,21 @@ const router = createBrowserRouter([
                 path: "/user/:username",
                 element: <ProfilePage />,
             },
+            {
+                element: <GroupLayout />,
+                children: [
+                    {
+                        path: "/group",
+                        element: <GroupHomePage />
+                    },
+                    {
+                        path: "/post",
+                        element: <PostPage />,
+                    },
+                ]
+            },
         ],
     },
-    {
-        path: "/group",
-        element: <GroupHomePage />
-    }
 ]);
 
 createRoot(document.getElementById("root")!).render(

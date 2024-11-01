@@ -16,6 +16,7 @@ import CreatePostPage from "./pages/post/create-post.page.tsx";
 import PostPage from "./pages/post/post.page.tsx";
 import ProfilePage from "./pages/user/profile.page.tsx";
 import GroupLayout from "./layouts/group.layout.tsx";
+import ChatPage from "./pages/chat/page.tsx";
 
 const router = createBrowserRouter([
     {
@@ -69,6 +70,10 @@ const router = createBrowserRouter([
             },
         ],
     },
+    {
+        path: "/chat",
+        element: <ChatPage />
+    }
 ]);
 
 createRoot(document.getElementById("root")!).render(

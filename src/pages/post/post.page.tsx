@@ -118,7 +118,6 @@ export default function PostPage() {
                         commentContent={comment.content}
                         commentId={comment.id}
                         handleReplyClick={handleReplyClick}
-                        commentUpvote={comment.upvotes}
                     />
                 )}
                 {replyingTo === comment.id && (
@@ -137,7 +136,7 @@ export default function PostPage() {
     };
 
     return (
-        <div className="mx-auto max-w-2xl p-4">
+        <div className="max-w-2xl md:col-span-2">
             <PostCard commentSectionRef={commentSectionRef} post={post} />
             <PostCommentForm />
             <div ref={commentSectionRef}>{renderComments(comments)}</div>

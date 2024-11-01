@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { GroupInfoCard } from "@/features/group/components/group-info-card";
+import GroupUpdateButton from "@/features/group/components/group-update-button";
 import { GroupHoverInfo } from "@/features/group/components/hover-groupname";
 import PostCard from "@/features/post/components/post-card";
 
@@ -56,6 +57,7 @@ export default function GroupHomePage() {
                                 description="A subreddit for programmers to share humorous content related to programming and technology."
                             />
                         </CardTitle>
+                            <GroupUpdateButton />
                     </CardHeader>
                     <CardContent>
                         <p>

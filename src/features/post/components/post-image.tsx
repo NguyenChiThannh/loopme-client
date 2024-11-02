@@ -12,12 +12,16 @@ type Post = {
 };
 
 interface PostImageProps {
-    post: Post,
-    isImageModalOpen: boolean,
-    setIsImageModalOpen: React.Dispatch<React.SetStateAction<boolean>>
+    post: Post;
+    isImageModalOpen: boolean;
+    setIsImageModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function PostImage({post, isImageModalOpen, setIsImageModalOpen}: PostImageProps) {
+export default function PostImage({
+    post,
+    isImageModalOpen,
+    setIsImageModalOpen,
+}: PostImageProps) {
     return (
         <Dialog open={isImageModalOpen} onOpenChange={setIsImageModalOpen}>
             <DialogTrigger asChild>

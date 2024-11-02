@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -8,7 +10,6 @@ import {
 } from "@/components/ui/dialog";
 
 import GroupForm from "./group-form";
-import { useState } from "react";
 
 export default function GroupCreateButton() {
     const [isOpen, setIsOpen] = useState(false);

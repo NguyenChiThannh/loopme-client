@@ -8,32 +8,21 @@ import {
     HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { Separator } from "@/components/ui/separator";
+import { IUser } from "@/configs/type";
 
-interface UserHoverInfoProps {
-    name: string;
-    avatarSrc: string;
-    karma: number;
-    joinDate: string;
-    cakeDay: string;
-    description: string;
-}
 
 export default function HoverUsername({
-    name,
-    avatarSrc,
-    karma,
-    joinDate,
-    cakeDay,
-    description,
-}: UserHoverInfoProps) {
+    displayName,
+    avatar,
+}: IUser) {
     return (
         <HoverCard>
             <HoverCardTrigger asChild>
                 <Link
-                    to={`/user/${name}`}
+                    to={`/user/${displayName}`}
                     className="h-auto p-0 text-sm font-semibold hover:underline"
                 >
-                    u/{name}
+                    u/{displayName}
                 </Link>
             </HoverCardTrigger>
             <HoverCardContent className="w-80">
@@ -41,21 +30,21 @@ export default function HoverUsername({
                     <div className="flex items-center space-x-4">
                         <Avatar>
                             <AvatarImage
-                                src={avatarSrc}
-                                alt={`${name}'s avatar`}
+                                src={avatar}
+                                alt={`${displayName}'s avatar`}
                             />
                             <AvatarFallback>
-                                {name[0].toUpperCase()}
+                                {displayName[0].toUpperCase()}
                             </AvatarFallback>
                         </Avatar>
                         <div>
-                            <h4 className="text-sm font-semibold">u/{name}</h4>
-                            <p className="text-xs text-muted-foreground">
+                            <h4 className="text-sm font-semibold">u/{displayName}</h4>
+                            {/* <p className="text-xs text-muted-foreground">
                                 {karma.toLocaleString()} karma
-                            </p>
+                            </p> */}
                         </div>
                     </div>
-                    <p className="text-sm">{description}</p>
+                    {/* <p className="text-sm">{description}</p>
                     <Separator />
                     <div className="flex justify-between text-xs text-muted-foreground">
                         <div className="flex items-center">
@@ -66,7 +55,7 @@ export default function HoverUsername({
                             <Cake className="mr-1 h-3 w-3" />
                             Cake day {cakeDay}
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </HoverCardContent>
         </HoverCard>

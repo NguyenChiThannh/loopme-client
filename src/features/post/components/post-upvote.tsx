@@ -1,22 +1,12 @@
 import { ArrowBigDown, ArrowBigUp, ChevronDown, ChevronUp } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-
-type Post = {
-    id: number;
-    title: string;
-    content: string;
-    author: string;
-    imageUrl?: string;
-    upvotes: number;
-    commentCount: number;
-    postedAt: string;
-};
+import { IPost } from "@/configs/type";
 
 interface PostUpvote {
     upvote: () => void;
     downvote: () => void;
-    post: Post;
+    post: IPost;
 }
 
 export default function PostUpvote({ upvote, downvote, post }: PostUpvote) {
@@ -36,7 +26,7 @@ export default function PostUpvote({ upvote, downvote, post }: PostUpvote) {
             >
                 <ArrowBigUp className="h-4 w-4" />
             </Button>
-            <span className="mx-2 text-sm">{post.upvotes}</span>
+            <span className="mx-2 text-sm">{post.totalVotes}</span>
             <Button
                 variant="ghost"
                 size="icon"

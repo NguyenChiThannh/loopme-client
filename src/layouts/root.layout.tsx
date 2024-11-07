@@ -1,21 +1,75 @@
+import {
+    Mutation,
+    MutationCache,
+    Query,
+    QueryCache,
+    QueryClient,
+    QueryClientProvider,
+    QueryKey,
+} from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import axios from "axios";
 import { Outlet } from "react-router";
+import { toast } from "sonner";
 
-import { Navbar } from "@/components/navbar";
-import { AppSidebar } from "@/components/sidebar/app-sidebar";
-import { SidebarProvider } from "@/components/ui/sidebar";
+const queryClient = new QueryClient({
+    queryCache: new QueryCache({
+        onSuccess: (
+            _data: unknown,
+            query: Query<unknown, unknown, unknown, QueryKey>,
+        ): void => {
+            if (query.meta?.SUCCESS_MESSAGE) {
+                toast.success(`${query.meta.SUCCESS_MESSAGE}:`);
+            }
+        },
+        onError: (
+            error: unknown,
+            query: Query<unknown, unknown, unknown, QueryKey>,
+        ): void => {
+            if (axios.isAxiosError(error) && query.meta?.ERROR_SOURCE) {
+                toast.error(
+                    `${query.meta.ERROR_SOURCE}: ${error.response?.data?.message}`,
+                );
+            }
+            if (error instanceof Error && query.meta?.ERROR_SOURCE) {
+                toast.error(`${query.meta.ERROR_SOURCE}: ${error.message}`);
+            }
+        },
+    }),
+    mutationCache: new MutationCache({
+        onError: (
+            error: unknown,
+            _variables: unknown,
+            _context: unknown,
+            mutation: Mutation<unknown, unknown, unknown, unknown>,
+        ): void => {
+            if (axios.isAxiosError(error) && mutation.meta?.ERROR_SOURCE) {
+                toast.error(
+                    `${mutation.meta.ERROR_SOURCE}: ${error.response?.data?.message}`,
+                );
+            }
+            if (error instanceof Error && mutation.meta?.ERROR_SOURCE) {
+                toast.error(`${mutation.meta.ERROR_SOURCE}: ${error.message}`);
+            }
+        },
+        onSuccess: (
+            _data: unknown,
+            _variables: unknown,
+            _context: unknown,
+            mutation: Mutation<unknown, unknown, unknown, unknown>,
+        ): void => {
+            if (mutation.meta?.SUCCESS_MESSAGE) {
+                toast.success(`${mutation.meta.SUCCESS_MESSAGE}:`);
+            }
+        },
+    }),
+});
 
 export default function RootLayout() {
     return (
-        <SidebarProvider defaultOpen>
-            <AppSidebar />
-            <div className="flex w-full flex-col">
-                <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                    <Navbar />
-                </header>
-                <main className="container py-10 pt-6">
-                    <Outlet />
-                </main>
-            </div>
-        </SidebarProvider>
+        <QueryClientProvider client={queryClient}>
+            <Outlet />
+            <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
     );
 }

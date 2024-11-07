@@ -57,7 +57,7 @@ export default function GroupHomePage() {
                                 description="A subreddit for programmers to share humorous content related to programming and technology."
                             />
                         </CardTitle>
-                            <GroupUpdateButton />
+                        <GroupUpdateButton />
                     </CardHeader>
                     <CardContent>
                         <p>

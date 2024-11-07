@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -8,7 +10,6 @@ import {
 } from "@/components/ui/dialog";
 
 import GroupForm from "./group-form";
-import { useState } from "react";
 
 export default function GroupUpdateButton() {
     const [isOpen, setIsOpen] = useState(false);
@@ -21,7 +22,7 @@ export default function GroupUpdateButton() {
         title: "test",
         backgroundCover: undefined,
         isPublic: true,
-    }
+    };
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
@@ -31,7 +32,10 @@ export default function GroupUpdateButton() {
                 <DialogHeader>
                     <DialogTitle>Update Group</DialogTitle>
                 </DialogHeader>
-                <GroupForm onSubmit={handleCreateGroup} initialData={initialData}/>
+                <GroupForm
+                    onSubmit={handleCreateGroup}
+                    initialData={initialData}
+                />
             </DialogContent>
         </Dialog>
     );

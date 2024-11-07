@@ -14,7 +14,7 @@ export function GroupInfoCard() {
     const description = 123;
     const name = "1234";
     return (
-        <Card className="sticky max-h-fit top-20">
+        <Card className="sticky top-20 max-h-fit">
             <div className="flex flex-col space-y-2 p-4">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">

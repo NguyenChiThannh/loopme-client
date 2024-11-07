@@ -2,7 +2,7 @@ import { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
 import { client } from "./axios";
 
-const request = async (options: AxiosRequestConfig) => {
+const axiosRequest = async (options: AxiosRequestConfig) => {
     const onSuccess = (response: AxiosResponse) => {
         const { data } = response;
         return data;
@@ -19,4 +19,4 @@ const request = async (options: AxiosRequestConfig) => {
     return client(options).then(onSuccess).catch(onError);
 };
 
-export default request;
+export default axiosRequest;

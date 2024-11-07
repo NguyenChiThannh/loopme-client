@@ -1,3 +1,5 @@
+import { authApi } from "../apis";
+import { authRequestSchema } from "../apis/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderCircleIcon } from "lucide-react";
 import { useState } from "react";
@@ -15,31 +17,20 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-const formSchema = z.object({
-    email: z.string().email({ message: "Invalid email address" }),
-    password: z
-        .string()
-        .min(8, { message: "Password must be at least 8 characters" }),
-});
-
 export function LoginForm() {
+    const { mutate } = authApi.mutation.useLogin();
     const [isLoading, setIsLoading] = useState(false);
 
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
+    const form = useForm<z.infer<typeof authRequestSchema.login>>({
+        resolver: zodResolver(authRequestSchema.login),
         defaultValues: {
-            email: "",
-            password: "",
+            email: "anacelol1234@gmail.com",
+            password: "An.123456",
         },
     });
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        setIsLoading(true);
-        // Simulate API call
-        setTimeout(() => {
-            console.log(values);
-            setIsLoading(false);
-        }, 1000);
+    function onSubmit(values: z.infer<typeof authRequestSchema.login>) {
+        mutate(values);
     }
 
     return (

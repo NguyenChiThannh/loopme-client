@@ -1,12 +1,21 @@
 import axios, {
     AxiosError,
     AxiosResponse,
+    HttpStatusCode,
     InternalAxiosRequestConfig,
 } from "axios";
+import Cookies from "js-cookie";
+
+import AuthService from "@/features/auth/apis/service";
+
+const COOKIES_STORAGE = {
+    ACCESS_TOKEN: "accessToken",
+    REFRESH_TOKEN: "refreshToken",
+} as const;
 
 export const client = (() => {
     return axios.create({
-        baseURL: process.env.BACKEND_BASE_URL, //TODO: Sửa port thành 5000 or 8000
+        baseURL: `${import.meta.env.VITE_BACKEND_BASE_URL}/v1`, //TODO: Sửa port thành 5000 or 8000
         headers: {
             Accept: "application/json",
             toJSON: true,
@@ -18,10 +27,6 @@ export const client = (() => {
 
 client.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
-        // const accessToken = localStorage.getItem("STORAGE_TOKEN.ACCESS_TOKEN");
-        // if (accessToken) {
-        //     config.headers.Authorization = `Bearer ${accessToken}`;
-        // }
         config.headers["Content-Type"] = "application/json";
         return config;
     },
@@ -30,38 +35,35 @@ client.interceptors.request.use(
     },
 );
 
-// client.interceptors.response.use(
-//     (res: AxiosResponse) => {
-//         return res; // Simply return the response
-//     },
-//     async (err) => {
-//         const status = err.response ? err.response.status : null;
+client.interceptors.response.use(
+    (res: AxiosResponse) => {
+        return res; // Simply return the response
+    },
+    async (err) => {
+        const originalConfig = err.config;
+        const status = err.response ? err.response.status : null;
 
-//         if (status === 401) {
-//             try {
-//                 const refreshTokenFromStorage = localStorage.getItem(
-//                     STORAGE_TOKEN.REFRESH_TOKEN,
-//                 );
-//                 const { accessToken, refreshToken } = await AuthService.refresh(
-//                     refreshTokenFromStorage,
-//                 );
+        if (status === HttpStatusCode.Unauthorized && !originalConfig._retry) {
+            originalConfig._retry = true;
+            try {
+                await AuthService.refresh();
+                const accessTokenFromCookie = Cookies.get(
+                    COOKIES_STORAGE.ACCESS_TOKEN,
+                );
+                client.defaults.headers.common.Authorization = `Bearer ${accessTokenFromCookie}`;
+                return await client(originalConfig);
+            } catch (error) {
+                return Promise.reject(error);
+            }
+        }
 
-//                 LocalStorageService.setTokens(accessToken, refreshToken);
-//                 client.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+        if (status === 403 && err.response.data) {
+            return Promise.reject(err.response.data);
+        }
 
-//                 return await client(originalConfig);
-//             } catch (error: AxiosError) {
-//                 return Promise.reject(error);
-//             }
-//         }
-
-//         if (status === 403 && err.response.data) {
-//             return Promise.reject(err.response.data);
-//         }
-
-//         return Promise.reject(err);
-//     },
-// );
+        return Promise.reject(err);
+    },
+);
 
 export const AxiosMethod = {
     GET: "GET",

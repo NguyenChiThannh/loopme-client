@@ -2,7 +2,6 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
-import { Toaster } from "./components/ui/sonner.tsx";
 import "./index.css";
 import AuthLayout from "./layouts/auth.layout.tsx";
 import GroupLayout from "./layouts/group.layout.tsx";
@@ -21,12 +20,7 @@ import ProfilePage from "./pages/user/profile.page.tsx";
 
 const router = createBrowserRouter([
     {
-        element: (
-            <>
-                <Toaster />
-                <RootLayout />
-            </>
-        ),
+        element: <RootLayout />,
         children: [
             {
                 element: <AuthLayout />,
@@ -61,7 +55,7 @@ const router = createBrowserRouter([
                         element: <CreatePostPage />,
                     },
                     {
-                        path: "/user/:username",
+                        path: "/user",
                         element: <ProfilePage />,
                     },
                     {

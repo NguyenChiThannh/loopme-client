@@ -7,6 +7,7 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import PostCard from "@/features/post/components/post-card";
+import { useUser } from "@/providers/user-provider";
 
 type Params = {
     username: string;
@@ -25,10 +26,17 @@ type Post = {
 
 export default function ProfilePage() {
     const params = useParams<Params>();
+    const { isLoading, user, isSignedIn } = useUser();
+    if (isLoading) {
+        return <p>Loading Profile</p>;
+    }
+    if (!isSignedIn || !user) {
+        return <p>Please login to enter this page</p>;
+    }
     return (
         <section className="flex flex-col space-y-4">
             {/* Header */}
-            <ProfileHeader username={params.username} />
+            <ProfileHeader username={user.displayName} />
             {/* Body */}
             <ProfileBody />
         </section>

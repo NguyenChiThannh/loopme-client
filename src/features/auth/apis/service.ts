@@ -1,10 +1,10 @@
 import { z } from "zod";
 
 import { AuthEndpoints } from "./config";
-import { OTP, User, authRequestSchema } from "./type";
+import { OTP, authRequestSchema } from "./type";
 import { AxiosMethod } from "@/configs/axios";
 import axiosRequest from "@/configs/request";
-import { ApiResponse, BaseResponse } from "@/configs/type";
+import { ApiResponse, BaseResponse, User } from "@/configs/type";
 
 export default class AuthService {
     public static login(

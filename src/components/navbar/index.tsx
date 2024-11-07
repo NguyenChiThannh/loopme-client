@@ -1,6 +1,5 @@
 import {
     Bell,
-    ChevronDown,
     Flame,
     Home,
     MessageSquare,
@@ -16,17 +15,17 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 
+import { Actions } from "./actions";
 import GroupCreateButton from "@/features/group/components/group-create-button";
 
 export function Navbar() {
     const [isSearchExpanded, setIsSearchExpanded] = useState(false);
-    const username = "testnav";
+
     return (
         <nav className="border-b bg-background">
             <div className="mx-auto px-4">
@@ -65,33 +64,7 @@ export function Navbar() {
                                     <MessageSquare className="h-5 w-5" />
                                 </Button>
                             </Link>
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" className="ml-2">
-                                        <User className="mr-2 h-5 w-5" />
-                                        <ChevronDown className="h-4 w-4" />
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end">
-                                    <DropdownMenuLabel>
-                                        My Account
-                                    </DropdownMenuLabel>
-                                    <DropdownMenuSeparator />
-                                    <Link to={`/user/${username}`}>
-                                        <DropdownMenuItem>
-                                            Profile
-                                        </DropdownMenuItem>
-                                    </Link>
-                                    <DropdownMenuItem>
-                                        Settings
-                                    </DropdownMenuItem>
-                                    <Link to={"/login"}>
-                                        <DropdownMenuItem>
-                                            Sign out
-                                        </DropdownMenuItem>
-                                    </Link>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
+                            <Actions />
                         </div>
                     </div>
                     <div className="flex items-center md:hidden">

@@ -19,7 +19,6 @@ export default function SignUpPage() {
         <Card className="w-full">
             <CardHeader>
                 <CardTitle>Sign Up</CardTitle>
-                <CardDescription>Please sign up!</CardDescription>
             </CardHeader>
             <CardContent>
                 <SignUpForm />

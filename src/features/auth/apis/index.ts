@@ -12,10 +12,38 @@ export const authApi = {
             return useMutation({
                 mutationFn: (data: z.infer<typeof authRequestSchema.login>) =>
                     AuthService.login(data),
-                onSuccess(data, variables, context) {
+                onSuccess(data) {
                     toast.success(data.message);
                 },
-                onError(error, variables, context) {},
+                onError() {
+                    toast.error("Email or password is incorrect");
+                },
+            });
+        },
+        useRegister() {
+            return useMutation({
+                mutationFn: (
+                    data: z.infer<typeof authRequestSchema.register>,
+                ) => AuthService.register(data),
+                onSuccess(data) {
+                    toast.success(data.message);
+                },
+                onError() {
+                    toast.error("Đăng ký thất bại");
+                },
+            });
+        },
+        useVerifyOtp() {
+            return useMutation({
+                mutationFn: (
+                    data: z.infer<typeof authRequestSchema.verifyOtp>,
+                ) => AuthService.verify(data),
+                onSuccess(data) {
+                    toast.success(data.message);
+                },
+                onError() {
+                    toast.error("OTP không chính xác");
+                },
             });
         },
     },

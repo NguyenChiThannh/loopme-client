@@ -1,9 +1,12 @@
+import { authApi } from "../apis";
+import { authRequestSchema } from "../apis/type";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoaderCircleIcon } from "lucide-react";
-import { useState } from "react";
+import { LoaderCircleIcon, VerifiedIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 import * as z from "zod";
 
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
     Form,
@@ -15,113 +18,115 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-const formSchema = z
-    .object({
-        email: z.string().email({ message: "Invalid email address" }),
-        password: z
-            .string()
-            .min(8, { message: "Password must be at least 8 characters" }),
-        repeatPassword: z
-            .string()
-            .min(8, { message: "Password must be at least 8 characters" }),
-        fullName: z
-            .string()
-            .min(2, { message: "Full name must be at least 2 characters" }),
-    })
-    .refine((data) => data.password === data.repeatPassword, {
-        message: "Passwords do not match",
-        path: ["repeatPassword"],
-    });
-
 export function SignUpForm() {
-    const [isLoading, setIsLoading] = useState(false);
-
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
+    const { mutate, isPending, isSuccess, data } =
+        authApi.mutation.useRegister();
+    const form = useForm<z.infer<typeof authRequestSchema.register>>({
+        resolver: zodResolver(authRequestSchema.register),
         defaultValues: {
-            email: "",
-            password: "",
+            email: "user@gmail.com",
+            password: "An.123456",
+            displayName: "Ha Do Thai An",
+            repeatPassword: "An.123456",
         },
     });
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        setIsLoading(true);
-        // Simulate API call
-        setTimeout(() => {
-            console.log(values);
-            setIsLoading(false);
-        }, 1000);
+    function onSubmit(values: z.infer<typeof authRequestSchema.register>) {
+        mutate({
+            displayName: values.displayName,
+            repeatPassword: values.repeatPassword,
+            password: values.password,
+            email: values.email,
+        });
     }
 
     return (
-        <Form {...form}>
-            <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="flex flex-col space-y-4"
-            >
-                <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Email</FormLabel>
-                            <FormControl>
-                                <Input placeholder="m@example.com" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="fullName"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Fullname</FormLabel>
-                            <FormControl>
-                                <Input placeholder="Thomas JR" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Password</FormLabel>
-                            <FormControl>
-                                <Input type="password" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="repeatPassword"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Repeat Password</FormLabel>
-                            <FormControl>
-                                <Input type="password" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <Button
-                    type="submit"
-                    className="mt-8 w-full"
-                    disabled={isLoading}
+        <>
+            {isSuccess && (
+                <Alert variant="default" className="border-green-400">
+                    <VerifiedIcon className="size-6" />
+                    <AlertTitle>
+                        <Link to={"/verify"} className="underline">
+                            Go to Verify OTP Page
+                        </Link>
+                    </AlertTitle>
+                    <AlertDescription>
+                        This is your OTP Code: {data.data.otp}
+                    </AlertDescription>
+                </Alert>
+            )}
+            <Form {...form}>
+                <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="flex flex-col space-y-4"
                 >
-                    {isLoading && (
-                        <LoaderCircleIcon className="mr-2 h-4 w-4 animate-spin" />
-                    )}
-                    Sign Up
-                </Button>
-            </form>
-        </Form>
+                    <FormField
+                        control={form.control}
+                        name="email"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Email</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        placeholder="m@example.com"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="displayName"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Display Name</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Thomas JR" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="password"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Password</FormLabel>
+                                <FormControl>
+                                    <Input type="password" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="repeatPassword"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Repeat Password</FormLabel>
+                                <FormControl>
+                                    <Input type="password" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <Button
+                        type="submit"
+                        className="mt-8 w-full"
+                        disabled={isPending}
+                    >
+                        {isPending && (
+                            <LoaderCircleIcon className="mr-2 h-4 w-4 animate-spin" />
+                        )}
+                        Sign Up
+                    </Button>
+                </form>
+            </Form>
+        </>
     );
 }

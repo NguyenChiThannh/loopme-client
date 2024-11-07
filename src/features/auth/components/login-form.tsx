@@ -2,7 +2,6 @@ import { authApi } from "../apis";
 import { authRequestSchema } from "../apis/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderCircleIcon } from "lucide-react";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -18,9 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 
 export function LoginForm() {
-    const { mutate } = authApi.mutation.useLogin();
-    const [isLoading, setIsLoading] = useState(false);
-
+    const { mutate, isPending } = authApi.mutation.useLogin();
     const form = useForm<z.infer<typeof authRequestSchema.login>>({
         resolver: zodResolver(authRequestSchema.login),
         defaultValues: {
@@ -65,9 +62,9 @@ export function LoginForm() {
                         </FormItem>
                     )}
                 />
-                <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading && (
-                        <LoaderCircleIcon className="mr-2 h-4 w-4 animate-spin" />
+                <Button type="submit" className="w-full" disabled={isPending}>
+                    {isPending && (
+                        <LoaderCircleIcon className="w-4 h-4 mr-2 animate-spin" />
                     )}
                     Sign In
                 </Button>

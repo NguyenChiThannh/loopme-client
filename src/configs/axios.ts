@@ -35,6 +35,8 @@ client.interceptors.request.use(
     },
 );
 
+let retryCount = 0;
+
 client.interceptors.response.use(
     (res: AxiosResponse) => {
         return res; // Simply return the response
@@ -43,8 +45,8 @@ client.interceptors.response.use(
         const originalConfig = err.config;
         const status = err.response ? err.response.status : null;
 
-        if (status === HttpStatusCode.Unauthorized && !originalConfig._retry) {
-            originalConfig._retry = true;
+        if (status === HttpStatusCode.Unauthorized && retryCount < 3) {
+            retryCount++;
             try {
                 await AuthService.refresh();
                 const accessTokenFromCookie = Cookies.get(
@@ -56,11 +58,6 @@ client.interceptors.response.use(
                 return Promise.reject(error);
             }
         }
-
-        if (status === 403 && err.response.data) {
-            return Promise.reject(err.response.data);
-        }
-
         return Promise.reject(err);
     },
 );

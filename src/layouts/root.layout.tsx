@@ -12,6 +12,11 @@ import axios from "axios";
 import { Outlet } from "react-router";
 import { toast } from "sonner";
 
+import { Toaster } from "@/components/ui/sonner";
+
+import ReactQueryProvider from "@/providers/react-query-provider";
+import { UserProvider } from "@/providers/user-provider";
+
 const queryClient = new QueryClient({
     queryCache: new QueryCache({
         onSuccess: (
@@ -67,9 +72,12 @@ const queryClient = new QueryClient({
 
 export default function RootLayout() {
     return (
-        <QueryClientProvider client={queryClient}>
-            <Outlet />
+        <ReactQueryProvider>
+            <UserProvider>
+                <Outlet />
+            </UserProvider>
+            <Toaster />
             <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
+        </ReactQueryProvider>
     );
 }

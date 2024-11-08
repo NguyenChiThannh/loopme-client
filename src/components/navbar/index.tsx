@@ -30,7 +30,7 @@ import { CreatePostDialog } from "@/features/post/layouts/create-post-dialog";
 import { useUser } from "@/providers/user-provider";
 
 export function Navbar() {
-    const { user } = useUser();
+    const { user, isSignedIn } = useUser();
     const [isSearchExpanded, setIsSearchExpanded] = useState(false);
     const { mutate: handleCreatePost } = postApi.mutation.useCreatePost();
     const createPost = (values: z.infer<typeof postRequestSchema.create>) => {
@@ -51,29 +51,30 @@ export function Navbar() {
                     </div>
                     <div className="hidden md:block">
                         <div className="ml-4 flex items-center md:ml-6">
-                            <GroupCreateButton />
-
-                            <CreatePostDialog>
-                                <PostCreateForm
-                                    onSubmit={createPost}
-                                />
-                            </CreatePostDialog>
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                className="ml-2"
-                            >
-                                <Bell className="h-5 w-5" />
-                            </Button>
-                            <Link to={"/chat"}>
-                                <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    className="ml-2"
-                                >
-                                    <MessageSquare className="h-5 w-5" />
-                                </Button>
-                            </Link>
+                            {isSignedIn && (
+                                <>
+                                    <GroupCreateButton />
+                                    <CreatePostDialog>
+                                        <PostCreateForm onSubmit={createPost} />
+                                    </CreatePostDialog>
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="ml-2"
+                                    >
+                                        <Bell className="h-5 w-5" />
+                                    </Button>
+                                    <Link to={"/chat"}>
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            className="ml-2"
+                                        >
+                                            <MessageSquare className="h-5 w-5" />
+                                        </Button>
+                                    </Link>
+                                </>
+                            )}
                             <Actions />
                         </div>
                     </div>

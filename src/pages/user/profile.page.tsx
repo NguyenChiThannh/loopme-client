@@ -1,12 +1,15 @@
 import { PlusCircleIcon } from "lucide-react";
+import { useEffect } from "react";
 import { useParams } from "react-router";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { User } from "@/configs/type";
+import { friendApi } from "@/features/friends/apis";
+import { ListFriend } from "@/features/friends/components/list-friend";
 import { postApi } from "@/features/post/apis";
 import ListPost from "@/features/post/components/list-post";
 import PostCard from "@/features/post/components/post-card";
@@ -30,7 +33,6 @@ type Post = {
 };
 
 export default function ProfilePage() {
-    const params = useParams<Params>();
     const { isLoading, user, isSignedIn } = useUser();
     if (isLoading) {
         return <p>Loading Profile</p>;
@@ -48,7 +50,7 @@ export default function ProfilePage() {
     );
 }
 
-interface ProfileHeaderProps extends User {}	
+interface ProfileHeaderProps extends User {}
 
 export function ProfileHeader(props: ProfileHeaderProps) {
     return (
@@ -63,25 +65,32 @@ export function ProfileHeader(props: ProfileHeaderProps) {
 }
 
 export function ProfileBody() {
-    const { data, isPending } = postApi.query.useGetPost();
-    if (isPending) {
-        return <p>Loading...</p>;
-    }
-
-    if (!data) {
-        return <p>No post</p>;
-    }
+    const [searchParams, setSearchParams] = useSearchParams();
+    const { data: posts, isPending: isPendingPosts } =
+        postApi.query.useGetPost();
+    const { data: pendingFriends, isPending: isPendingFriends } =
+        friendApi.query.useGetPendingFriend(
+            searchParams.get("tab") === "friend",
+        );
 
     const tabList = [
         {
             value: "overview",
             label: "Overview",
-            content: <ListPost posts={data.data.data} />,
+            content: (
+                <ListPost posts={posts?.data.data} isPending={isPendingPosts} />
+            ),
         },
         {
-            value: "post",
-            label: "Post",
-            content: <div>Post</div>,
+            value: "friend",
+            label: "Friend",
+            content: (
+                <ListFriend
+                    friends={[]}
+                    pendingFriends={pendingFriends?.data.data}
+                    isLoading={isPendingFriends}
+                />
+            ),
         },
         {
             value: "comment",
@@ -99,8 +108,16 @@ export function ProfileBody() {
             content: <div>Downvote</div>,
         },
     ];
+
     return (
-        <Tabs defaultValue={tabList.at(0)?.value} className="space-y-5">
+        <Tabs
+            value={searchParams.get("tab") || "overview"}
+            defaultValue={tabList.at(0)?.value}
+            className="space-y-5"
+            onValueChange={(value) => {
+                setSearchParams({ tab: value });
+            }}
+        >
             <TabsList className="w-[40%] justify-between bg-transparent">
                 {tabList.map((tab, i) => (
                     <TabsTrigger

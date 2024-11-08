@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -22,12 +23,19 @@ import { Input } from "@/components/ui/input";
 
 import { Actions } from "./actions";
 import GroupCreateButton from "@/features/group/components/group-create-button";
+import { postApi } from "@/features/post/apis";
+import { postRequestSchema } from "@/features/post/apis/type";
 import PostCreateForm from "@/features/post/components/post-create-form";
 import { CreatePostDialog } from "@/features/post/layouts/create-post-dialog";
+import { useUser } from "@/providers/user-provider";
 
 export function Navbar() {
+    const { user, isSignedIn } = useUser();
     const [isSearchExpanded, setIsSearchExpanded] = useState(false);
-
+    const { mutate: handleCreatePost } = postApi.mutation.useCreatePost();
+    const createPost = (values: z.infer<typeof postRequestSchema.create>) => {
+        handleCreatePost(values);
+    };
     return (
         <nav className="border-b bg-background">
             <div className="mx-auto px-4">
@@ -43,27 +51,30 @@ export function Navbar() {
                     </div>
                     <div className="hidden md:block">
                         <div className="ml-4 flex items-center md:ml-6">
-                            <GroupCreateButton />
-
-                            <CreatePostDialog>
-                                <PostCreateForm />
-                            </CreatePostDialog>
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                className="ml-2"
-                            >
-                                <Bell className="h-5 w-5" />
-                            </Button>
-                            <Link to={"/chat"}>
-                                <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    className="ml-2"
-                                >
-                                    <MessageSquare className="h-5 w-5" />
-                                </Button>
-                            </Link>
+                            {isSignedIn && (
+                                <>
+                                    <GroupCreateButton />
+                                    <CreatePostDialog>
+                                        <PostCreateForm onSubmit={createPost} />
+                                    </CreatePostDialog>
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="ml-2"
+                                    >
+                                        <Bell className="h-5 w-5" />
+                                    </Button>
+                                    <Link to={"/chat"}>
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            className="ml-2"
+                                        >
+                                            <MessageSquare className="h-5 w-5" />
+                                        </Button>
+                                    </Link>
+                                </>
+                            )}
                             <Actions />
                         </div>
                     </div>

@@ -1,6 +1,9 @@
-import axiosRequest from "@/configs/request";
+import { z } from "zod";
+
+import { postRequestSchema } from "./type";
 import { AxiosMethod } from "@/configs/axios";
-import { IPost, PaginatedResponse } from "@/configs/type";
+import axiosRequest from "@/configs/request";
+import { ApiResponse, IPost, PaginatedResponse } from "@/configs/type";
 
 export const PostEndpoints = {
     getPosts: () => "/posts",
@@ -11,9 +14,12 @@ export const PostEndpoints = {
     getPostsByGroupId: (groupId: string) => `/posts/group/${groupId}`,
 };
 
-
 export default class PostService {
-    public static getPosts(page: number, size: number, sort: string): Promise<PaginatedResponse<IPost[]>> {
+    public static getPosts(
+        page: number,
+        size: number,
+        sort: string,
+    ): Promise<PaginatedResponse<IPost[]>> {
         return axiosRequest({
             url: PostEndpoints.getPosts(),
             method: AxiosMethod.GET,
@@ -21,10 +27,15 @@ export default class PostService {
                 page,
                 size,
                 sort,
-            }
-        })
+            },
+        });
     }
-    public static getPostsByGroupId(groupdId: string, page: number, size: number, sort: string): Promise<PaginatedResponse<IPost[]>>  {
+    public static getPostsByGroupId(
+        groupdId: string,
+        page: number,
+        size: number,
+        sort: string,
+    ): Promise<PaginatedResponse<IPost[]>> {
         return axiosRequest({
             url: PostEndpoints.getPostsByGroupId(groupdId),
             method: AxiosMethod.GET,
@@ -33,6 +44,15 @@ export default class PostService {
                 size,
                 sort,
             },
-        })
+        });
+    }
+    public static create(
+        data: z.infer<typeof postRequestSchema.create>,
+    ): Promise<ApiResponse<IPost>> {
+        return axiosRequest({
+            url: PostEndpoints.create(),
+            method: AxiosMethod.POST,
+            data: data,
+        });
     }
 }

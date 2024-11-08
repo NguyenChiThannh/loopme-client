@@ -7,6 +7,8 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { User } from "@/configs/type";
+import { postApi } from "@/features/post/apis";
+import ListPost from "@/features/post/components/list-post";
 import PostCard from "@/features/post/components/post-card";
 import UserUpdateForm from "@/features/user/components/user-update-form";
 import { UserUpdateDialog } from "@/features/user/layouts/user-update-dialog";
@@ -46,7 +48,7 @@ export default function ProfilePage() {
     );
 }
 
-interface ProfileHeaderProps extends User {}
+interface ProfileHeaderProps extends User {}	
 
 export function ProfileHeader(props: ProfileHeaderProps) {
     return (
@@ -61,63 +63,20 @@ export function ProfileHeader(props: ProfileHeaderProps) {
 }
 
 export function ProfileBody() {
-    const posts: Post[] = [
-        {
-            id: 1,
-            title: "Interesting Post Title",
-            content:
-                "This is the main content of the post. It can be quite long and detailed, discussing various topics or sharing information.",
-            author: "original_poster",
-            imageUrl: "/placeholder.svg?height=600&width=800",
-            upvotes: 256,
-            commentCount: 45,
-            postedAt: "5 hours ago",
-        },
-        {
-            id: 2,
-            title: "Interesting Post Title",
-            content:
-                "This is the main content of the post. It can be quite long and detailed, discussing various topics or sharing information.",
-            author: "original_poster",
-            imageUrl: "/placeholder.svg?height=600&width=800",
-            upvotes: 256,
-            commentCount: 45,
-            postedAt: "5 hours ago",
-        },
-        {
-            id: 3,
-            title: "Interesting Post Title",
-            content:
-                "This is the main content of the post. It can be quite long and detailed, discussing various topics or sharing information.",
-            author: "original_poster",
-            imageUrl: "/placeholder.svg?height=600&width=800",
-            upvotes: 256,
-            commentCount: 45,
-            postedAt: "5 hours ago",
-        },
-        {
-            id: 4,
-            title: "Interesting Post Title",
-            content:
-                "This is the main content of the post. It can be quite long and detailed, discussing various topics or sharing information.",
-            author: "original_poster",
-            imageUrl: "/placeholder.svg?height=600&width=800",
-            upvotes: 256,
-            commentCount: 45,
-            postedAt: "5 hours ago",
-        },
-    ];
+    const { data, isPending } = postApi.query.useGetPost();
+    if (isPending) {
+        return <p>Loading...</p>;
+    }
+
+    if (!data) {
+        return <p>No post</p>;
+    }
+
     const tabList = [
         {
             value: "overview",
             label: "Overview",
-            content: (
-                <div className="space-y-4">
-                    {/* {posts.map((post) => (
-                        <PostCard post={post} />
-                    ))} */}
-                </div>
-            ),
+            content: <ListPost posts={data.data.data} />,
         },
         {
             value: "post",

@@ -49,10 +49,6 @@ client.interceptors.response.use(
             retryCount++;
             try {
                 await AuthService.refresh();
-                const accessTokenFromCookie = Cookies.get(
-                    COOKIES_STORAGE.ACCESS_TOKEN,
-                );
-                client.defaults.headers.common.Authorization = `Bearer ${accessTokenFromCookie}`;
                 return await client(originalConfig);
             } catch (error) {
                 return Promise.reject(error);

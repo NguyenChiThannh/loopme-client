@@ -68,4 +68,5 @@ export const AxiosMethod = {
     PUT: "PUT",
     DELETE: "DELETE",
     OPTIONS: "OPTIONS",
+    PATCH: "PATCH",
 };

@@ -1,10 +1,16 @@
 import { z } from "zod";
 
-import { AuthEndpoints } from "./config";
 import { OTP, authRequestSchema } from "./type";
 import { AxiosMethod } from "@/configs/axios";
 import axiosRequest from "@/configs/request";
 import { ApiResponse, BaseResponse, User } from "@/configs/type";
+
+export const AuthEndpoints = {
+    refreshToken: () => "/auth/refresh-token",
+    login: () => "/auth/login",
+    register: () => "/auth/register",
+    verifyAccount: () => "/auth/verify-account",
+};
 
 export default class AuthService {
     public static login(

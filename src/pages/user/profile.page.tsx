@@ -6,7 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
+import { User } from "@/configs/type";
 import PostCard from "@/features/post/components/post-card";
+import UserUpdateForm from "@/features/user/components/user-update-form";
+import { UserUpdateDialog } from "@/features/user/layouts/user-update-dialog";
 import { useUser } from "@/providers/user-provider";
 
 type Params = {
@@ -36,24 +39,22 @@ export default function ProfilePage() {
     return (
         <section className="flex flex-col space-y-4">
             {/* Header */}
-            <ProfileHeader username={user.displayName} />
+            <ProfileHeader {...user} />
             {/* Body */}
             <ProfileBody />
         </section>
     );
 }
 
-interface ProfileHeaderProps {
-    username?: string;
-}
+interface ProfileHeaderProps extends User {}
 
-export function ProfileHeader({ username }: ProfileHeaderProps) {
+export function ProfileHeader(props: ProfileHeaderProps) {
     return (
         <div className="flex items-center space-x-3">
             <img src="/user.png" className="size-16" />
             <div className="flex flex-col">
-                <h2 className="text-3xl font-bold">{username}</h2>
-                <h3 className="italic text-muted-foreground">{`u/${username}`}</h3>
+                <h2 className="text-3xl font-bold">{props.displayName}</h2>
+                <h3 className="italic text-muted-foreground">{`u/${props.displayName}`}</h3>
             </div>
         </div>
     );
@@ -112,9 +113,9 @@ export function ProfileBody() {
             label: "Overview",
             content: (
                 <div className="space-y-4">
-                    {posts.map((post) => (
+                    {/* {posts.map((post) => (
                         <PostCard post={post} />
-                    ))}
+                    ))} */}
                 </div>
             ),
         },
@@ -166,14 +167,23 @@ export function ProfileBody() {
 }
 
 export function ProfileActions() {
+    const { user, isLoading } = useUser();
+    if (isLoading) {
+        return <p>Loading</p>;
+    }
+    if (!user) return null;
+
     return (
-        <div>
+        <div className="flex items-center space-x-3">
             <Link to={"/create-post"}>
                 <Button variant={"outline"}>
                     <PlusCircleIcon />
                     Create post
                 </Button>
             </Link>
+            <UserUpdateDialog>
+                <UserUpdateForm initialValues={user} />
+            </UserUpdateDialog>
         </div>
     );
 }

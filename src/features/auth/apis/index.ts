@@ -5,6 +5,11 @@ import { z } from "zod";
 import AuthService from "./service";
 import { authRequestSchema } from "./type";
 
+export const AUTH_KEYS = {
+    refreshToken: "refresh_token",
+    accessToken: "access_token",
+};
+
 export const authApi = {
     query: {},
     mutation: {

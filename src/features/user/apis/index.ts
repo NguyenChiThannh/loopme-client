@@ -1,7 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { USER_KEYS } from "./config";
 import UserService from "./service";
+
+export const USER_KEYS = {
+    user: ["user"] as string[],
+};
 
 export const userApi = {
     query: {

@@ -1,9 +1,7 @@
-import { Award, Users } from "lucide-react";
+import { groupApi } from "../apis";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import { Card } from "@/components/ui/card";
 
 interface GroupInfoCardProps {
     members: number;
@@ -20,6 +18,10 @@ export function GroupInfoCard({
     groupId,
     isJoined,
 }: GroupInfoCardProps) {
+    const { mutate: handleJoinGroup } = groupApi.mutation.useSendJoinRequest();
+    const onClick = () => {
+        handleJoinGroup(groupId);
+    };
     return (
         <Card className="sticky top-20 max-h-fit">
             <div className="flex flex-col space-y-2 p-4">
@@ -45,7 +47,11 @@ export function GroupInfoCard({
                             </p>
                         </div>
                     </div>
-                    {!isJoined && <Button className="ml-auto">Join</Button>}
+                    {!isJoined && (
+                        <Button className="ml-auto" onClick={onClick}>
+                            Join
+                        </Button>
+                    )}
                 </div>
             </div>
         </Card>

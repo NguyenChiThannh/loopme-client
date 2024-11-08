@@ -1,9 +1,10 @@
-import { group } from "console";
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { z } from "zod";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 
+import { ROUTES } from "@/configs/route.config";
 import { groupApi } from "@/features/group/apis";
 import GroupUpdateButton from "@/features/group/components/group-update-button";
 import { postApi } from "@/features/post/apis";
@@ -12,11 +13,11 @@ import ListPost from "@/features/post/components/list-post";
 import PostCreateForm from "@/features/post/components/post-create-form";
 import { CreatePostDialog } from "@/features/post/layouts/create-post-dialog";
 import { useUser } from "@/providers/user-provider";
-import { ROUTES } from "@/configs/route.config";
 
 export default function GroupHomePage() {
     const { user } = useUser();
     const { groupId } = useParams();
+    const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
     if (!groupId) {
         navigate(ROUTES.HOME_PAGE);
@@ -33,7 +34,9 @@ export default function GroupHomePage() {
         postApi.mutation.useCreatePostInGroup();
     const createPost = (values: z.infer<typeof postRequestSchema.create>) => {
         handleCreatePost({ ...values, group: groupData?.data._id });
+        setIsOpen(false);
     };
+
     if (!data || isLoading || groupLoading || !groupData) {
         return <div>Loading...</div>;
     }
@@ -58,16 +61,34 @@ export default function GroupHomePage() {
                                 r/{groupData.data.name}
                             </p>
                         </CardTitle>
-                        <CreatePostDialog>
-                            <PostCreateForm onSubmit={createPost} />
-                        </CreatePostDialog>
-                        {groupData.data.owner._id === user?._id && (
-                            <GroupUpdateButton />
-                        )}
+                        <div className="flex flex-row space-x-2">
+                            {(groupData.data.owner._id === user?._id ||
+                                groupData.data.members.some(
+                                    (member) => member.user._id === user?._id,
+                                )) && (
+                                <CreatePostDialog
+                                    isOpen={isOpen}
+                                    setIsOpen={setIsOpen}
+                                >
+                                    <PostCreateForm onSubmit={createPost} />
+                                </CreatePostDialog>
+                            )}
+                            {groupData.data.owner._id === user?._id && (
+                                <GroupUpdateButton />
+                            )}
+                        </div>
                     </CardHeader>
                 </Card>
 
-                <ListPost posts={data.data.data} />
+                {groupData.data.isPublic ||
+                groupData.data.members.some(
+                    (member) => member.user._id === user?._id,
+                ) ||
+                groupData.data.owner._id === user?._id ? (
+                    <ListPost posts={data.data.data} />
+                ) : (
+                    <p>This is a privacy group</p>
+                )}
             </div>
         </>
     );

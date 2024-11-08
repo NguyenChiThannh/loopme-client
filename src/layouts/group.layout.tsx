@@ -35,9 +35,11 @@ export default function GroupLayout() {
                 name={groupData.data.name}
                 members={groupData.data.members.length}
                 groupId={groupData.data._id}
-                isJoined={groupData.data.members.some(
-                    (member) => member.user._id === user._id,
-                )}
+                isJoined={
+                    groupData.data.members.some(
+                        (member) => member.user._id === user._id,
+                    ) || groupData.data.owner._id === user._id
+                }
             />
         </div>
     );

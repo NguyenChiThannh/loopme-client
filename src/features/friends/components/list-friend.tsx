@@ -32,11 +32,11 @@ export function ListFriend({
         return <p>No friend</p>;
     }
     return (
-        <div className="w-full max-w-4xl p-4 space-y-8">
+        <div className="w-full max-w-4xl space-y-8 p-4">
             <div className="flex items-center justify-between">
                 <h1 className="text-3xl font-bold">Friend List</h1>
                 <Button>
-                    <UserPlus className="w-4 h-4 mr-2" />
+                    <UserPlus className="mr-2 h-4 w-4" />
                     Add New Friend
                 </Button>
             </div>
@@ -75,7 +75,7 @@ export function ListFriend({
                         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                             {friends.map((friend) => (
                                 <li key={friend.id}>
-                                    <div className="flex items-center p-4 space-x-4 rounded-lg bg-secondary">
+                                    <div className="flex items-center space-x-4 rounded-lg bg-secondary p-4">
                                         <Avatar>
                                             <AvatarImage
                                                 src={friend.avatar}

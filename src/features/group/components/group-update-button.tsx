@@ -13,8 +13,7 @@ import GroupForm from "./group-form";
 
 export default function GroupUpdateButton() {
     const [isOpen, setIsOpen] = useState(false);
-    const handleCreateGroup = (formData: FormData) => {
-        console.log(formData);
+    const handleCreateGroup = () => {
         setIsOpen(false);
     };
     const initialData = {

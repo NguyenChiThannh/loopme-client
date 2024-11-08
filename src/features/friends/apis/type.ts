@@ -5,3 +5,5 @@ export interface PendingFriend {
     sender: IUser;
     sentAt: string;
 }
+
+export interface Friend extends IUser {}

@@ -9,6 +9,8 @@ const USER = {
 
 const FRIEND = {
     pendingFriend: ["pending_friend"] as string[],
+    friends: ["friends"] as string[],
+    suggestedFriend: ["suggested_friend"] as string[],
 };
 
 const POST = {

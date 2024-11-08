@@ -1,7 +1,5 @@
 import { authApi } from "../apis";
 
-import { Button } from "@/components/ui/button";
-
 export function SignOutButton() {
     const { mutate } = authApi.mutation.useLogout();
     const handleSignOut = () => {
@@ -9,12 +7,8 @@ export function SignOutButton() {
     };
 
     return (
-        <Button
-            onClick={handleSignOut}
-            className="w-full py-2 text-sm"
-            variant={"ghost"}
-        >
+        <button onClick={handleSignOut} className="w-full text-left">
             Log out
-        </Button>
+        </button>
     );
 }

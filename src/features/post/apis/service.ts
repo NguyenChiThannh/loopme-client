@@ -1,9 +1,10 @@
 import axiosRequest from "@/configs/request";
 import { PostEndpoints } from "./config";
 import { AxiosMethod } from "@/configs/axios";
+import { IPost, PaginatedResponse } from "@/configs/type";
 
 export default class PostService {
-    public static getPosts(page: number, size: number, sort: string) {
+    public static getPosts(page: number, size: number, sort: string): Promise<PaginatedResponse<IPost[]>> {
         return axiosRequest({
             url: PostEndpoints.getPosts(),
             method: AxiosMethod.GET,
@@ -14,7 +15,7 @@ export default class PostService {
             }
         })
     }
-    public static getPostsByGroupId(groupdId: string, page: number, size: number, sort: string) {
+    public static getPostsByGroupId(groupdId: string, page: number, size: number, sort: string): Promise<PaginatedResponse<IPost[]>>  {
         return axiosRequest({
             url: PostEndpoints.getPostsByGroupId(groupdId),
             method: AxiosMethod.GET,

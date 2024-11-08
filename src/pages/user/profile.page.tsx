@@ -75,8 +75,6 @@ export function ProfileBody() {
             searchParams.get("tab") === "friend",
         );
 
-    console.log("my frriends: ", friends);
-
     const tabList = [
         {
             value: "overview",

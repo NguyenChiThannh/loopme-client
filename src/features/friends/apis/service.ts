@@ -8,6 +8,8 @@ export const FriendEndpoints = {
     acceptFriendInvitation: (userId: string) =>
         `/friends/accept-invitations/${userId}`,
     getAllFriends: () => "/friends",
+    removePendingFriendInvitation: (friendId: string) =>
+        `/friends/pending-invitations/${friendId}`,
 };
 
 export default class FriendService {
@@ -29,6 +31,14 @@ export default class FriendService {
         return axiosRequest({
             url: FriendEndpoints.getAllFriends(),
             method: AxiosMethod.GET,
+        });
+    }
+    static async removePendingFriendInvitation(
+        userId: string,
+    ): Promise<BaseResponse> {
+        return axiosRequest({
+            url: FriendEndpoints.removePendingFriendInvitation(userId),
+            method: AxiosMethod.DELETE,
         });
     }
 }

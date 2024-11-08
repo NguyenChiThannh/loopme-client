@@ -8,19 +8,27 @@ import { IUser } from "@/configs/type";
 
 type FriendItemProps = {
     friend: IUser;
-    isPending?: boolean;
+    isPendingInvitation?: boolean;
 };
 
-export function FriendItem({ friend, isPending = false }: FriendItemProps) {
-    const { mutate } = friendApi.mutation.useAcceptFriendInvitation();
+export function FriendItem({
+    friend,
+    isPendingInvitation = false,
+}: FriendItemProps) {
+    const { mutate: handleAcceptInvitation } =
+        friendApi.mutation.useAcceptFriendInvitation();
+    const { mutate: handleRejectInvitation } =
+        friendApi.mutation.useRemovePendingFriendInvitation();
 
     const handleAcceptFriendInvitation = () => {
-        if (!isPending) return;
-        mutate(friend._id);
+        if (!isPendingInvitation) return;
+        handleAcceptInvitation(friend._id);
     };
     const handleRejectFriendInvitation = () => {
-        console.log("Reject friend invitation");
+        if (!isPendingInvitation) return;
+        handleRejectInvitation(friend._id);
     };
+
     return (
         <li className="flex items-center justify-between rounded-lg border p-4">
             <div className="flex items-center space-x-4">
@@ -32,7 +40,7 @@ export function FriendItem({ friend, isPending = false }: FriendItemProps) {
                 </Avatar>
                 <span className="font-medium">{friend.displayName}</span>
             </div>
-            {isPending && (
+            {isPendingInvitation && (
                 <div className="space-x-2">
                     <Button
                         size="sm"
@@ -42,7 +50,11 @@ export function FriendItem({ friend, isPending = false }: FriendItemProps) {
                         <Check className="size-4" />
                         Accept
                     </Button>
-                    <Button size="sm" variant="destructive">
+                    <Button
+                        size="sm"
+                        variant="destructive"
+                        onClick={handleRejectFriendInvitation}
+                    >
                         <X className="size-4" />
                         Decline
                     </Button>

@@ -36,5 +36,20 @@ export const friendApi = {
                 },
             });
         },
+        useRemovePendingFriendInvitation: () => {
+            const queryClient = useQueryClient();
+            return useMutation({
+                mutationFn: (friendId: string) =>
+                    FriendService.removePendingFriendInvitation(friendId),
+                onSuccess: () => {
+                    queryClient.invalidateQueries({
+                        queryKey: GLOBAL_KEYS.FRIEND.pendingFriend,
+                    });
+                    queryClient.invalidateQueries({
+                        queryKey: GLOBAL_KEYS.FRIEND.friends,
+                    });
+                },
+            });
+        },
     },
 };

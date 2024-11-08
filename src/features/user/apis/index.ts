@@ -4,16 +4,13 @@ import { z } from "zod";
 
 import UserService from "./service";
 import { userRequestSchema } from "./type";
-
-export const USER_KEYS = {
-    user: ["user"] as string[],
-};
+import { GLOBAL_KEYS } from "@/configs/keys";
 
 export const userApi = {
     query: {
         useGetUserInformation() {
             return useQuery({
-                queryKey: USER_KEYS.user,
+                queryKey: GLOBAL_KEYS.USER.user,
                 queryFn: () => UserService.getUserInformation(),
                 retry: false,
             });
@@ -28,7 +25,7 @@ export const userApi = {
                 ) => UserService.updateUserInformation(data),
                 onSuccess() {
                     queryClient.invalidateQueries({
-                        queryKey: USER_KEYS.user,
+                        queryKey: GLOBAL_KEYS.USER.user,
                     });
                     toast.success("Cập nhật thông tin thành công");
                 },

@@ -56,7 +56,7 @@ export function Navbar() {
                             <CreatePostDialog>
                                 <PostCreateForm
                                     onSubmit={createPost}
-                                ></PostCreateForm>
+                                />
                             </CreatePostDialog>
                             <Button
                                 variant="ghost"

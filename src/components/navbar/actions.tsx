@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { ROUTES } from "@/configs/route.config";
+import { SignOutButton } from "@/features/auth/components/sign-out-button";
 import { useUser } from "@/providers/user-provider";
 
 export function Actions() {
@@ -49,9 +50,9 @@ export function Actions() {
                     <DropdownMenuItem>Profile</DropdownMenuItem>
                 </Link>
                 <DropdownMenuItem>Settings</DropdownMenuItem>
-                <Link to={"/login"}>
-                    <DropdownMenuItem>Sign out</DropdownMenuItem>
-                </Link>
+                <DropdownMenuItem>
+                    <SignOutButton />
+                </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
     );

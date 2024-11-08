@@ -9,8 +9,8 @@ import Cookies from "js-cookie";
 import AuthService from "@/features/auth/apis/service";
 
 const COOKIES_STORAGE = {
-    ACCESS_TOKEN: "accessToken",
-    REFRESH_TOKEN: "refreshToken",
+    ACCESS_TOKEN: "access_token",
+    REFRESH_TOKEN: "refresh_token",
 } as const;
 
 export const client = (() => {
@@ -68,4 +68,5 @@ export const AxiosMethod = {
     PUT: "PUT",
     DELETE: "DELETE",
     OPTIONS: "OPTIONS",
+    PATCH: "PATCH",
 };

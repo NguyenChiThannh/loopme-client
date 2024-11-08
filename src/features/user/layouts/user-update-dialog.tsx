@@ -1,3 +1,4 @@
+import { Settings } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -20,7 +21,10 @@ export function UserUpdateDialog({
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="outline">Update User Information</Button>
+                <Button variant="secondary">
+                    <Settings className="size-5" />
+                    Update Information
+                </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[550px]">
                 <DialogHeader>

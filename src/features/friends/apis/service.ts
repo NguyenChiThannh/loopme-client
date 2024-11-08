@@ -1,7 +1,7 @@
 import { Friend, PendingFriend } from "./type";
 import { AxiosMethod } from "@/configs/axios";
 import axiosRequest from "@/configs/request";
-import { BaseResponse, PaginatedResponse } from "@/configs/type";
+import { ApiResponse, BaseResponse, PaginatedResponse } from "@/configs/type";
 
 export const FriendEndpoints = {
     getPendingFriendInvitations: () => "/friends/all-invitations",
@@ -10,6 +10,9 @@ export const FriendEndpoints = {
     getAllFriends: () => "/friends",
     removePendingFriendInvitation: (friendId: string) =>
         `/friends/pending-invitations/${friendId}`,
+    getSuggestedFriends: () => "/friends/suggest-mutual-friends",
+    addPendingFriendInvitation: (userId: string) =>
+        `friends/pending-invitations/${userId}`,
 };
 
 export default class FriendService {
@@ -39,6 +42,20 @@ export default class FriendService {
         return axiosRequest({
             url: FriendEndpoints.removePendingFriendInvitation(userId),
             method: AxiosMethod.DELETE,
+        });
+    }
+    static async getSuggestedFriends(): Promise<ApiResponse<Friend[]>> {
+        return axiosRequest({
+            url: FriendEndpoints.getSuggestedFriends(),
+            method: AxiosMethod.GET,
+        });
+    }
+    static async addPendingFriendInvitation(
+        userId: string,
+    ): Promise<BaseResponse> {
+        return axiosRequest({
+            url: FriendEndpoints.addPendingFriendInvitation(userId),
+            method: AxiosMethod.POST,
         });
     }
 }

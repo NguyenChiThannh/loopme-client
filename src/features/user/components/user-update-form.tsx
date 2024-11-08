@@ -1,3 +1,4 @@
+import { userApi } from "../apis";
 import { userRequestSchema } from "../apis/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -15,6 +16,7 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 import { User } from "@/configs/type";
 
@@ -23,18 +25,19 @@ interface UserUpdateFormProps {
 }
 
 export default function UserUpdateForm({ initialValues }: UserUpdateFormProps) {
+    const { mutate, isPending } = userApi.mutation.useUpdateUserInformation();
     const form = useForm<z.infer<typeof userRequestSchema.updateUser>>({
         resolver: zodResolver(userRequestSchema.updateUser),
         defaultValues: initialValues,
     });
 
     const handleSubmit = form.handleSubmit((values) => {
-        console.log(values);
+        mutate(values);
     });
 
     return (
         <Form {...form}>
-            <form onSubmit={handleSubmit} className="space-y-8">
+            <form onSubmit={handleSubmit} className="space-y-6">
                 <FormField
                     control={form.control}
                     name="avatar"
@@ -65,6 +68,10 @@ export default function UserUpdateForm({ initialValues }: UserUpdateFormProps) {
                         </FormItem>
                     )}
                 />
+                <div className="space-y-2">
+                    <Label>Email</Label>
+                    <Input type="email" disabled value={initialValues.email} />
+                </div>
                 <FormField
                     control={form.control}
                     name="displayName"
@@ -81,7 +88,9 @@ export default function UserUpdateForm({ initialValues }: UserUpdateFormProps) {
                         </FormItem>
                     )}
                 />
-                <Button type="submit">Save changes</Button>
+                <Button type="submit" disabled={isPending}>
+                    Save changes
+                </Button>
             </form>
         </Form>
     );

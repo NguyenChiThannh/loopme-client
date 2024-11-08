@@ -1,3 +1,6 @@
+import { z } from "zod";
+
+import { userRequestSchema } from "./type";
 import { AxiosMethod } from "@/configs/axios";
 import axiosRequest from "@/configs/request";
 import { ApiResponse, BaseResponse, User } from "@/configs/type";
@@ -14,7 +17,9 @@ export default class UserService {
             url: UserEndpoints.getUserInformation(),
         });
     }
-    public static updateUserInformation(data: User): Promise<BaseResponse> {
+    public static updateUserInformation(
+        data: z.infer<typeof userRequestSchema.updateUser>,
+    ): Promise<BaseResponse> {
         return axiosRequest({
             method: AxiosMethod.PATCH,
             url: UserEndpoints.updateUserInformation(),

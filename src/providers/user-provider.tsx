@@ -1,7 +1,7 @@
 import { ReactNode, createContext, useContext } from "react";
 
+import { User } from "@/configs/type";
 import { userApi } from "@/features/user/apis";
-import { User } from "@/features/user/apis/type";
 
 interface UserContextType {
     user?: User;

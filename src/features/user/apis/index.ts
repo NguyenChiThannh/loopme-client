@@ -1,7 +1,13 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { z } from "zod";
 
-import { USER_KEYS } from "./config";
 import UserService from "./service";
+import { userRequestSchema } from "./type";
+
+export const USER_KEYS = {
+    user: ["user"] as string[],
+};
 
 export const userApi = {
     query: {
@@ -13,5 +19,23 @@ export const userApi = {
             });
         },
     },
-    mutation: {},
+    mutation: {
+        useUpdateUserInformation() {
+            const queryClient = useQueryClient();
+            return useMutation({
+                mutationFn: (
+                    data: z.infer<typeof userRequestSchema.updateUser>,
+                ) => UserService.updateUserInformation(data),
+                onSuccess() {
+                    queryClient.invalidateQueries({
+                        queryKey: USER_KEYS.user,
+                    });
+                    toast.success("Cập nhật thông tin thành công");
+                },
+                onError() {
+                    toast.error("Cập nhật thông tin thất bại");
+                },
+            });
+        },
+    },
 };

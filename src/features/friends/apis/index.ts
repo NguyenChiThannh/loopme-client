@@ -6,10 +6,16 @@ import { GLOBAL_KEYS } from "@/configs/keys";
 export const friendApi = {
     query: {
         useGetPendingFriend: (isEnabled: boolean) => {
-            console.log(isEnabled);
             return useQuery({
                 queryKey: GLOBAL_KEYS.FRIEND.pendingFriend,
                 queryFn: () => FriendService.getPendingFriend(),
+                enabled: isEnabled,
+            });
+        },
+        useGetAllFriend: (isEnabled: boolean) => {
+            return useQuery({
+                queryKey: GLOBAL_KEYS.FRIEND.friends,
+                queryFn: () => FriendService.getAllFriends(),
                 enabled: isEnabled,
             });
         },
@@ -17,13 +23,15 @@ export const friendApi = {
     mutation: {
         useAcceptFriendInvitation: () => {
             const queryClient = useQueryClient();
-
             return useMutation({
                 mutationFn: (userId: string) =>
                     FriendService.acceptFriendInvitation(userId),
                 onSuccess: () => {
                     queryClient.invalidateQueries({
                         queryKey: GLOBAL_KEYS.FRIEND.pendingFriend,
+                    });
+                    queryClient.invalidateQueries({
+                        queryKey: GLOBAL_KEYS.FRIEND.friends,
                     });
                 },
             });

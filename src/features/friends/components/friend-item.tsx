@@ -22,7 +22,7 @@ export function FriendItem({ friend, isPending = false }: FriendItemProps) {
         console.log("Reject friend invitation");
     };
     return (
-        <div className="flex items-center justify-between p-4 border rounded-lg">
+        <li className="flex items-center justify-between rounded-lg border p-4">
             <div className="flex items-center space-x-4">
                 <Avatar>
                     <AvatarImage src={friend.avatar} alt={friend.displayName} />
@@ -48,6 +48,6 @@ export function FriendItem({ friend, isPending = false }: FriendItemProps) {
                     </Button>
                 </div>
             )}
-        </div>
+        </li>
     );
 }

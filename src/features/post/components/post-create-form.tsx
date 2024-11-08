@@ -49,17 +49,11 @@ export default function PostCreateForm() {
     };
 
     return (
-        <Card className="mx-auto w-full max-w-2xl">
-            <CardHeader>
-                <CardTitle className="text-3xl">Create a New Post</CardTitle>
-                <CardDescription>
-                    Share your thoughts with the community
-                </CardDescription>
-            </CardHeader>
+        <Card className="mx-auto w-full max-w-2xl py-2">
             <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="flex flex-col space-y-2">
-                        <Label htmlFor="title" className="text-lg">
+                        <Label htmlFor="title" className="text-base">
                             Title
                         </Label>
                         <Input
@@ -67,11 +61,11 @@ export default function PostCreateForm() {
                             placeholder="Enter your post title"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
-                            className="py-3 text-lg"
+                            className="py-3 text-base"
                         />
                     </div>
                     <div className="flex flex-col space-y-2">
-                        <Label htmlFor="content" className="text-lg">
+                        <Label htmlFor="content" className="text-base">
                             Content
                         </Label>
                         <Textarea
@@ -79,11 +73,11 @@ export default function PostCreateForm() {
                             placeholder="Write your post content here"
                             value={content}
                             onChange={(e) => setContent(e.target.value)}
-                            className="min-h-[200px] py-3 text-lg"
+                            className="min-h-[200px] py-3 text-base"
                         />
                     </div>
                     <div className="flex flex-col space-y-2">
-                        <Label htmlFor="image" className="text-lg">
+                        <Label htmlFor="image" className="text-base">
                             Upload Image (optional)
                         </Label>
                         <ImageForm
@@ -94,7 +88,7 @@ export default function PostCreateForm() {
                 </form>
             </CardContent>
             <CardFooter className="flex flex-col items-start">
-                <Button onClick={handleSubmit} size="lg" className="text-lg">
+                <Button onClick={handleSubmit} size="lg" className="text-base">
                     Create Post
                 </Button>
                 {error && (

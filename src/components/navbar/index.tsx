@@ -22,6 +22,8 @@ import { Input } from "@/components/ui/input";
 
 import { Actions } from "./actions";
 import GroupCreateButton from "@/features/group/components/group-create-button";
+import { CreatePostDialog } from "@/features/post/layouts/create-post-dialog";
+import PostCreateForm from "@/features/post/components/post-create-form";
 
 export function Navbar() {
     const [isSearchExpanded, setIsSearchExpanded] = useState(false);
@@ -42,12 +44,10 @@ export function Navbar() {
                     <div className="hidden md:block">
                         <div className="ml-4 flex items-center md:ml-6">
                             <GroupCreateButton />
-                            <Link to={"/create-post"}>
-                                <Button variant="ghost">
-                                    <PlusCircle className="mr-2 h-5 w-5" />
-                                    Create Post
-                                </Button>
-                            </Link>
+
+                            <CreatePostDialog>
+                                <PostCreateForm></PostCreateForm>
+                            </CreatePostDialog>
                             <Button
                                 variant="ghost"
                                 size="icon"

@@ -43,5 +43,17 @@ export const postApi = {
                 },
             });
         },
+        useCreatePostInGroup() {
+            return useMutation({
+                mutationFn: (data: z.infer<typeof postRequestSchema.createInGroup>) =>
+                    PostService.createInGroup(data),
+                onSuccess(data) {
+                    toast.success(data.message);
+                },
+                onError() {
+                    toast.error("Something went wrong");
+                },
+            });
+        },
     },
 };

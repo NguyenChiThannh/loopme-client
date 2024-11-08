@@ -14,7 +14,6 @@ import VerifyPage from "./pages/auth/verify.page.tsx";
 import ChatPage from "./pages/chat/page.tsx";
 import GroupHomePage from "./pages/group/group.page.tsx";
 import HomePage from "./pages/home/home.page.tsx";
-import CreatePostPage from "./pages/post/create-post.page.tsx";
 import PostPage from "./pages/post/post.page.tsx";
 import ProfilePage from "./pages/user/profile.page.tsx";
 
@@ -49,10 +48,6 @@ const router = createBrowserRouter([
                     {
                         path: "/",
                         element: <HomePage />,
-                    },
-                    {
-                        path: "/create-post",
-                        element: <CreatePostPage />,
                     },
                     {
                         path: "/user",

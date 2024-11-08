@@ -2,6 +2,7 @@ import { MessageSquare, Share2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { CardFooter } from "@/components/ui/card";
+
 import { IPost } from "@/configs/type";
 
 interface PostAction {
@@ -19,7 +20,7 @@ export default function PostAction({ post, postCommentAction }: PostAction) {
                 onClick={postCommentAction}
             >
                 <MessageSquare className="mr-1 h-3 w-3" />
-                {post.comments?.length ?? ''} Comments
+                {post.comments?.length ?? ""} Comments
             </Button>
             <Button variant="ghost" size="sm" className="h-8 text-xs">
                 <Share2 className="mr-1 h-3 w-3" />

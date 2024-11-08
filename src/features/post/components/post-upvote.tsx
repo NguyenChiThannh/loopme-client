@@ -1,6 +1,7 @@
 import { ArrowBigDown, ArrowBigUp, ChevronDown, ChevronUp } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+
 import { IPost } from "@/configs/type";
 
 interface PostUpvote {

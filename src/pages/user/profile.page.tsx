@@ -68,10 +68,14 @@ export function ProfileBody() {
     const [searchParams, setSearchParams] = useSearchParams();
     const { data: posts, isPending: isPendingPosts } =
         postApi.query.useGetPost();
+    const { data: friends, isPending: isLoadingFriends } =
+        friendApi.query.useGetAllFriend(searchParams.get("tab") === "friend");
     const { data: pendingFriends, isPending: isPendingFriends } =
         friendApi.query.useGetPendingFriend(
             searchParams.get("tab") === "friend",
         );
+
+    console.log("my frriends: ", friends);
 
     const tabList = [
         {
@@ -86,9 +90,9 @@ export function ProfileBody() {
             label: "Friend",
             content: (
                 <ListFriend
-                    friends={[]}
+                    friends={friends?.data.data}
                     pendingFriends={pendingFriends?.data.data}
-                    isLoading={isPendingFriends}
+                    isLoading={isPendingFriends || isLoadingFriends}
                 />
             ),
         },

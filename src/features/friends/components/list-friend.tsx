@@ -1,6 +1,5 @@
-import { friendApi } from "../apis";
-import { PendingFriend } from "../apis/type";
-import { Check, UserPlus, X } from "lucide-react";
+import { Friend, PendingFriend } from "../apis/type";
+import { UserPlus } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -8,15 +7,9 @@ import { Separator } from "@/components/ui/separator";
 
 import { FriendItem } from "./friend-item";
 
-type Friend = {
-    id: string;
-    name: string;
-    avatar: string;
-};
-
 type FriendListProps = {
     pendingFriends?: PendingFriend[];
-    friends: Friend[];
+    friends?: Friend[];
     isLoading?: boolean;
 };
 
@@ -28,20 +21,9 @@ export function ListFriend({
     if (isLoading) {
         return <p>Loading...</p>;
     }
-    if (!friendApi) {
-        return <p>No friend</p>;
-    }
     return (
-        <div className="w-full max-w-4xl p-4 space-y-8">
-            <div className="flex items-center justify-between">
-                <h1 className="text-3xl font-bold">Friend List</h1>
-                <Button>
-                    <UserPlus className="w-4 h-4 mr-2" />
-                    Add New Friend
-                </Button>
-            </div>
-
-            <div className="space-y-6">
+        <div className="w-full space-y-8 px-10 py-2">
+            <div className="space-y-4">
                 <div>
                     <h2 className="mb-4 text-2xl font-semibold">
                         Pending Friends
@@ -74,29 +56,11 @@ export function ListFriend({
                     ) : (
                         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                             {friends.map((friend) => (
-                                <li key={friend.id}>
-                                    <div className="flex items-center p-4 space-x-4 rounded-lg bg-secondary">
-                                        <Avatar>
-                                            <AvatarImage
-                                                src={friend.avatar}
-                                                alt={friend.name}
-                                            />
-                                            <AvatarFallback>
-                                                {friend.name
-                                                    .slice(0, 2)
-                                                    .toUpperCase()}
-                                            </AvatarFallback>
-                                        </Avatar>
-                                        <div>
-                                            <p className="font-medium leading-none">
-                                                {friend.name}
-                                            </p>
-                                            <p className="text-sm text-muted-foreground">
-                                                Friend
-                                            </p>
-                                        </div>
-                                    </div>
-                                </li>
+                                <FriendItem
+                                    friend={friend}
+                                    key={friend._id}
+                                    isPending={false}
+                                />
                             ))}
                         </ul>
                     )}

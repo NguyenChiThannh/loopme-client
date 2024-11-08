@@ -1,12 +1,13 @@
-import { PendingFriend } from "./type";
+import { Friend, PendingFriend } from "./type";
 import { AxiosMethod } from "@/configs/axios";
 import axiosRequest from "@/configs/request";
 import { BaseResponse, PaginatedResponse } from "@/configs/type";
 
 export const FriendEndpoints = {
-    getPendingFriendInvitations: () => "friends/all-invitations",
+    getPendingFriendInvitations: () => "/friends/all-invitations",
     acceptFriendInvitation: (userId: string) =>
-        `friends/accept-invitations/${userId}`,
+        `/friends/accept-invitations/${userId}`,
+    getAllFriends: () => "/friends",
 };
 
 export default class FriendService {
@@ -22,6 +23,12 @@ export default class FriendService {
         return axiosRequest({
             url: FriendEndpoints.acceptFriendInvitation(userId),
             method: AxiosMethod.POST,
+        });
+    }
+    static async getAllFriends(): Promise<PaginatedResponse<Friend[]>> {
+        return axiosRequest({
+            url: FriendEndpoints.getAllFriends(),
+            method: AxiosMethod.GET,
         });
     }
 }

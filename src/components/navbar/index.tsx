@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -22,12 +23,19 @@ import { Input } from "@/components/ui/input";
 
 import { Actions } from "./actions";
 import GroupCreateButton from "@/features/group/components/group-create-button";
-import { CreatePostDialog } from "@/features/post/layouts/create-post-dialog";
+import { postApi } from "@/features/post/apis";
+import { postRequestSchema } from "@/features/post/apis/type";
 import PostCreateForm from "@/features/post/components/post-create-form";
+import { CreatePostDialog } from "@/features/post/layouts/create-post-dialog";
+import { useUser } from "@/providers/user-provider";
 
 export function Navbar() {
+    const { user } = useUser();
     const [isSearchExpanded, setIsSearchExpanded] = useState(false);
-
+    const { mutate: handleCreatePost } = postApi.mutation.useCreatePost();
+    const createPost = (values: z.infer<typeof postRequestSchema.create>) => {
+        handleCreatePost(values);
+    };
     return (
         <nav className="border-b bg-background">
             <div className="mx-auto px-4">
@@ -46,7 +54,9 @@ export function Navbar() {
                             <GroupCreateButton />
 
                             <CreatePostDialog>
-                                <PostCreateForm></PostCreateForm>
+                                <PostCreateForm
+                                    onSubmit={createPost}
+                                ></PostCreateForm>
                             </CreatePostDialog>
                             <Button
                                 variant="ghost"

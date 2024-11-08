@@ -11,29 +11,20 @@ import {
 } from "@/components/ui/card";
 
 import PostUpvote from "./post-upvote";
+import { IPost } from "@/configs/type";
 import HoverUsername from "@/features/post/components/hover-username";
 import PostAction from "@/features/post/components/post-action";
 import PostImage from "@/features/post/components/post-image";
 
-type Post = {
-    id: number;
-    title: string;
-    content: string;
-    author: string;
-    imageUrl?: string;
-    upvotes: number;
-    commentCount: number;
-    postedAt: string;
-};
-
 interface PostCardProps {
     commentSectionRef?: React.RefObject<HTMLDivElement>;
-    post: Post;
+    post: IPost;
 }
 
 export default function PostCard({ commentSectionRef, post }: PostCardProps) {
     const [isImageModalOpen, setIsImageModalOpen] = useState(false);
     const navigator = useNavigate();
+    const isGroupDefined = post.group && Object.keys(post.group).length > 0;
 
     const scrollToComments = () => {
         if (commentSectionRef)
@@ -46,48 +37,60 @@ export default function PostCard({ commentSectionRef, post }: PostCardProps) {
             <CardHeader className="flex flex-row items-center gap-4 py-3">
                 <Avatar className="size-12">
                     <AvatarImage
-                        src="/placeholder.svg?height=40&width=40"
-                        alt="u/RedditUser123"
+                        src={post.user.avatar}
+                        alt={post.user.displayName}
                     />
-                    <AvatarFallback>RU</AvatarFallback>
+                    <AvatarFallback>{post.user.displayName[0]}</AvatarFallback>
                 </Avatar>
                 <div className="flex-1">
                     <div className="flex items-center space-x-2">
-                        <Link
-                            to={"/group"}
-                            className="h-auto p-0 text-sm font-semibold hover:underline"
-                        >
-                            <span className="font-semibold">r/AskReddit</span>
-                        </Link>
-                        <span className="text-sm text-muted-foreground">•</span>
-                        <span className="text-sm text-muted-foreground">
-                            Post by
-                        </span>
+                        {isGroupDefined && (
+                            <>
+                                <Link
+                                    to={`/group/${post.group?._id}`}
+                                    className="h-auto p-0 text-sm font-semibold hover:underline"
+                                >
+                                    <span className="font-semibold">
+                                        r/{post.group?.name}
+                                    </span>
+                                </Link>
+                                <span className="text-sm text-muted-foreground">
+                                    •
+                                </span>
+                                <span className="text-sm text-muted-foreground">
+                                    Post by
+                                </span>
+                            </>
+                        )}
                         <span className="text-sm text-muted-foreground">
                             <HoverUsername
-                                name={post.author}
-                                avatarSrc={""}
-                                karma={0}
-                                joinDate={""}
-                                cakeDay={""}
-                                description={""}
+                                _id={post.user._id}
+                                displayName={post.user.displayName}
+                                avatar={post.user.avatar}
                             />
                         </span>
                     </div>
                     <span className="text-sm text-muted-foreground">
-                        {post.postedAt}
+                        {new Date(post.createdAt).toLocaleDateString("en-GB", {
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric",
+                        })}
                     </span>
                 </div>
             </CardHeader>
             <CardContent className="py-3">
                 <p className="mb-4 text-sm">{post.content}</p>
-                {post.imageUrl && (
-                    <PostImage
-                        post={post}
-                        isImageModalOpen={isImageModalOpen}
-                        setIsImageModalOpen={setIsImageModalOpen}
-                    />
-                )}
+                {post.images &&
+                    post.images.length > 0 &&
+                    post.images.map((imageUrl, index) => (
+                        <PostImage
+                            key={index}
+                            imageUrl={imageUrl}
+                            isImageModalOpen={isImageModalOpen}
+                            setIsImageModalOpen={setIsImageModalOpen}
+                        />
+                    ))}
                 <CardFooter>
                     <PostUpvote
                         post={post}

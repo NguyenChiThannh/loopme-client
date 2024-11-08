@@ -1,45 +1,31 @@
-import { Button } from "@/components/ui/button";
+import { useNavigate, useParams } from "react-router";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-import { GroupInfoCard } from "@/features/group/components/group-info-card";
 import GroupUpdateButton from "@/features/group/components/group-update-button";
 import { GroupHoverInfo } from "@/features/group/components/hover-groupname";
-import PostCard from "@/features/post/components/post-card";
-
-const posts = [
-    {
-        id: 1,
-        title: "When you finally fix that bug you've been working on for hours",
-        content: "asd",
-        author: "debuggingmaster",
-        postedAt: "2 hours ago",
-        upvotes: 1234,
-        commentCount: 89,
-        imageUrl: "123",
-    },
-    {
-        id: 1,
-        title: "When you finally fix that bug you've been working on for hours",
-        content: "asd",
-        author: "debuggingmaster",
-        postedAt: "2 hours ago",
-        upvotes: 1234,
-        commentCount: 89,
-        imageUrl: "123",
-    },
-    {
-        id: 1,
-        title: "When you finally fix that bug you've been working on for hours",
-        content: "asd",
-        author: "debuggingmaster",
-        postedAt: "2 hours ago",
-        upvotes: 1234,
-        commentCount: 89,
-        imageUrl: "123",
-    },
-];
+import { postApi } from "@/features/post/apis";
+import ListPost from "@/features/post/components/list-post";
 
 export default function GroupHomePage() {
+    const { groupId } = useParams();
+    const navigate = useNavigate();
+    if (!groupId) {
+        navigate("/");
+        return null;
+    }
+    const { data, error, isLoading } =
+        postApi.query.useGetPostByGroupId(groupId);
+    
+        console.log(data);
+    if (!data || isLoading) {
+        return <div>Loading...</div>; 
+    }
+
+    if (error) {
+        return <div>Error loading posts: {error.message}</div>; // Handle error state
+    }
+
     return (
         <>
             <div className="fixed inset-x-0 inset-y-0 -z-50">
@@ -67,9 +53,7 @@ export default function GroupHomePage() {
                     </CardContent>
                 </Card>
 
-                {posts.map((post) => (
-                    <PostCard post={post} />
-                ))}
+                <ListPost posts={data.data.data} />
             </div>
         </>
     );

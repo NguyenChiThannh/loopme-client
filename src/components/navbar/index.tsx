@@ -22,8 +22,8 @@ import { Input } from "@/components/ui/input";
 
 import { Actions } from "./actions";
 import GroupCreateButton from "@/features/group/components/group-create-button";
-import { CreatePostDialog } from "@/features/post/layouts/create-post-dialog";
 import PostCreateForm from "@/features/post/components/post-create-form";
+import { CreatePostDialog } from "@/features/post/layouts/create-post-dialog";
 
 export function Navbar() {
     const [isSearchExpanded, setIsSearchExpanded] = useState(false);
@@ -46,7 +46,7 @@ export function Navbar() {
                             <GroupCreateButton />
 
                             <CreatePostDialog>
-                                <PostCreateForm></PostCreateForm>
+                                <PostCreateForm />
                             </CreatePostDialog>
                             <Button
                                 variant="ghost"

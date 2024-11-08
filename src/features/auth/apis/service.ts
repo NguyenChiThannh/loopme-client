@@ -10,6 +10,7 @@ export const AuthEndpoints = {
     login: () => "/auth/login",
     register: () => "/auth/register",
     verifyAccount: () => "/auth/verify-account",
+    logout: () => "/auth/logout",
 };
 
 export default class AuthService {
@@ -45,6 +46,12 @@ export default class AuthService {
             url: AuthEndpoints.verifyAccount(),
             method: AxiosMethod.POST,
             data: data,
+        });
+    }
+    public static logout(): Promise<BaseResponse> {
+        return axiosRequest({
+            url: AuthEndpoints.logout(),
+            method: AxiosMethod.POST,
         });
     }
 }

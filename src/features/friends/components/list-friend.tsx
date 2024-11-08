@@ -38,7 +38,7 @@ export function ListFriend({
                                 <FriendItem
                                     friend={friend.sender}
                                     key={friend.sender._id}
-                                    isPending={true}
+                                    isPendingInvitation={true}
                                 />
                             ))}
                         </ul>
@@ -59,7 +59,7 @@ export function ListFriend({
                                 <FriendItem
                                     friend={friend}
                                     key={friend._id}
-                                    isPending={false}
+                                    isPendingInvitation={false}
                                 />
                             ))}
                         </ul>

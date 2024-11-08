@@ -1,6 +1,4 @@
 import { PlusCircleIcon } from "lucide-react";
-import { useEffect } from "react";
-import { useParams } from "react-router";
 import { Link, useSearchParams } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
@@ -12,25 +10,9 @@ import { friendApi } from "@/features/friends/apis";
 import { ListFriend } from "@/features/friends/components/list-friend";
 import { postApi } from "@/features/post/apis";
 import ListPost from "@/features/post/components/list-post";
-import PostCard from "@/features/post/components/post-card";
 import UserUpdateForm from "@/features/user/components/user-update-form";
 import { UserUpdateDialog } from "@/features/user/layouts/user-update-dialog";
 import { useUser } from "@/providers/user-provider";
-
-type Params = {
-    username: string;
-};
-
-type Post = {
-    id: number;
-    title: string;
-    content: string;
-    author: string;
-    imageUrl?: string;
-    upvotes: number;
-    commentCount: number;
-    postedAt: string;
-};
 
 export default function ProfilePage() {
     const { isLoading, user, isSignedIn } = useUser();
@@ -74,8 +56,6 @@ export function ProfileBody() {
         friendApi.query.useGetPendingFriend(
             searchParams.get("tab") === "friend",
         );
-
-    console.log("my frriends: ", friends);
 
     const tabList = [
         {

@@ -1,3 +1,4 @@
+import { postRequestSchema } from "../apis/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Label } from "@radix-ui/react-label";
 import { AlertCircle } from "lucide-react";
@@ -27,13 +28,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 import { ImageForm } from "./image-form";
-import { postRequestSchema } from "../apis/type";
 
 // interface FileWithPreview extends File {
 //     preview: string;
 // }
-
-
 
 interface PostCreateFormProps {
     onSubmit: (values: z.infer<typeof postRequestSchema.create>) => void;
@@ -58,7 +56,7 @@ export default function PostCreateForm({ onSubmit }: PostCreateFormProps) {
     // };
 
     const handleSubmit = form.handleSubmit((values) => {
-        onSubmit(values)
+        onSubmit(values);
     });
 
     return (

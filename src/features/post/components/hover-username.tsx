@@ -8,13 +8,10 @@ import {
     HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { Separator } from "@/components/ui/separator";
+
 import { IUser } from "@/configs/type";
 
-
-export default function HoverUsername({
-    displayName,
-    avatar,
-}: IUser) {
+export default function HoverUsername({ displayName, avatar }: IUser) {
     return (
         <HoverCard>
             <HoverCardTrigger asChild>
@@ -38,7 +35,9 @@ export default function HoverUsername({
                             </AvatarFallback>
                         </Avatar>
                         <div>
-                            <h4 className="text-sm font-semibold">u/{displayName}</h4>
+                            <h4 className="text-sm font-semibold">
+                                u/{displayName}
+                            </h4>
                             {/* <p className="text-xs text-muted-foreground">
                                 {karma.toLocaleString()} karma
                             </p> */}

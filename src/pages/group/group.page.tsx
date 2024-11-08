@@ -16,10 +16,10 @@ export default function GroupHomePage() {
     }
     const { data, error, isLoading } =
         postApi.query.useGetPostByGroupId(groupId);
-    
-        console.log(data);
+
+    console.log(data);
     if (!data || isLoading) {
-        return <div>Loading...</div>; 
+        return <div>Loading...</div>;
     }
 
     if (error) {

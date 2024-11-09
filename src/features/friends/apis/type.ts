@@ -1,9 +1,9 @@
-import { IUser } from "@/configs/type";
+import { UserSelect } from "@/configs/type";
 
 export interface PendingFriend {
     __v: number;
-    sender: IUser;
+    sender: UserSelect;
     sentAt: string;
 }
 
-export interface Friend extends IUser {}
+export interface Friend extends UserSelect {}

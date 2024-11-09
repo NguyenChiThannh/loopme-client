@@ -12,6 +12,7 @@ import LoginPage from "./pages/auth/login.page.tsx";
 import SignUpPage from "./pages/auth/signup.page.tsx";
 import VerifyPage from "./pages/auth/verify.page.tsx";
 import ChatPage from "./pages/chat/page.tsx";
+import GroupMemberPage from "./pages/group/group-member.page.tsx";
 import GroupHomePage from "./pages/group/group.page.tsx";
 import HomePage from "./pages/home/home.page.tsx";
 import PostPage from "./pages/post/post.page.tsx";
@@ -63,6 +64,10 @@ const router = createBrowserRouter([
                             {
                                 path: "/post",
                                 element: <PostPage />,
+                            },
+                            {
+                                path: "/group/:groupId/members",
+                                element: <GroupMemberPage />,
                             },
                         ],
                     },

@@ -1,7 +1,10 @@
 import { groupApi } from "../apis";
+import { Link } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+
+import { useUser } from "@/providers/user-provider";
 
 interface GroupInfoCardProps {
     members: number;
@@ -9,6 +12,7 @@ interface GroupInfoCardProps {
     name: string;
     groupId: string;
     isJoined: boolean;
+    isWaiting: boolean;
 }
 
 export function GroupInfoCard({
@@ -17,8 +21,13 @@ export function GroupInfoCard({
     name,
     groupId,
     isJoined,
+    isWaiting,
 }: GroupInfoCardProps) {
+    const { user } = useUser();
     const { mutate: handleJoinGroup } = groupApi.mutation.useSendJoinRequest();
+    if (!user) {
+        return <p>Loading</p>;
+    }
     const onClick = () => {
         handleJoinGroup(groupId);
     };
@@ -28,9 +37,11 @@ export function GroupInfoCard({
                 <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                         <div>
-                            <h4 className="mb-2 text-sm font-semibold">
-                                r/{name}
-                            </h4>
+                            <Link to={`/group/${groupId}`}>
+                                <h4 className="mb-2 text-sm font-semibold hover:underline">
+                                    r/{name}
+                                </h4>
+                            </Link>
                             <p className="mb-2 text-xs text-muted-foreground">
                                 {members} members
                             </p>
@@ -47,11 +58,19 @@ export function GroupInfoCard({
                             </p>
                         </div>
                     </div>
-                    {!isJoined && (
-                        <Button className="ml-auto" onClick={onClick}>
-                            Join
-                        </Button>
-                    )}
+                    <div className="ml-auto flex flex-col">
+                        {!isJoined && !isWaiting && (
+                            <Button className="mb-2 ml-auto" onClick={onClick}>
+                                Join
+                            </Button>
+                        )}
+                        {isWaiting && (
+                            <Button className="mb-2 ml-auto">Pending</Button>
+                        )}
+                        <Link to={`/group/${groupId}/members`}>
+                            <Button>Members</Button>
+                        </Link>
+                    </div>
                 </div>
             </div>
         </Card>

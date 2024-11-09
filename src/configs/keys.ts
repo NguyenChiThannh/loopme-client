@@ -32,7 +32,10 @@ const POST = {
 };
 
 const GROUP = {
+    groupPrefix: ["groupById"],
     groupById: (groupId: string) => ["groupById", groupId],
+    members: ["members"] as string[],
+    waitings: ["waitings"] as string[],
 };
 
 const NOTIFICATION = {

@@ -13,6 +13,7 @@ export const FriendEndpoints = {
     getSuggestedFriends: () => "/friends/suggest-mutual-friends",
     addPendingFriendInvitation: (userId: string) =>
         `friends/pending-invitations/${userId}`,
+    removeFriend: (friendId: string) => `/friends/${friendId}`,
 };
 
 export default class FriendService {
@@ -56,6 +57,12 @@ export default class FriendService {
         return axiosRequest({
             url: FriendEndpoints.addPendingFriendInvitation(userId),
             method: AxiosMethod.POST,
+        });
+    }
+    static async removeFriend(friendId: string): Promise<BaseResponse> {
+        return axiosRequest({
+            url: FriendEndpoints.removeFriend(friendId),
+            method: AxiosMethod.DELETE,
         });
     }
 }

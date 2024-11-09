@@ -80,7 +80,7 @@ export function AppSidebar() {
                     to={"/"}
                 >
                     <img className="size-8" src="/logo.svg" alt="Logo" />
-                    <h1>Reddog</h1>
+                    <h1>Loop Me</h1>
                 </Link>
             </SidebarHeader>
             <SidebarContent>

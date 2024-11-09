@@ -74,5 +74,18 @@ export const friendApi = {
                 },
             });
         },
+        useRemoveFriend: () => {
+            const queryClient = useQueryClient();
+            return useMutation({
+                mutationFn: (friendId: string) =>
+                    FriendService.removeFriend(friendId),
+                onSuccess: () => {
+                    queryClient.invalidateQueries({
+                        queryKey: GLOBAL_KEYS.FRIEND.friends,
+                    });
+                    toast.success("Remove friend successfully");
+                },
+            });
+        },
     },
 };

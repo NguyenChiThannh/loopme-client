@@ -5,10 +5,11 @@ import { GLOBAL_KEYS } from "@/configs/keys";
 
 export const notificationApi = {
     query: {
-        useGetNotifications() {
+        useGetNotifications(isEnabled: boolean) {
             return useQuery({
                 queryKey: GLOBAL_KEYS.NOTIFICATION.notification,
                 queryFn: () => NotificationService.getNotifications(),
+                enabled: isEnabled,
             });
         },
     },

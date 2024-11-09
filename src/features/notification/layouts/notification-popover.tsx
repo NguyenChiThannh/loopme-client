@@ -10,15 +10,16 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover";
 
+import { useNotificationStore } from "@/stores/notification-store";
+
 export function NotificationPopover() {
+    const { isOpen, handleOpenChange } = useNotificationStore();
     const [unreadCount, setUnreadCount] = useState(true);
-    const { data, isPending } = notificationApi.query.useGetNotifications();
-    if (isPending) {
-        return <Loader2 className="h-5 w-5 animate-spin" />;
-    }
+    const { data, isPending } =
+        notificationApi.query.useGetNotifications(isOpen);
 
     return (
-        <Popover>
+        <Popover open={isOpen} onOpenChange={handleOpenChange}>
             <PopoverTrigger asChild>
                 <Button variant="ghost" size="icon" className="relative">
                     <Bell className="size-8" />

@@ -1,8 +1,5 @@
 import { Friend, PendingFriend } from "../apis/type";
-import { UserPlus } from "lucide-react";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
 import { FriendItem } from "./friend-item";
@@ -60,6 +57,7 @@ export function ListFriend({
                                     friend={friend}
                                     key={friend._id}
                                     isPendingInvitation={false}
+                                    isFriend
                                 />
                             ))}
                         </ul>

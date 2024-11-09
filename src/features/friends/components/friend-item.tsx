@@ -9,24 +9,31 @@ import { IUser } from "@/configs/type";
 type FriendItemProps = {
     friend: IUser;
     isPendingInvitation?: boolean;
+    isFriend?: boolean;
 };
 
 export function FriendItem({
     friend,
     isPendingInvitation = false,
+    isFriend = false,
 }: FriendItemProps) {
     const { mutate: handleAcceptInvitation } =
         friendApi.mutation.useAcceptFriendInvitation();
     const { mutate: handleRejectInvitation } =
         friendApi.mutation.useRemovePendingFriendInvitation();
+    const { mutate: handleRemove } = friendApi.mutation.useRemoveFriend();
 
     const handleAcceptFriendInvitation = () => {
-        if (!isPendingInvitation) return;
+        if (!isPendingInvitation && !isFriend) return;
         handleAcceptInvitation(friend._id);
     };
     const handleRejectFriendInvitation = () => {
-        if (!isPendingInvitation) return;
+        if (!isPendingInvitation && !isFriend) return;
         handleRejectInvitation(friend._id);
+    };
+    const handleRemoveFriend = (friendId: string) => {
+        if (!isFriend) return;
+        handleRemove(friendId);
     };
 
     return (
@@ -40,7 +47,7 @@ export function FriendItem({
                 </Avatar>
                 <span className="font-medium">{friend.displayName}</span>
             </div>
-            {isPendingInvitation && (
+            {isPendingInvitation && !isFriend && (
                 <div className="space-x-2">
                     <Button
                         size="sm"
@@ -59,6 +66,15 @@ export function FriendItem({
                         Decline
                     </Button>
                 </div>
+            )}
+            {isFriend && (
+                <Button
+                    size="sm"
+                    variant="destructive"
+                    onClick={() => handleRemoveFriend(friend._id)}
+                >
+                    Remove
+                </Button>
             )}
         </li>
     );

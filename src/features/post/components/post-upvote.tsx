@@ -1,21 +1,63 @@
+import { postApi } from "../apis";
 import { ArrowBigDown, ArrowBigUp, ChevronDown, ChevronUp } from "lucide-react";
+import { useState } from "react";
+
+import { cn } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
 
 import { IPost } from "@/configs/type";
 
 interface PostUpvote {
-    upvote: () => void;
-    downvote: () => void;
     post: IPost;
 }
 
-export default function PostUpvote({ upvote, downvote, post }: PostUpvote) {
+export default function PostUpvote({ post }: PostUpvote) {
+    const { mutate: upvote } = postApi.mutation.useUpvote();
+    const { mutate: downvote } = postApi.mutation.useDownvote();
+    const { mutate: removevote } = postApi.mutation.useRemovevote();
+    const [voteState, setVoteState] = useState<string | null>(post.voteValue);
+    const [totalVote, setTotalVote] = useState<number>(post.totalVotes);
     const handleUpvote = () => {
-        upvote();
+        if (voteState === "UPVOTE") {
+            removevote(post._id, {
+                onSuccess: () => {
+                    setTotalVote((totalVote) => totalVote - 1);
+                    console.log("here");
+                    setVoteState(null);
+                },
+            });
+        } else {
+            upvote(post._id, {
+                onSuccess: () => {
+                    setTotalVote((totalVote) =>
+                        voteState === "DOWNVOTE"
+                            ? totalVote + 2
+                            : totalVote + 1,
+                    );
+                    setVoteState("UPVOTE");
+                },
+            });
+        }
     };
     const handleDownvote = () => {
-        downvote();
+        if (voteState === "DOWNVOTE") {
+            removevote(post._id, {
+                onSuccess: () => {
+                    setTotalVote((totalVote) => totalVote + 1);
+                    setVoteState(null);
+                },
+            });
+        } else {
+            downvote(post._id, {
+                onSuccess: () => {
+                    setTotalVote((totalVote) =>
+                        voteState === "UPVOTE" ? totalVote - 2 : totalVote - 1,
+                    );
+                    setVoteState("DOWNVOTE");
+                },
+            });
+        }
     };
     return (
         <div className="flex items-center rounded-2xl bg-slate-100 px-2 py-1">
@@ -25,16 +67,26 @@ export default function PostUpvote({ upvote, downvote, post }: PostUpvote) {
                 className="h-6 w-6"
                 onClick={handleUpvote}
             >
-                <ArrowBigUp className="h-4 w-4" />
+                <ArrowBigUp
+                    className={cn(
+                        "h-4 w-4",
+                        voteState === "UPVOTE" && "fill-black",
+                    )}
+                />
             </Button>
-            <span className="mx-2 text-sm">{post.totalVotes}</span>
+            <span className="mx-2 text-sm">{totalVote}</span>
             <Button
                 variant="ghost"
                 size="icon"
                 className="h-6 w-6"
                 onClick={handleDownvote}
             >
-                <ArrowBigDown className="h-4 w-4" />
+                <ArrowBigDown
+                    className={cn(
+                        "h-4 w-4",
+                        voteState === "DOWNVOTE" && "fill-black",
+                    )}
+                />
             </Button>
         </div>
     );

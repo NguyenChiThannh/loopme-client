@@ -70,5 +70,50 @@ export const postApi = {
                 },
             });
         },
+        useUpvote() {
+            const queryClient = useQueryClient();
+            return useMutation({
+                mutationFn: (postId: string) => PostService.upvote(postId),
+                onSuccess(data) {
+                    toast.success(data.message);
+                    //invalidate post by id
+                    // queryClient.invalidateQueries({
+                    // })
+                },
+                onError() {
+                    toast.error("Something went wrong when upvote");
+                },
+            });
+        },
+        useDownvote() {
+            const queryClient = useQueryClient();
+            return useMutation({
+                mutationFn: (postId: string) => PostService.downvote(postId),
+                onSuccess(data) {
+                    toast.success(data.message);
+                    //invalidate post by id
+                    // queryClient.invalidateQueries({
+                    // })
+                },
+                onError() {
+                    toast.error("Something went wrong when downvote");
+                },
+            });
+        },
+        useRemovevote() {
+            const queryClient = useQueryClient();
+            return useMutation({
+                mutationFn: (postId: string) => PostService.removevote(postId),
+                onSuccess(data) {
+                    toast.success(data.message);
+                    //invalidate post by id
+                    // queryClient.invalidateQueries({
+                    // })
+                },
+                onError() {
+                    toast.error("Something went wrong when removevote");
+                },
+            });
+        },
     },
 };

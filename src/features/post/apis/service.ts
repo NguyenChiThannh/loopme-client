@@ -3,14 +3,19 @@ import { z } from "zod";
 import { postRequestSchema } from "./type";
 import { AxiosMethod } from "@/configs/axios";
 import axiosRequest from "@/configs/request";
-import { ApiResponse, IPost, PaginatedResponse } from "@/configs/type";
+import {
+    ApiResponse,
+    BaseResponse,
+    IPost,
+    PaginatedResponse,
+} from "@/configs/type";
 
 export const PostEndpoints = {
     getPosts: () => "/posts",
     create: () => "/posts",
-    upvote: () => "/posts/:postId/upvote",
-    downvote: () => "/posts/:postId/downvote",
-    removevote: () => "/posts/:postId/removevote",
+    upvote: (postId: string) => `/posts/${postId}/upvote`,
+    downvote: (postId: string) => `/posts/${postId}/downvote`,
+    removevote: (postId: string) => `/posts/${postId}/removevote`,
     getPostsByGroupId: (groupId: string) => `/posts/group/${groupId}`,
 };
 
@@ -62,6 +67,24 @@ export default class PostService {
             url: PostEndpoints.create(),
             method: AxiosMethod.POST,
             data: data,
+        });
+    }
+    public static upvote(postId: string): Promise<BaseResponse> {
+        return axiosRequest({
+            url: PostEndpoints.upvote(postId),
+            method: AxiosMethod.POST,
+        });
+    }
+    public static downvote(postId: string): Promise<BaseResponse> {
+        return axiosRequest({
+            url: PostEndpoints.downvote(postId),
+            method: AxiosMethod.POST,
+        });
+    }
+    public static removevote(postId: string): Promise<BaseResponse> {
+        return axiosRequest({
+            url: PostEndpoints.removevote(postId),
+            method: AxiosMethod.DELETE,
         });
     }
 }

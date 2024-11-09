@@ -17,7 +17,7 @@ export interface User {
     __v: number;
 }
 
-type VoteValue = "UPVOTE" | "DOWNVOTE" | null; // Added null for voteValue
+export type VoteValue = "UPVOTE" | "DOWNVOTE" | null; // Added null for voteValue
 
 export interface UserSelect {
     _id: string;

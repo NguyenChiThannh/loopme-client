@@ -23,6 +23,7 @@ import { Input } from "@/components/ui/input";
 
 import { Actions } from "./actions";
 import GroupCreateButton from "@/features/group/components/group-create-button";
+import { NotificationPopover } from "@/features/notification/layouts/notification-popover";
 import { postApi } from "@/features/post/apis";
 import { postRequestSchema } from "@/features/post/apis/type";
 import PostCreateForm from "@/features/post/components/post-create-form";
@@ -53,7 +54,7 @@ export function Navbar() {
                         </div>
                     </div>
                     <div className="hidden md:block">
-                        <div className="ml-4 flex items-center md:ml-6">
+                        <div className="flex items-center space-x-4">
                             {isSignedIn && (
                                 <>
                                     <GroupCreateButton />
@@ -63,13 +64,7 @@ export function Navbar() {
                                     >
                                         <PostCreateForm onSubmit={createPost} />
                                     </CreatePostDialog>
-                                    <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        className="ml-2"
-                                    >
-                                        <Bell className="h-5 w-5" />
-                                    </Button>
+                                    <NotificationPopover />
                                     <Link to={"/chat"}>
                                         <Button
                                             variant="ghost"

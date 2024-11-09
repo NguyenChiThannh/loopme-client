@@ -35,10 +35,16 @@ const GROUP = {
     groupById: (groupId: string) => ["groupById", groupId],
 };
 
+const NOTIFICATION = {
+    prefix: ["notification"] as string[],
+    notification: ["notification"] as string[],
+};
+
 export const GLOBAL_KEYS = {
     AUTH,
     USER,
     FRIEND,
     POST,
     GROUP,
+    NOTIFICATION,
 };

@@ -92,11 +92,7 @@ export default function PostCard({ commentSectionRef, post }: PostCardProps) {
                         />
                     ))}
                 <CardFooter>
-                    <PostUpvote
-                        post={post}
-                        downvote={() => {}}
-                        upvote={() => {}}
-                    />
+                    <PostUpvote post={post} />
                     <PostAction
                         post={post}
                         postCommentAction={scrollToComments}

@@ -1,8 +1,6 @@
 import { postRequestSchema } from "../apis/type";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Label } from "@radix-ui/react-label";
 import { AlertCircle } from "lucide-react";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -11,10 +9,7 @@ import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
-    CardDescription,
     CardFooter,
-    CardHeader,
-    CardTitle,
 } from "@/components/ui/card";
 import {
     Form,
@@ -24,14 +19,9 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 import { ImageForm } from "./image-form";
-
-// interface FileWithPreview extends File {
-//     preview: string;
-// }
 
 interface PostCreateFormProps {
     onSubmit: (values: z.infer<typeof postRequestSchema.create>) => void;

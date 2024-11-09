@@ -9,9 +9,9 @@ import {
 } from "@/components/ui/hover-card";
 import { Separator } from "@/components/ui/separator";
 
-import { IUser } from "@/configs/type";
+import { UserSelect } from "@/configs/type";
 
-export default function HoverUsername({ displayName, avatar }: IUser) {
+export default function HoverUsername({ displayName, avatar }: UserSelect) {
     return (
         <HoverCard>
             <HoverCardTrigger asChild>

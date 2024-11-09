@@ -1,8 +1,20 @@
+import { groupApi } from "../apis";
+import { groupRequestSchema } from "../apis/type";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
+import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 
 type GroupFormProps = {
@@ -12,15 +24,21 @@ type GroupFormProps = {
         backgroundCover?: string;
         isPublic: boolean;
     };
-    onSubmit: (data: FormData) => void;
+    onSubmit: () => void;
 };
 
 export default function GroupForm(
     { initialData, onSubmit }: GroupFormProps = { onSubmit: () => {} },
 ) {
-    const [title, setTitle] = useState(initialData?.title || "");
-    const [backgroundCover, setBackgroundCover] = useState<File | null>(null);
-    const [isPublic, setIsPublic] = useState(initialData?.isPublic || false);
+    const form = useForm<z.infer<typeof groupRequestSchema.create>>({
+        resolver: zodResolver(groupRequestSchema.create),
+        defaultValues: {
+            name: "",
+            background_cover: null,
+            isPublic: true,
+        },
+    });
+    const { mutate: createGroup } = groupApi.mutation.useCreateGroup();
     const [previewUrl, setPreviewUrl] = useState(
         initialData?.backgroundCover || "",
     );
@@ -32,7 +50,6 @@ export default function GroupForm(
     ) => {
         const file = e.target.files?.[0];
         if (file) {
-            setBackgroundCover(file);
             const reader = new FileReader();
             reader.onloadend = () => {
                 setPreviewUrl(reader.result as string);
@@ -41,62 +58,77 @@ export default function GroupForm(
         }
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        const formData = new FormData();
-        formData.append("title", title);
-        if (backgroundCover) {
-            formData.append("backgroundCover", backgroundCover);
-        }
-        formData.append("isPublic", isPublic.toString());
-        if (isUpdateMode) {
-            formData.append("id", initialData.id);
-        }
-        onSubmit(formData);
-    };
+    const handleSubmit = form.handleSubmit((values) => {
+        createGroup(values);
+        onSubmit();
+    });
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-                <Label htmlFor="title">Group Name</Label>
-                <Input
-                    id="title"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    required
+        <Form {...form}>
+            <form onSubmit={handleSubmit} className="space-y-4">
+                <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Group Name</FormLabel>
+                            <FormControl>
+                                <Input {...field} />
+                            </FormControl>
+                        </FormItem>
+                    )}
                 />
-            </div>
-            <div className="space-y-2">
-                <Label htmlFor="backgroundCover">
-                    Background Cover (optional)
-                </Label>
-                <Input
-                    id="backgroundCover"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleBackgroundCoverChange}
-                />
-                {previewUrl && (
-                    <div className="mt-2">
-                        <img
-                            src={previewUrl}
-                            alt="Background cover preview"
-                            className="h-auto max-w-full rounded"
+
+                <FormItem>
+                    <FormLabel htmlFor="backgroundCover">
+                        Background Cover (optional)
+                    </FormLabel>
+                    <FormControl>
+                        <Input
+                            id="backgroundCover"
+                            type="file"
+                            accept="image/*"
+                            onChange={handleBackgroundCoverChange}
                         />
-                    </div>
-                )}
-            </div>
-            <div className="flex items-center space-x-2">
-                <Switch
-                    id="isPublic"
-                    checked={isPublic}
-                    onCheckedChange={setIsPublic}
+                    </FormControl>
+                    {previewUrl && (
+                        <div className="mt-2">
+                            <img
+                                src={previewUrl}
+                                alt="Background cover preview"
+                                className="h-auto max-w-full rounded"
+                            />
+                        </div>
+                    )}
+                </FormItem>
+
+                <FormField
+                    control={form.control}
+                    name="isPublic"
+                    render={({ field }) => (
+                        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                            <div className="space-y-0.5">
+                                <FormLabel className="text-base">
+                                    Public Group
+                                </FormLabel>
+                                <FormDescription>
+                                    Make this group visible to everyone
+                                </FormDescription>
+                            </div>
+                            <FormControl>
+                                <Switch
+                                    checked={field.value}
+                                    onCheckedChange={field.onChange}
+                                />
+                            </FormControl>
+                        </FormItem>
+                    )}
                 />
-                <Label htmlFor="isPublic">Public Group</Label>
-            </div>
-            <Button type="submit" className="w-full">
-                {initialData ? "Update Group" : "Create Group"}
-            </Button>
-        </form>
+
+                <Button type="submit" className="w-full">
+                    {initialData ? "Update Group" : "Create Group"}
+                </Button>
+            </form>
+        </Form>
     );
 }

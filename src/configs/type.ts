@@ -19,7 +19,7 @@ export interface User {
 
 type VoteValue = "UPVOTE" | "DOWNVOTE" | null; // Added null for voteValue
 
-export interface IUser {
+export interface UserSelect {
     _id: string;
     displayName: string;
     avatar: string;
@@ -46,7 +46,7 @@ export interface IPost {
     _id: string;
     group?: IGroup | null; // Assuming group can be empty or an object with unknown shape
     content: string;
-    user: IUser; // user is now an IUser object, based on the provided response
+    user: UserSelect; // user is now an IUser object, based on the provided response
     images: string[];
     privacy: "public" | "private" | "friends";
     createdAt: Date;
@@ -66,4 +66,27 @@ export interface PaginatedResponse<T> extends BaseResponse {
     hasNextPage: boolean;
     nextCursor?: number;
     totalElement?: number;
+}
+
+export interface Group {
+    _id: string;
+    name: string;
+    owner: UserSelect;
+    background_cover: string;
+    isPublic: boolean;
+    members: Member[];
+    pendingInvitations: PendingInvitation[];
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+}
+
+export interface PendingInvitation {
+    user: string;
+    joinAt: string;
+}
+
+export interface Member {
+    user: UserSelect;
+    joinAt: string;
 }

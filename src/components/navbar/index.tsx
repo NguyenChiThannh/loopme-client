@@ -35,7 +35,10 @@ export function Navbar() {
     const { mutate: handleCreatePost } = postApi.mutation.useCreatePost();
     const createPost = (values: z.infer<typeof postRequestSchema.create>) => {
         handleCreatePost(values);
+        setIsOpen(false);
     };
+    const [isOpen, setIsOpen] = useState(false);
+
     return (
         <nav className="border-b bg-background">
             <div className="mx-auto px-4">
@@ -54,7 +57,10 @@ export function Navbar() {
                             {isSignedIn && (
                                 <>
                                     <GroupCreateButton />
-                                    <CreatePostDialog>
+                                    <CreatePostDialog
+                                        isOpen={isOpen}
+                                        setIsOpen={setIsOpen}
+                                    >
                                         <PostCreateForm onSubmit={createPost} />
                                     </CreatePostDialog>
                                     <Button

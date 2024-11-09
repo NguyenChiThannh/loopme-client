@@ -13,8 +13,32 @@ const FRIEND = {
     suggestedFriend: ["suggested_friend"] as string[],
 };
 
+const POST = {
+    prefixPost: ["posts"],
+    posts: (page: number, size: number, sort: string) => [
+        "posts",
+        page,
+        size,
+        sort,
+    ],
+    prefixGroupPost: ["groupPosts"],
+    groupPosts: (groupId: string, page: number, size: number, sort: string) => [
+        "groupPosts",
+        groupId,
+        page,
+        size,
+        sort,
+    ],
+};
+
+const GROUP = {
+    groupById: (groupId: string) => ["groupById", groupId],
+};
+
 export const GLOBAL_KEYS = {
     AUTH,
     USER,
     FRIEND,
+    POST,
+    GROUP,
 };

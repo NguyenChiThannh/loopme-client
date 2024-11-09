@@ -55,4 +55,13 @@ export default class PostService {
             data: data,
         });
     }
+    public static createInGroup(
+        data: z.infer<typeof postRequestSchema.create>,
+    ): Promise<ApiResponse<IPost>> {
+        return axiosRequest({
+            url: PostEndpoints.create(),
+            method: AxiosMethod.POST,
+            data: data,
+        });
+    }
 }

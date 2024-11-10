@@ -24,6 +24,7 @@ export const GroupEndpoints = {
         `/groups/${groupId}/pending-invitations/${userId}`,
     removeMember: (groupId: string, userId: string) =>
         `/groups/${groupId}/members/${userId}`,
+    getJoinedGroup: () => "/groups",
 };
 
 export default class GroupService {
@@ -91,6 +92,13 @@ export default class GroupService {
         return axiosRequest({
             url: GroupEndpoints.removeMember(groupId, userId),
             method: AxiosMethod.DELETE,
+        });
+    }
+    public static async getJoinedGroup(
+    ): Promise<ApiResponse<Group[]>> {
+        return axiosRequest({
+            url: GroupEndpoints.getJoinedGroup(),
+            method: AxiosMethod.GET,
         });
     }
 }

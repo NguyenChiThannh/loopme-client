@@ -8,11 +8,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { User } from "@/configs/type";
 import { friendApi } from "@/features/friends/apis";
 import { ListFriend } from "@/features/friends/components/list-friend";
+import { groupApi } from "@/features/group/apis";
 import { postApi } from "@/features/post/apis";
 import ListPost from "@/features/post/components/list-post";
 import UserUpdateForm from "@/features/user/components/user-update-form";
 import { UserUpdateDialog } from "@/features/user/layouts/user-update-dialog";
 import { useUser } from "@/providers/user-provider";
+import { ListGroup } from "@/features/group/components/list-group";
 
 export default function ProfilePage() {
     const { isLoading, user, isSignedIn } = useUser();
@@ -56,7 +58,8 @@ export function ProfileBody() {
         friendApi.query.useGetPendingFriend(
             searchParams.get("tab") === "friend",
         );
-
+    const { data: groups, isPending: isPendingGroups } =
+        groupApi.query.useGetJoinedGroup(searchParams.get("tab") === "group");
     const tabList = [
         {
             value: "overview",
@@ -90,6 +93,11 @@ export function ProfileBody() {
             value: "downvote",
             label: "Downvote",
             content: <div>Downvote</div>,
+        },
+        {
+            value: "group",
+            label: "Group",
+            content: <ListGroup groups={groups?.data} isLoading={isPendingGroups} />,
         },
     ];
 

@@ -27,6 +27,13 @@ export const groupApi = {
                 enabled: isEnabled,
             });
         },
+        useGetJoinedGroup: (isEnabled: boolean) => {
+            return useQuery({
+                queryKey: GLOBAL_KEYS.GROUP.groupPrefix,
+                queryFn: () => GroupService.getJoinedGroup(),
+                enabled: isEnabled,
+            });
+        },
     },
     mutation: {
         useCreateGroup() {

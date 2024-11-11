@@ -3,6 +3,6 @@ export const ROUTES = {
     LOGIN_PAGE: "/login",
     SIGNUP_PAGE: "/signup",
     CREATE_POST_PAGE: "/create-post",
-    USER_PAGE: (username: string) => `/user/${username}`,
+    USER_PAGE: (userId: string) => `/user/${userId}`,
     GROUP_PAGE: "/group/:groupName",
 };

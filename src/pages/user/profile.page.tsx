@@ -1,5 +1,5 @@
 import { PlusCircleIcon } from "lucide-react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -9,25 +9,33 @@ import { User } from "@/configs/type";
 import { friendApi } from "@/features/friends/apis";
 import { ListFriend } from "@/features/friends/components/list-friend";
 import { groupApi } from "@/features/group/apis";
+import { ListGroup } from "@/features/group/components/list-group";
 import { postApi } from "@/features/post/apis";
 import ListPost from "@/features/post/components/list-post";
+import { userApi } from "@/features/user/apis";
 import UserUpdateForm from "@/features/user/components/user-update-form";
 import { UserUpdateDialog } from "@/features/user/layouts/user-update-dialog";
 import { useUser } from "@/providers/user-provider";
-import { ListGroup } from "@/features/group/components/list-group";
+
+type Params = {
+    userId: string;
+};
 
 export default function ProfilePage() {
-    const { isLoading, user, isSignedIn } = useUser();
-    if (isLoading) {
+    const params = useParams<Params>();
+    const { data, isPending, isError } = userApi.query.useGetUserById(
+        params.userId || "",
+    );
+    if (isPending) {
         return <p>Loading Profile</p>;
     }
-    if (!isSignedIn || !user) {
-        return <p>Please login to enter this page</p>;
+    if (!data || isError) {
+        return <p>User not found !</p>;
     }
     return (
         <section className="flex flex-col space-y-4">
             {/* Header */}
-            <ProfileHeader {...user} />
+            <ProfileHeader {...data.data} />
             {/* Body */}
             <ProfileBody />
         </section>
@@ -49,9 +57,10 @@ export function ProfileHeader(props: ProfileHeaderProps) {
 }
 
 export function ProfileBody() {
+    const params = useParams();
     const [searchParams, setSearchParams] = useSearchParams();
     const { data: posts, isPending: isPendingPosts } =
-        postApi.query.useGetPost();
+        postApi.query.useGetPostByUserId(params.userId || "");
     const { data: friends, isPending: isLoadingFriends } =
         friendApi.query.useGetAllFriend(searchParams.get("tab") === "friend");
     const { data: pendingFriends, isPending: isPendingFriends } =
@@ -97,7 +106,9 @@ export function ProfileBody() {
         {
             value: "group",
             label: "Group",
-            content: <ListGroup groups={groups?.data} isLoading={isPendingGroups} />,
+            content: (
+                <ListGroup groups={groups?.data} isLoading={isPendingGroups} />
+            ),
         },
     ];
 

@@ -12,6 +12,7 @@ import {
 
 export const PostEndpoints = {
     getPosts: () => "/posts",
+    getPostsByUserId: (userId: string) => `/posts/user/${userId}`,
     create: () => "/posts",
     upvote: (postId: string) => `/posts/${postId}/upvote`,
     downvote: (postId: string) => `/posts/${postId}/downvote`,
@@ -27,6 +28,22 @@ export default class PostService {
     ): Promise<PaginatedResponse<IPost[]>> {
         return axiosRequest({
             url: PostEndpoints.getPosts(),
+            method: AxiosMethod.GET,
+            params: {
+                page,
+                size,
+                sort,
+            },
+        });
+    }
+    public static getPostsByUserId(
+        userId: string,
+        page: number,
+        size: number,
+        sort: string,
+    ): Promise<PaginatedResponse<IPost[]>> {
+        return axiosRequest({
+            url: PostEndpoints.getPostsByUserId(userId),
             method: AxiosMethod.GET,
             params: {
                 page,

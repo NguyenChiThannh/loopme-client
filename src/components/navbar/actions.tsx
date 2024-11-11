@@ -40,13 +40,13 @@ export function Actions() {
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="ml-2">
                     <User className="mr-2 size-5" />
-                    <ChevronDown className="size-5" />
+                    <ChevronDown className="s ize-5" />
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <Link to={"user"}>
+                <Link to={ROUTES.USER_PAGE(user._id)}>
                     <DropdownMenuItem>Profile</DropdownMenuItem>
                 </Link>
                 <DropdownMenuItem>Settings</DropdownMenuItem>

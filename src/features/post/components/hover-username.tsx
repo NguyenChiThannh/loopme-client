@@ -9,14 +9,19 @@ import {
 } from "@/components/ui/hover-card";
 import { Separator } from "@/components/ui/separator";
 
+import { ROUTES } from "@/configs/route.config";
 import { UserSelect } from "@/configs/type";
 
-export default function HoverUsername({ displayName, avatar }: UserSelect) {
+export default function HoverUsername({
+    displayName,
+    avatar,
+    _id,
+}: UserSelect) {
     return (
         <HoverCard>
             <HoverCardTrigger asChild>
                 <Link
-                    to={`/user/${displayName}`}
+                    to={ROUTES.USER_PAGE(_id)}
                     className="h-auto p-0 text-sm font-semibold hover:underline"
                 >
                     u/{displayName}
@@ -47,11 +52,11 @@ export default function HoverUsername({ displayName, avatar }: UserSelect) {
                     <Separator />
                     <div className="flex justify-between text-xs text-muted-foreground">
                         <div className="flex items-center">
-                            <CalendarDays className="mr-1 h-3 w-3" />
+                            <CalendarDays className="w-3 h-3 mr-1" />
                             Joined {joinDate}
                         </div>
                         <div className="flex items-center">
-                            <Cake className="mr-1 h-3 w-3" />
+                            <Cake className="w-3 h-3 mr-1" />
                             Cake day {cakeDay}
                         </div>
                     </div> */}

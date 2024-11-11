@@ -1,12 +1,17 @@
 import { useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router";
 
 import { cn } from "@/lib/utils";
 
+import { ROUTES } from "@/configs/route.config";
+import { IComment } from "@/configs/type";
+import { postApi } from "@/features/post/apis";
 import PostCard from "@/features/post/components/post-card";
 import PostComment from "@/features/post/components/post-comment";
 import PostCommentForm from "@/features/post/components/post-comment-form";
 import PostReply from "@/features/post/components/post-reply";
 import PostReplyForm from "@/features/post/components/post-reply-form";
+import { useUser } from "@/providers/user-provider";
 
 type Comment = {
     id: number;
@@ -28,118 +33,41 @@ type Post = {
 };
 
 export default function PostPage() {
-    const [post, setPost] = useState<Post>({
-        id: 1,
-        title: "Interesting Post Title",
-        content:
-            "This is the main content of the post. It can be quite long and detailed, discussing various topics or sharing information.",
-        author: "original_poster",
-        imageUrl: "/placeholder.svg?height=600&width=800",
-        upvotes: 256,
-        commentCount: 45,
-        postedAt: "5 hours ago",
-    });
-
-    const [comments, setComments] = useState<Comment[]>([
-        {
-            id: 1,
-            author: "user123",
-            content: "Great post! Really insightful.",
-            upvotes: 15,
-            replies: [
-                {
-                    id: 2,
-                    author: "reply_user1",
-                    content: "I agree, very informative!",
-                    upvotes: 7,
-                    replies: [],
-                },
-                {
-                    id: 3,
-                    author: "reply_user2",
-                    content:
-                        "Thanks for sharing your thoughts. I learned a lot from this.",
-                    upvotes: 5,
-                    replies: [
-                        {
-                            id: 4,
-                            author: "nested_reply_user",
-                            content:
-                                "Glad to see others finding this helpful too!",
-                            upvotes: 3,
-                            replies: [],
-                        },
-                    ],
-                },
-            ],
-        },
-        {
-            id: 5,
-            author: "another_user",
-            content:
-                "This is an interesting perspective. I have a different view though.",
-            upvotes: 8,
-            replies: [],
-        },
-    ]);
-
-    const [replyingTo, setReplyingTo] = useState<number | null>(null);
+    const { postId } = useParams();
+    const { user } = useUser();
+    const navigate = useNavigate();
     const commentSectionRef = useRef<HTMLDivElement>(null);
+    if (!postId || !user?._id) {
+        navigate(ROUTES.HOME_PAGE);
+        return;
+    }
+    const { data, isLoading } = postApi.query.useGetPostById(postId);
+    if (!data || isLoading) {
+        return <div>Loading...</div>;
+    }
 
-    const handleReplyClick = (commentId: number) => {
-        setReplyingTo((prevState) =>
-            prevState === commentId ? null : commentId,
-        );
-    };
-
-    const renderComments = (
-        comments: Comment[],
-        isReply = false,
-        depth = 0,
-    ) => {
+    const renderComments = (comments: IComment[]) => {
         return comments.map((comment) => (
-            <div
-                key={comment.id}
-                className={cn("mb-2", {
-                    [`ml-8 border-l border-gray-200 pl-2`]: isReply,
-                })}
-            >
-                {isReply ? (
-                    <PostReply
-                        author={comment.author}
-                        commentContent={comment.content}
-                        commentId={comment.id}
-                        handleReplyClick={handleReplyClick}
-                        commentUpvote={comment.upvotes}
-                    />
-                ) : (
-                    <PostComment
-                        author={comment.author}
-                        commentContent={comment.content}
-                        commentId={comment.id}
-                        handleReplyClick={handleReplyClick}
-                    />
-                )}
-                {replyingTo === comment.id && (
-                    <PostReplyForm
-                        comment={comment}
-                        setReplyingTo={setReplyingTo}
-                    />
-                )}
-                {comment.replies.length > 0 && (
-                    <div>
-                        {renderComments(comment.replies, true, depth + 1)}
-                    </div>
-                )}
+            <div key={comment._id} className={cn("mb-2")}>
+                <PostComment
+                    comment={comment}
+                    currentUserId={user?._id}
+                    postId={postId}
+                />
             </div>
         ));
     };
-
+    console.log(data.data[0]);
     return (
         <div className="max-w-2xl md:col-span-2">
-            <PostCard commentSectionRef={commentSectionRef} post={post} />
-            <PostCommentForm />
-            <div ref={commentSectionRef}>{renderComments(comments)}</div>
+            <PostCard
+                commentSectionRef={commentSectionRef}
+                post={data.data[0]}
+            />
+            <PostCommentForm postId={data.data[0]._id} />
+            <div ref={commentSectionRef}>
+                {renderComments(data.data[0].comments || [])}
+            </div>
         </div>
     );
 }

@@ -18,6 +18,8 @@ export const PostEndpoints = {
     downvote: (postId: string) => `/posts/${postId}/downvote`,
     removevote: (postId: string) => `/posts/${postId}/removevote`,
     getPostsByGroupId: (groupId: string) => `/posts/group/${groupId}`,
+    getPostById: (postId: string) => `/posts/${postId}`,
+    addComment: (postId: string) => `/posts/${postId}/comment`,
 };
 
 export default class PostService {
@@ -102,6 +104,36 @@ export default class PostService {
         return axiosRequest({
             url: PostEndpoints.removevote(postId),
             method: AxiosMethod.DELETE,
+        });
+    }
+    public static getPostById(postId: string): Promise<ApiResponse<IPost[]>> {
+        return axiosRequest({
+            url: PostEndpoints.getPostById(postId),
+            method: AxiosMethod.GET,
+        });
+    }
+    public static addComment(
+        postId: string,
+        content: string,
+    ): Promise<BaseResponse> {
+        return axiosRequest({
+            url: PostEndpoints.addComment(postId),
+            method: AxiosMethod.POST,
+            data: {
+                content,
+            },
+        });
+    }
+    public static removeComment(
+        postId: string,
+        commentId: string,
+    ): Promise<BaseResponse> {
+        return axiosRequest({
+            url: PostEndpoints.addComment(postId),
+            method: AxiosMethod.DELETE,
+            params: {
+                commentId,
+            },
         });
     }
 }

@@ -64,10 +64,6 @@ const router = createBrowserRouter([
                                 element: <GroupHomePage />,
                             },
                             {
-                                path: "/post",
-                                element: <PostPage />,
-                            },
-                            {
                                 path: "/group/:groupId/members",
                                 element: <GroupMemberPage />,
                             },
@@ -76,6 +72,10 @@ const router = createBrowserRouter([
                     {
                         path: "/search",
                         element: <SearchPage />,
+                    },
+                    {
+                        path: "/post/:postId",
+                        element: <PostPage />,
                     },
                 ],
             },

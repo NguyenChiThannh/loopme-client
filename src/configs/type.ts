@@ -90,3 +90,7 @@ export interface Member {
     user: UserSelect;
     joinAt: string;
 }
+
+export interface SearchParams {
+    q: string | null;
+}

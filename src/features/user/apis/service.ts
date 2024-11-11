@@ -8,6 +8,7 @@ import { ApiResponse, BaseResponse, User } from "@/configs/type";
 export const UserEndpoints = {
     getUserInformation: () => "/user",
     updateUserInformation: () => "/user",
+    getUserById: (userId: string) => `/user/${userId}`,
 };
 
 export default class UserService {
@@ -24,6 +25,12 @@ export default class UserService {
             method: AxiosMethod.PATCH,
             url: UserEndpoints.updateUserInformation(),
             data,
+        });
+    }
+    public static getUserById(userId: string): Promise<ApiResponse<User>> {
+        return axiosRequest({
+            method: AxiosMethod.GET,
+            url: UserEndpoints.getUserById(userId),
         });
     }
 }

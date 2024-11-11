@@ -17,11 +17,6 @@ export default function HomePage() {
         <section className="relative flex space-x-8">
             <div className="w-[70%]">
                 <ListPost posts={data.data.data} />
-                <ListPost posts={data.data.data} />
-                <ListPost posts={data.data.data} />
-                <ListPost posts={data.data.data} />
-                <ListPost posts={data.data.data} />
-                <ListPost posts={data.data.data} />
             </div>
             <RightSidebarLayout>
                 <ListSuggestedFriend />

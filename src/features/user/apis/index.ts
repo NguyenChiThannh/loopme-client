@@ -12,6 +12,13 @@ export const userApi = {
             return useQuery({
                 queryKey: GLOBAL_KEYS.USER.user,
                 queryFn: () => UserService.getUserInformation(),
+                retry: 1,
+            });
+        },
+        useGetUserById(userId: string) {
+            return useQuery({
+                queryKey: GLOBAL_KEYS.USER.user,
+                queryFn: () => UserService.getUserById(userId),
                 retry: false,
             });
         },

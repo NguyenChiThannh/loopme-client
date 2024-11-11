@@ -35,6 +35,18 @@ export const postApi = {
                     PostService.getPostsByGroupId(groupId, page, size, sort),
             });
         },
+        useGetPostByUserId: (
+            userId: string,
+            page: number = 1,
+            size: number = 10,
+            sort: string = "asc",
+        ) => {
+            return useQuery({
+                queryKey: GLOBAL_KEYS.POST.userPosts(userId, page, size, sort),
+                queryFn: () =>
+                    PostService.getPostsByUserId(userId, page, size, sort),
+            });
+        },
     },
     mutation: {
         useCreatePost() {

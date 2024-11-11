@@ -31,6 +31,13 @@ const POST = {
         size,
         sort,
     ],
+    userPosts: (userId: string, page: number, size: number, sort: string) => [
+        "user_posts",
+        userId,
+        page,
+        size,
+        sort,
+    ],
 };
 
 const GROUP = {

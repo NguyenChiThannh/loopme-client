@@ -1,5 +1,4 @@
 import {
-    Bell,
     Flame,
     Home,
     MessageSquare,
@@ -28,6 +27,7 @@ import { postApi } from "@/features/post/apis";
 import { postRequestSchema } from "@/features/post/apis/type";
 import PostCreateForm from "@/features/post/components/post-create-form";
 import { CreatePostDialog } from "@/features/post/layouts/create-post-dialog";
+import { SearchBar } from "@/features/search/components/search-bar";
 import { useUser } from "@/providers/user-provider";
 
 export function Navbar() {
@@ -46,11 +46,7 @@ export function Navbar() {
                 <div className="flex h-16 items-center justify-between">
                     <div className="hidden flex-1 px-4 md:block">
                         <div className="mx-auto w-full max-w-lg">
-                            <Input
-                                type="search"
-                                placeholder="Search"
-                                className="w-full bg-muted"
-                            />
+                            <SearchBar />
                         </div>
                     </div>
                     <div className="hidden md:block">

@@ -1,3 +1,4 @@
+import { NuqsAdapter } from "nuqs/adapters/react-router";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
@@ -16,6 +17,7 @@ import GroupMemberPage from "./pages/group/group-member.page.tsx";
 import GroupHomePage from "./pages/group/group.page.tsx";
 import HomePage from "./pages/home/home.page.tsx";
 import PostPage from "./pages/post/post.page.tsx";
+import SearchPage from "./pages/search/search.page.tsx";
 import ProfilePage from "./pages/user/profile.page.tsx";
 
 const router = createBrowserRouter([
@@ -71,6 +73,10 @@ const router = createBrowserRouter([
                             },
                         ],
                     },
+                    {
+                        path: "/search",
+                        element: <SearchPage />,
+                    },
                 ],
             },
             {
@@ -83,6 +89,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
-        <RouterProvider router={router} />
+        <NuqsAdapter>
+            <RouterProvider router={router} />
+        </NuqsAdapter>
     </StrictMode>,
 );

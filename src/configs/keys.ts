@@ -1,3 +1,5 @@
+import { SearchParams } from "./type";
+
 const AUTH = {
     refreshToken: "refresh_token",
     accessToken: "access_token",
@@ -43,6 +45,11 @@ const NOTIFICATION = {
     notification: ["notification"] as string[],
 };
 
+const SEARCH = {
+    search: ["search"] as string[],
+    searchUser: (params: SearchParams) => ["search_user", params] as string[],
+};
+
 export const GLOBAL_KEYS = {
     AUTH,
     USER,
@@ -50,4 +57,5 @@ export const GLOBAL_KEYS = {
     POST,
     GROUP,
     NOTIFICATION,
+    SEARCH,
 };

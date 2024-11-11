@@ -31,7 +31,8 @@ export interface IVote {
 }
 
 export interface IComment {
-    user: string; // Types.ObjectId is replaced with string
+    _id: string;
+    user: UserSelect; // Types.ObjectId is replaced with string
     value: string;
     createdAt: Date;
     updatedAt: Date;

@@ -29,7 +29,7 @@ export default function PostCard({ commentSectionRef, post }: PostCardProps) {
     const scrollToComments = () => {
         if (commentSectionRef)
             commentSectionRef?.current?.scrollIntoView({ behavior: "smooth" });
-        else navigator("/post");
+        else navigator(`/post/${post._id}`);
     };
 
     return (
@@ -37,7 +37,7 @@ export default function PostCard({ commentSectionRef, post }: PostCardProps) {
             <CardHeader className="flex flex-row items-center gap-4 py-3">
                 <Avatar className="size-12">
                     <AvatarImage
-                        src={post.user.avatar}
+                        src={post.user.avatar || ""}
                         alt={post.user.displayName}
                     />
                     <AvatarFallback>{post.user.displayName[0]}</AvatarFallback>
@@ -66,7 +66,7 @@ export default function PostCard({ commentSectionRef, post }: PostCardProps) {
                             <HoverUsername
                                 _id={post.user._id}
                                 displayName={post.user.displayName}
-                                avatar={post.user.avatar}
+                                avatar={post.user.avatar || ""}
                             />
                         </span>
                     </div>

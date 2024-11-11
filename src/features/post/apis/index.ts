@@ -47,6 +47,12 @@ export const postApi = {
                     PostService.getPostsByUserId(userId, page, size, sort),
             });
         },
+        useGetPostById: (postId: string) => {
+            return useQuery({
+                queryKey: GLOBAL_KEYS.POST.postById(postId),
+                queryFn: () => PostService.getPostById(postId),
+            });
+        },
     },
     mutation: {
         useCreatePost() {
@@ -88,9 +94,9 @@ export const postApi = {
                 mutationFn: (postId: string) => PostService.upvote(postId),
                 onSuccess(data) {
                     toast.success(data.message);
-                    //invalidate post by id
-                    // queryClient.invalidateQueries({
-                    // })
+                    queryClient.invalidateQueries({
+                        queryKey: GLOBAL_KEYS.POST.prefixPostById,
+                    });
                 },
                 onError() {
                     toast.error("Something went wrong when upvote");
@@ -103,9 +109,9 @@ export const postApi = {
                 mutationFn: (postId: string) => PostService.downvote(postId),
                 onSuccess(data) {
                     toast.success(data.message);
-                    //invalidate post by id
-                    // queryClient.invalidateQueries({
-                    // })
+                    queryClient.invalidateQueries({
+                        queryKey: GLOBAL_KEYS.POST.prefixPostById,
+                    });
                 },
                 onError() {
                     toast.error("Something went wrong when downvote");
@@ -118,12 +124,54 @@ export const postApi = {
                 mutationFn: (postId: string) => PostService.removevote(postId),
                 onSuccess(data) {
                     toast.success(data.message);
-                    //invalidate post by id
-                    // queryClient.invalidateQueries({
-                    // })
+                    queryClient.invalidateQueries({
+                        queryKey: GLOBAL_KEYS.POST.prefixPostById,
+                    });
                 },
                 onError() {
                     toast.error("Something went wrong when removevote");
+                },
+            });
+        },
+        useAddComment() {
+            const queryClient = useQueryClient();
+            return useMutation({
+                mutationFn: ({
+                    postId,
+                    content,
+                }: {
+                    postId: string;
+                    content: string;
+                }) => PostService.addComment(postId, content),
+                onSuccess(data) {
+                    toast.success(data.message);
+                    queryClient.invalidateQueries({
+                        queryKey: GLOBAL_KEYS.POST.prefixPostById,
+                    });
+                },
+                onError() {
+                    toast.error("Something went wrong when sumbit comment");
+                },
+            });
+        },
+        useRemoveComment() {
+            const queryClient = useQueryClient();
+            return useMutation({
+                mutationFn: ({
+                    postId,
+                    commentId,
+                }: {
+                    postId: string;
+                    commentId: string;
+                }) => PostService.removeComment(postId, commentId),
+                onSuccess(data) {
+                    toast.success(data.message);
+                    queryClient.invalidateQueries({
+                        queryKey: GLOBAL_KEYS.POST.prefixPostById,
+                    });
+                },
+                onError() {
+                    toast.error("Something went wrong when sumbit comment");
                 },
             });
         },

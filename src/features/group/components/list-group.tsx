@@ -1,15 +1,12 @@
-import { Group } from "@/configs/type";
 import { GroupItem } from "./group-item";
+import { Group } from "@/configs/type";
 
 type GroupListProps = {
     groups?: Group[];
     isLoading?: boolean;
 };
 
-export function ListGroup({
-    groups = [],
-    isLoading = false,
-}: GroupListProps) {
+export function ListGroup({ groups = [], isLoading = false }: GroupListProps) {
     if (isLoading) {
         return <p>Loading...</p>;
     }
@@ -25,10 +22,7 @@ export function ListGroup({
                     ) : (
                         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                             {groups.map((group) => (
-                                <GroupItem
-                                    group={group}
-                                    key={group._id}
-                                />
+                                <GroupItem group={group} key={group._id} />
                             ))}
                         </ul>
                     )}

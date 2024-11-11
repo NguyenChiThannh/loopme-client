@@ -1,32 +1,20 @@
+import { postApi } from "../apis";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
-type Comment = {
-    id: number;
-    author: string;
-    content: string;
-    upvotes: number;
-    replies: Comment[];
-};
+interface CommentProps {
+    postId: string;
+}
 
-export default function PostCommentForm() {
+export default function PostCommentForm({ postId }: CommentProps) {
+    const { mutate: addComment } = postApi.mutation.useAddComment();
     const [newComment, setNewComment] = useState("");
-
     const handleCommentSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (newComment.trim()) {
-            const newCommentObj: Comment = {
-                id: Date.now(),
-                author: "current_user",
-                content: newComment,
-                upvotes: 0,
-                replies: [],
-            };
-            setNewComment("");
-            console.log(newCommentObj);
-        }
+        if (!newComment || newComment.trim().length === 0) return;
+        addComment({ postId, content: newComment });
     };
 
     return (

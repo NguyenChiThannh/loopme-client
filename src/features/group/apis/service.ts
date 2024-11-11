@@ -94,8 +94,7 @@ export default class GroupService {
             method: AxiosMethod.DELETE,
         });
     }
-    public static async getJoinedGroup(
-    ): Promise<ApiResponse<Group[]>> {
+    public static async getJoinedGroup(): Promise<ApiResponse<Group[]>> {
         return axiosRequest({
             url: GroupEndpoints.getJoinedGroup(),
             method: AxiosMethod.GET,

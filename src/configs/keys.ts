@@ -59,6 +59,13 @@ const SEARCH = {
     searchUser: (params: SearchParams) => ["search_user", params] as string[],
 };
 
+const CHAT = {
+    prefix: ["messages"] as string[],
+    messages: (userId: string) => ["messages", userId] as string[],
+    channels: ["channels"] as string[],
+    channel: (channelId: string) => ["channel", channelId] as string[],
+};
+
 export const GLOBAL_KEYS = {
     AUTH,
     USER,
@@ -67,4 +74,5 @@ export const GLOBAL_KEYS = {
     GROUP,
     NOTIFICATION,
     SEARCH,
+    CHAT,
 };

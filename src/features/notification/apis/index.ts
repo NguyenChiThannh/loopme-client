@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import NotificationService from "./service";
 import { GLOBAL_KEYS } from "@/configs/keys";
@@ -13,5 +13,18 @@ export const notificationApi = {
             });
         },
     },
-    mutation: {},
+    mutation: {
+        useMarkAsReadAll() {
+            const queryClient = useQueryClient();
+
+            return useMutation({
+                mutationFn: () => NotificationService.markAsReadAll(),
+                onSuccess() {
+                    queryClient.invalidateQueries({
+                        queryKey: GLOBAL_KEYS.NOTIFICATION.notification,
+                    });
+                },
+            });
+        },
+    },
 };

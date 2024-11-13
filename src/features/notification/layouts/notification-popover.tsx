@@ -17,6 +17,8 @@ export function NotificationPopover() {
     const [unreadCount, setUnreadCount] = useState(true);
     const { data, isPending } =
         notificationApi.query.useGetNotifications(isOpen);
+    const { mutate: handleMarkAsReadAll } =
+        notificationApi.mutation.useMarkAsReadAll();
 
     return (
         <Popover open={isOpen} onOpenChange={handleOpenChange}>
@@ -30,8 +32,14 @@ export function NotificationPopover() {
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-80 p-0">
-                <div className="border-b p-4 text-sm font-medium">
-                    Notifications {data?.data.length || 0}
+                <div className="flex justify-between border-b p-4 text-sm font-medium">
+                    <p>Notifications {data?.data.length || 0}</p>
+                    <button
+                        className="underline"
+                        onClick={() => handleMarkAsReadAll()}
+                    >
+                        Mark as Read all
+                    </button>
                 </div>
                 {data?.data && <NotificationList notifications={data.data} />}
             </PopoverContent>

@@ -1,10 +1,11 @@
 import { Notification } from "./type";
 import { AxiosMethod } from "@/configs/axios";
 import axiosRequest from "@/configs/request";
-import { ApiResponse } from "@/configs/type";
+import { ApiResponse, BaseResponse } from "@/configs/type";
 
 const notificationEndpoints = {
     getNotifications: () => "/notifications",
+    markAsReadAll: () => "/notifications/read",
 };
 
 export default class NotificationService {
@@ -14,6 +15,12 @@ export default class NotificationService {
         return axiosRequest({
             url: notificationEndpoints.getNotifications(),
             method: AxiosMethod.GET,
+        });
+    }
+    public static async markAsReadAll(): Promise<BaseResponse> {
+        return axiosRequest({
+            url: notificationEndpoints.markAsReadAll(),
+            method: AxiosMethod.PATCH,
         });
     }
 }

@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import MessageList from "./message-list";
 
 export interface Contact {
     id: string;
@@ -69,27 +70,7 @@ export default function ChatArea({
                 </div>
             </div>
             <ScrollArea className="flex-1 p-4">
-                {messages.map((message) => (
-                    <div
-                        key={message.id}
-                        className={`mb-4 flex ${message.senderId === "currentUser" ? "justify-end" : "justify-start"}`}
-                    >
-                        <div
-                            className={`max-w-xs rounded-lg px-4 py-2 ${
-                                message.senderId === "currentUser"
-                                    ? "bg-blue-500 text-white"
-                                    : "bg-gray-200"
-                            }`}
-                        >
-                            <p>{message.content}</p>
-                            <p
-                                className={`mt-1 text-xs ${message.senderId === "currentUser" ? "text-blue-100" : "text-gray-500"}`}
-                            >
-                                {message.timestamp}
-                            </p>
-                        </div>
-                    </div>
-                ))}
+                <MessageList messages={messages}/>
             </ScrollArea>
             <div className="border-t bg-white p-4">
                 <div className="flex space-x-2">

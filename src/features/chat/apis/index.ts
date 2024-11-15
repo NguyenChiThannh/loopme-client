@@ -1,6 +1,8 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { z } from "zod";
 
 import ChatService from "./service";
+import { chatRequestSchema } from "./type";
 import { GLOBAL_KEYS } from "@/configs/keys";
 
 export const chatApi = {
@@ -29,6 +31,13 @@ export const chatApi = {
             return useMutation({
                 mutationFn: (message: string) =>
                     ChatService.sendMessage(userId, message),
+            });
+        },
+        useCreateChannel() {
+            return useMutation({
+                mutationFn: (
+                    channel: z.infer<typeof chatRequestSchema.createChannel>,
+                ) => ChatService.createChannel(channel),
             });
         },
     },

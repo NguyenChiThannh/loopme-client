@@ -1,4 +1,12 @@
+import { z } from "zod";
+
 import { UserSelect } from "@/configs/type";
+
+export const chatRequestSchema = {
+    createChannel: z.object({
+        friendId: z.string().min(1, "Friend ID is required"),
+    }),
+};
 
 export interface Message {
     _id: string;

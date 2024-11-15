@@ -1,21 +1,27 @@
-import { Channel, Message } from "./type";
+import { z } from "zod";
+
+import { Channel, Message, chatRequestSchema } from "./type";
 import { AxiosMethod } from "@/configs/axios";
 import axiosRequest from "@/configs/request";
 import { ApiResponse, PaginatedResponse } from "@/configs/type";
 
 const chatEndpoints = {
-    getMessages: (userId: string) => `/messages/${userId}`,
+    getMessages: () => `/messages`,
     sendMessage: (userId: string) => `/messages/${userId}`,
     getChannels: () => `/channels`,
+    createChannel: () => `/channels`,
     getChannel: (channelId: string) => `/channels/${channelId}`,
 };
 export default class ChatService {
     static async getMessages(
-        userId: string,
+        channelId: string,
     ): Promise<PaginatedResponse<Message[]>> {
         return axiosRequest({
             method: AxiosMethod.GET,
-            url: chatEndpoints.getMessages(userId),
+            url: chatEndpoints.getMessages(),
+            params: {
+                channelId,
+            },
         });
     }
     static async getChannels(): Promise<PaginatedResponse<Channel[]>> {
@@ -41,6 +47,17 @@ export default class ChatService {
             url: chatEndpoints.sendMessage(userId),
             data: {
                 message,
+            },
+        });
+    }
+    static async createChannel(
+        channel: z.infer<typeof chatRequestSchema.createChannel>,
+    ): Promise<ApiResponse<Channel>> {
+        return axiosRequest({
+            method: AxiosMethod.POST,
+            url: chatEndpoints.createChannel(),
+            data: {
+                channel,
             },
         });
     }

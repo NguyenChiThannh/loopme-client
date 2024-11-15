@@ -12,6 +12,9 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 import ContactItem from "./contact-item";
 import EmptyState from "./empty-state";
+import NewChatModal from "./new-chat-model";
+import { friendApi } from "@/features/friends/apis";
+import { ChatFriendList } from "@/features/friends/components/chat-friend-list";
 
 export interface Contact {
     id: string;
@@ -43,33 +46,55 @@ export default function ContactList({
     const filteredContacts = contacts.filter((contact) =>
         contact.name.toLowerCase().includes(searchQuery.toLowerCase()),
     );
+    const {
+        data: friends,
+        isPending,
+        isError,
+    } = friendApi.query.useGetAllFriend(true);
+    const { mutate } = chatApi.mutation.useCreateChannel();
+
+    if (isPending) return null;
+    if (isError && !friends) return <p>Cannot load friends</p>;
+
+    const handleNewChat = (friendId: string) => {
+        mutate({
+            friendId: friendId,
+        });
+    };
+
     console.log(data);
     return (
         <Card className="w-1/3 max-w-sm border-r">
-            <CardContent className="flex h-full flex-col p-4">
-                <div className="mb-4 flex items-center justify-between">
+            <CardContent className="flex flex-col h-full p-4">
+                <div className="flex items-center justify-between mb-4">
                     <h2 className="text-2xl font-bold">Chats</h2>
                     <div className="space-x-2">
                         <Link to={"/"}>
                             <Button variant="outline" size="icon">
-                                <Undo2 className="h-5 w-5" />
+                                <Undo2 className="w-5 h-5" />
                                 <span className="sr-only">New Chat</span>
                             </Button>
                         </Link>
-                        <Button
+                        {/* <Button
                             variant="outline"
                             size="icon"
                             onClick={onNewChat}
                         >
-                            <PlusCircle className="h-5 w-5" />
+                            <PlusCircle className="w-5 h-5" />
                             <span className="sr-only">New Chat</span>
-                        </Button>
+                        </Button> */}
+                        <NewChatModal>
+                            <ChatFriendList
+                                friends={friends.data.data}
+                                onStartChat={handleNewChat}
+                            />
+                        </NewChatModal>
                     </div>
                 </div>
                 {contacts.length > 0 ? (
                     <>
                         <div className="relative mb-4">
-                            <Search className="absolute left-2 top-1/2 -translate-y-1/2 transform text-gray-400" />
+                            <Search className="absolute text-gray-400 transform -translate-y-1/2 left-2 top-1/2" />
                             <Input
                                 className="pl-8"
                                 placeholder="Search contacts..."

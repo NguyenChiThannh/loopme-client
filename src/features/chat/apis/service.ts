@@ -57,7 +57,7 @@ export default class ChatService {
             method: AxiosMethod.POST,
             url: chatEndpoints.createChannel(),
             data: {
-                channel,
+                friendId: channel.friendId,
             },
         });
     }

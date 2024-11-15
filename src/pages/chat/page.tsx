@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import ChatArea from "@/features/chat/components/chat-area";
 import ContactList from "@/features/chat/components/contact-list";
 import NewChatModal from "@/features/chat/components/new-chat-model";
+import { friendApi } from "@/features/friends/apis";
+import { ChatFriendList } from "@/features/friends/components/chat-friend-list";
 
 export interface Contact {
     id: string;
@@ -59,6 +61,15 @@ export default function ChatPage() {
     const [searchQuery, setSearchQuery] = useState("");
     const [showNewChatModal, setShowNewChatModal] = useState(false);
     const [newChatName, setNewChatName] = useState("");
+
+    const {
+        data: friends,
+        isPending,
+        isError,
+    } = friendApi.query.useGetAllFriend(true);
+
+    if (isPending) return null;
+    if (isError && !friends) return <p>Cannot load friends</p>;
 
     const handleSendMessage = () => {
         if (newMessage.trim() && selectedContact) {
@@ -120,13 +131,12 @@ export default function ChatPage() {
                 onNewMessageChange={setNewMessage}
                 onSendMessage={handleSendMessage}
             />
-            <NewChatModal
-                isOpen={showNewChatModal}
-                newChatName={newChatName}
-                onNewChatNameChange={setNewChatName}
-                onClose={() => setShowNewChatModal(false)}
-                onSubmit={handleNewChat}
-            />
+            {/* <NewChatModal>
+                <ChatFriendList
+                    friends={friends.data.data}
+                    onStartChat={() => {}}
+                />
+            </NewChatModal> */}
         </div>
     );
 }

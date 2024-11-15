@@ -4,8 +4,8 @@ import { Navbar } from "@/components/navbar";
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 
-import { UserProvider } from "@/providers/user-provider";
 import { SocketProvider } from "@/providers/socket-provider";
+import { UserProvider } from "@/providers/user-provider";
 
 export default function HomeLayout() {
     return (
@@ -13,7 +13,7 @@ export default function HomeLayout() {
             <SocketProvider>
                 <SidebarProvider defaultOpen>
                     <AppSidebar />
-                    <div className="flex flex-col w-full">
+                    <div className="flex w-full flex-col">
                         <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
                             <Navbar />
                         </header>

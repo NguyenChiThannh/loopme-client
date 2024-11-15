@@ -32,7 +32,7 @@ export default function NewChatModal({ children }: NewChatModalProps) {
                         Start a new chat with a friend.
                     </DialogDescription>
                 </DialogHeader>
-                <div className="flex flex-col w-full space-y-4">{children}</div>
+                <div className="flex w-full flex-col space-y-4">{children}</div>
             </DialogContent>
         </Dialog>
     );

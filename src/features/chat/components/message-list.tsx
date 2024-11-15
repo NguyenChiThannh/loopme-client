@@ -1,22 +1,17 @@
-import MessageItem from "./message";
+import { Message } from "../apis/type";
 
-export interface Message {
-    id: string;
-    senderId: string;
-    content: string;
-    timestamp: string;
-}
+import MessageItem from "./message";
 
 interface MessageListProps {
     messages: Message[];
 }
 
-export default function MessageList({messages}:MessageListProps) {
+export default function MessageList({ messages }: MessageListProps) {
     return (
         <>
             {messages.map((message) => (
-                <MessageItem message={message}/>
+                <MessageItem message={message} />
             ))}
         </>
-    )
+    );
 }

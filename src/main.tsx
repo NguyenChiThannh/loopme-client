@@ -5,6 +5,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import "./index.css";
 import AuthLayout from "./layouts/auth.layout.tsx";
+import ChatLayout from "./layouts/chat.layout.tsx";
 import GroupLayout from "./layouts/group.layout.tsx";
 import HomeLayout from "./layouts/home.layout.tsx";
 import RootLayout from "./layouts/root.layout.tsx";
@@ -81,7 +82,11 @@ const router = createBrowserRouter([
             },
             {
                 path: "/chat",
-                element: <ChatPage />,
+                element: (
+                    <ChatLayout>
+                        <ChatPage />,
+                    </ChatLayout>
+                ),
             },
         ],
     },

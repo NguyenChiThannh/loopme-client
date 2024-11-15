@@ -35,7 +35,7 @@ export function FriendItem({ friend, onStartChat }: FriendItemProps) {
                     onClick={() => onStartChat(friend._id)}
                     aria-label={`Start chat with ${friend.displayName}`}
                 >
-                    <MessageSquare className="w-4 h-4 mr-2" />
+                    <MessageSquare className="mr-2 h-4 w-4" />
                     Chat
                 </Button>
             </div>

@@ -23,8 +23,8 @@ export interface Channel {
     __v: number;
     createdAt: string;
     isRead: boolean;
-    name: string;
-    participants: UserSelect[];
+    participantsDetails: UserSelect[];
     readAt: string;
     updatedAt: string;
+    latestMessage: Message;
 }

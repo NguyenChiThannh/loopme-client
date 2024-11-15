@@ -1,5 +1,7 @@
+import { useQueryState } from "nuqs";
 import React, { useState } from "react";
 
+import { Channel } from "@/features/chat/apis/type";
 import ChatArea from "@/features/chat/components/chat-area";
 import ContactList from "@/features/chat/components/contact-list";
 import NewChatModal from "@/features/chat/components/new-chat-model";
@@ -52,11 +54,11 @@ const initialContacts: Contact[] = [
 const initialMessages: Message[] = [];
 
 export default function ChatPage() {
-    const [contacts, setContacts] = useState<Contact[]>(initialContacts);
-    const [selectedContact, setSelectedContact] = useState<Contact | null>(
+    const [selectedChannel, setSelectedChannel] = useState<Channel | null>(
         null,
     );
-    const [messages, setMessages] = useState<Message[]>(initialMessages);
+    const [channelId, setChannelId] = useQueryState("channelId");
+    // const [messages, setMessages] = useState<Message[]>(initialMessages);
     const [newMessage, setNewMessage] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
     const [showNewChatModal, setShowNewChatModal] = useState(false);
@@ -72,7 +74,7 @@ export default function ChatPage() {
     if (isError && !friends) return <p>Cannot load friends</p>;
 
     const handleSendMessage = () => {
-        if (newMessage.trim() && selectedContact) {
+        if (newMessage.trim() && selectedChannel) {
             const newMsg: Message = {
                 id: Date.now().toString(),
                 senderId: "currentUser",
@@ -87,45 +89,22 @@ export default function ChatPage() {
         }
     };
 
-    const handleNewChat = () => {
-        if (newChatName.trim()) {
-            const newContact: Contact = {
-                id: Date.now().toString(),
-                name: newChatName.trim(),
-                avatar: "/placeholder.svg?height=40&width=40",
-                lastMessage: "",
-                lastMessageTime: "Just now",
-                unreadCount: 0,
-            };
-            setContacts([...contacts, newContact]);
-            setSelectedContact(newContact);
-            setNewChatName("");
-            setShowNewChatModal(false);
-        }
-    };
-
-    const handleContactSelect = (contact: Contact) => {
-        setSelectedContact(contact);
-        // Clear unread count when selecting a contact
-        setContacts(
-            contacts.map((c) =>
-                c.id === contact.id ? { ...c, unreadCount: 0 } : c,
-            ),
-        );
+    const handleChannelSelect = (channel: Channel) => {
+        setChannelId(channel._id);
+        setSelectedChannel(channel);
     };
 
     return (
         <div className="flex h-screen bg-gray-100">
             <ContactList
-                contacts={contacts}
-                selectedContact={selectedContact}
+                selectedChannel={null}
                 searchQuery={searchQuery}
                 onSearchChange={setSearchQuery}
-                onContactSelect={handleContactSelect}
+                onChannelSelect={handleChannelSelect}
                 onNewChat={() => setShowNewChatModal(true)}
             />
             <ChatArea
-                selectedContact={selectedContact}
+                selectedChannel={selectedChannel}
                 messages={messages}
                 newMessage={newMessage}
                 onNewMessageChange={setNewMessage}

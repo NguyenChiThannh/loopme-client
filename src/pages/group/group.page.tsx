@@ -6,7 +6,6 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { ROUTES } from "@/configs/route.config";
 import { groupApi } from "@/features/group/apis";
-import GroupUpdateButton from "@/features/group/components/group-update-button";
 import { postApi } from "@/features/post/apis";
 import { postRequestSchema } from "@/features/post/apis/type";
 import ListPost from "@/features/post/components/list-post";
@@ -72,9 +71,6 @@ export default function GroupHomePage() {
                                 >
                                     <PostCreateForm onSubmit={createPost} />
                                 </CreatePostDialog>
-                            )}
-                            {groupData.data.owner._id === user?._id && (
-                                <GroupUpdateButton />
                             )}
                         </div>
                     </CardHeader>

@@ -7,10 +7,10 @@ import { GLOBAL_KEYS } from "@/configs/keys";
 
 export const chatApi = {
     query: {
-        useGetMessages(userId: string) {
+        useGetMessages(channelId?: string) {
             return useQuery({
-                queryKey: GLOBAL_KEYS.CHAT.messages(userId),
-                queryFn: () => ChatService.getMessages(userId),
+                queryKey: GLOBAL_KEYS.CHAT.messages(channelId),
+                queryFn: () => ChatService.getMessages(channelId),
             });
         },
         useGetChannels() {

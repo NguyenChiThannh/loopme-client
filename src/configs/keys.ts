@@ -61,7 +61,7 @@ const SEARCH = {
 
 const CHAT = {
     prefix: ["messages"] as string[],
-    messages: (userId: string) => ["messages", userId] as string[],
+    messages: (channelId?: string) => ["messages", channelId] as string[],
     channels: ["channels"] as string[],
     channel: (channelId: string) => ["channel", channelId] as string[],
 };

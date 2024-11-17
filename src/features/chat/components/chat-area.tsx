@@ -1,5 +1,6 @@
+import { chatApi } from "../apis";
 import { Channel, Message } from "../apis/type";
-import { Phone, Send, Video } from "lucide-react";
+import { Send } from "lucide-react";
 import React from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -10,67 +11,70 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import MessageList from "./message-list";
 
 interface ChatAreaProps {
-    selectedContact: Channel | null;
-    messages: Message[];
-    newMessage: string;
-    onNewMessageChange: (message: string) => void;
-    onSendMessage: () => void;
+    selectedChannel: Channel;
 }
 
-export default function ChatArea({
-    selectedContact,
-    messages,
-    newMessage,
-    onNewMessageChange,
-    onSendMessage,
-}: ChatAreaProps) {
-    if (!selectedContact) {
+export default function ChatArea({ selectedChannel }: ChatAreaProps) {
+    const { data, isPending, isError } = chatApi.query.useGetMessages(
+        selectedChannel._id,
+    );
+    const [messages, setMessages] = React.useState<Message[]>(
+        data?.data.data || [],
+    );
+    const [newMessage, setNewMessage] = React.useState("");
+    if (isPending) return <p>Loading messages</p>;
+
+    if (!data || isError) {
         return (
-            <div className="flex flex-1 items-center justify-center bg-gray-50">
-                <p className="text-xl text-gray-500">
-                    Select a contact to start chatting
-                </p>
+            <div className="flex items-center justify-center flex-1 bg-gray-50">
+                <p className="text-xl text-gray-500">Failed to load message</p>
             </div>
         );
     }
+    const handleSendMessage = () => {
+        if (newMessage.trim() && selectedChannel) {
+            // setMessages([...messages, newMsg]);
+            setNewMessage("");
+        }
+    };
 
     return (
-        <div className="flex flex-1 flex-col">
-            <div className="flex items-center justify-between border-b bg-white p-4">
+        <div className="flex flex-col flex-1">
+            <div className="flex items-center justify-between p-4 bg-white border-b">
                 <div className="flex items-center space-x-3">
                     <Avatar>
                         <AvatarImage
-                            src={selectedContact.participantsDetails[0].avatar}
+                            src={selectedChannel.participantsDetails[0].avatar}
                             alt={
-                                selectedContact.participantsDetails[0]
+                                selectedChannel.participantsDetails[0]
                                     .displayName
                             }
                         />
                         <AvatarFallback>
-                            {selectedContact.participantsDetails[0].displayName
+                            {selectedChannel.participantsDetails[0].displayName
                                 .split(" ")
                                 .map((n) => n[0])
                                 .join("")}
                         </AvatarFallback>
                     </Avatar>
                     <h2 className="text-xl font-semibold">
-                        {selectedContact.participantsDetails[0].displayName}
+                        {selectedChannel.participantsDetails[0].displayName}
                     </h2>
                 </div>
             </div>
             <ScrollArea className="flex-1 p-4">
-                <MessageList messages={messages} />
+                <MessageList messages={data.data.data} />
             </ScrollArea>
-            <div className="border-t bg-white p-4">
+            <div className="p-4 bg-white border-t">
                 <div className="flex space-x-2">
                     <Input
                         value={newMessage}
-                        onChange={(e) => onNewMessageChange(e.target.value)}
+                        // onChange={(e) => onNewMessageChange(e.target.value)}
                         placeholder="Type a message..."
-                        onKeyPress={(e) => e.key === "Enter" && onSendMessage()}
+                        // onKeyPress={(e) => e.key === "Enter" && onSendMessage()}
                     />
-                    <Button onClick={onSendMessage}>
-                        <Send className="h-5 w-5" />
+                    <Button>
+                        <Send className="w-5 h-5" />
                         <span className="sr-only">Send message</span>
                     </Button>
                 </div>

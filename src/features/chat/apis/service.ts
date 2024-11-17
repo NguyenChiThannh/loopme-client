@@ -14,7 +14,7 @@ const chatEndpoints = {
 };
 export default class ChatService {
     static async getMessages(
-        channelId: string,
+        channelId?: string,
     ): Promise<PaginatedResponse<Message[]>> {
         return axiosRequest({
             method: AxiosMethod.GET,

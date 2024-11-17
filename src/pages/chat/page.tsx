@@ -1,9 +1,11 @@
 import { useQueryState } from "nuqs";
 import React, { useState } from "react";
 
+import { chatApi } from "@/features/chat/apis";
 import { Channel } from "@/features/chat/apis/type";
 import ChatArea from "@/features/chat/components/chat-area";
 import ContactList from "@/features/chat/components/contact-list";
+import ChannelList from "@/features/chat/components/contact-list";
 import NewChatModal from "@/features/chat/components/new-chat-model";
 import { friendApi } from "@/features/friends/apis";
 import { ChatFriendList } from "@/features/friends/components/chat-friend-list";
@@ -58,11 +60,7 @@ export default function ChatPage() {
         null,
     );
     const [channelId, setChannelId] = useQueryState("channelId");
-    // const [messages, setMessages] = useState<Message[]>(initialMessages);
-    const [newMessage, setNewMessage] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
-    const [showNewChatModal, setShowNewChatModal] = useState(false);
-    const [newChatName, setNewChatName] = useState("");
 
     const {
         data: friends,
@@ -73,22 +71,6 @@ export default function ChatPage() {
     if (isPending) return null;
     if (isError && !friends) return <p>Cannot load friends</p>;
 
-    const handleSendMessage = () => {
-        if (newMessage.trim() && selectedChannel) {
-            const newMsg: Message = {
-                id: Date.now().toString(),
-                senderId: "currentUser",
-                content: newMessage.trim(),
-                timestamp: new Date().toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                }),
-            };
-            setMessages([...messages, newMsg]);
-            setNewMessage("");
-        }
-    };
-
     const handleChannelSelect = (channel: Channel) => {
         setChannelId(channel._id);
         setSelectedChannel(channel);
@@ -96,26 +78,17 @@ export default function ChatPage() {
 
     return (
         <div className="flex h-screen bg-gray-100">
-            <ContactList
-                selectedChannel={null}
+            <ChannelList
+                selectedChannel={selectedChannel}
                 searchQuery={searchQuery}
                 onSearchChange={setSearchQuery}
                 onChannelSelect={handleChannelSelect}
-                onNewChat={() => setShowNewChatModal(true)}
             />
-            <ChatArea
-                selectedChannel={selectedChannel}
-                messages={messages}
-                newMessage={newMessage}
-                onNewMessageChange={setNewMessage}
-                onSendMessage={handleSendMessage}
-            />
-            {/* <NewChatModal>
-                <ChatFriendList
-                    friends={friends.data.data}
-                    onStartChat={() => {}}
-                />
-            </NewChatModal> */}
+            {channelId && selectedChannel ? (
+                <ChatArea selectedChannel={selectedChannel} />
+            ) : (
+                <p>Select a contact to start chatting</p>
+            )}
         </div>
     );
 }

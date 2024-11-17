@@ -23,7 +23,6 @@ interface ChannelListProps {
     searchQuery: string;
     onSearchChange: (query: string) => void;
     onChannelSelect: (channel: Channel) => void;
-    onNewChat: () => void;
 }
 
 export default function ChannelList({
@@ -31,16 +30,9 @@ export default function ChannelList({
     searchQuery,
     onSearchChange,
     onChannelSelect,
-    onNewChat,
 }: ChannelListProps) {
     const { data, isLoading } = chatApi.query.useGetChannels();
     const { user, isLoading: isUserLoading, isSignedIn } = useUser();
-    if (isUserLoading) return null;
-    if (!user || !isSignedIn) return <p>Null</p>;
-    if (isLoading || !data) return <Loader2 />;
-    // const filteredChannels = data.data.data.filter((channel) =>
-    //     channel.participantDetails..toLowerCase().includes(searchQuery.toLowerCase()),
-    // );
     const {
         data: friends,
         isPending,
@@ -48,8 +40,15 @@ export default function ChannelList({
     } = friendApi.query.useGetAllFriend(true);
     const { mutate } = chatApi.mutation.useCreateChannel();
 
+    if (isUserLoading) return null;
+    if (!user || !isSignedIn) return <p>Null</p>;
+    if (isLoading || !data) return <Loader2 />;
     if (isPending) return null;
     if (isError && !friends) return <p>Cannot load friends</p>;
+
+    // const filteredChannels = data.data.data.filter((channel) =>
+    //     channel.participantDetails..toLowerCase().includes(searchQuery.toLowerCase()),
+    // );
 
     const handleNewChat = (friendId: string) => {
         mutate({
@@ -60,13 +59,13 @@ export default function ChannelList({
     console.log(data);
     return (
         <Card className="w-1/3 max-w-sm border-r">
-            <CardContent className="flex h-full flex-col p-4">
-                <div className="mb-4 flex items-center justify-between">
+            <CardContent className="flex flex-col h-full p-4">
+                <div className="flex items-center justify-between mb-4">
                     <h2 className="text-2xl font-bold">Chats</h2>
                     <div className="space-x-2">
                         <Link to={"/"}>
                             <Button variant="outline" size="icon">
-                                <Undo2 className="h-5 w-5" />
+                                <Undo2 className="w-5 h-5" />
                                 <span className="sr-only">New Chat</span>
                             </Button>
                         </Link>
@@ -86,10 +85,10 @@ export default function ChannelList({
                         </NewChatModal>
                     </div>
                 </div>
-                {data.data.data.length ? (
+                {data.data.data.length && (
                     <>
                         <div className="relative mb-4">
-                            <Search className="absolute left-2 top-1/2 -translate-y-1/2 transform text-gray-400" />
+                            <Search className="absolute text-gray-400 transform -translate-y-1/2 left-2 top-1/2" />
                             <Input
                                 className="pl-8"
                                 placeholder="Search channels..."
@@ -109,8 +108,6 @@ export default function ChannelList({
                             ))}
                         </ScrollArea>
                     </>
-                ) : (
-                    <EmptyState onNewChat={onNewChat} />
                 )}
             </CardContent>
         </Card>

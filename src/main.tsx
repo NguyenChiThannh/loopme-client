@@ -8,7 +8,6 @@ import AuthLayout from "./layouts/auth.layout.tsx";
 import GroupLayout from "./layouts/group.layout.tsx";
 import HomeLayout from "./layouts/home.layout.tsx";
 import RootLayout from "./layouts/root.layout.tsx";
-import ForgetPasswordPage from "./pages/auth/forget-password.page.tsx";
 import LoginPage from "./pages/auth/login.page.tsx";
 import SignUpPage from "./pages/auth/signup.page.tsx";
 import VerifyPage from "./pages/auth/verify.page.tsx";
@@ -38,10 +37,6 @@ const router = createBrowserRouter([
                     {
                         path: "/verify",
                         element: <VerifyPage />,
-                    },
-                    {
-                        path: "/forget-password",
-                        element: <ForgetPasswordPage />,
                     },
                 ],
             },

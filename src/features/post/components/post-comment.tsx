@@ -1,6 +1,3 @@
-import { postApi } from "../apis";
-import { ChevronDown, ChevronUp } from "lucide-react";
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,6 +9,7 @@ import {
 
 import HoverUsername from "./hover-username";
 import { IComment } from "@/configs/type";
+import { commentApi } from "@/features/comment/apis";
 
 interface CommentProps {
     comment: IComment;
@@ -24,9 +22,9 @@ export default function PostComment({
     currentUserId,
     postId,
 }: CommentProps) {
-    const { mutate: removeComment } = postApi.mutation.useRemoveComment();
+    const { mutate: removeComment } = commentApi.mutation.useRemoveComment();
     const handleRemoveClick = () => {
-        removeComment({ postId: postId, commentId: comment._id });
+        removeComment({ commentId: comment._id });
     };
     return (
         <Card>
@@ -47,7 +45,7 @@ export default function PostComment({
                 />
             </CardHeader>
             <CardContent className="p-1 px-10">
-                <p className="text-sm">{comment.value}</p>
+                <p className="text-sm">{comment.content}</p>
             </CardContent>
             {currentUserId === comment.user._id && (
                 <CardFooter className="flex items-center gap-2 px-3">

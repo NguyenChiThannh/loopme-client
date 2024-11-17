@@ -1,5 +1,4 @@
-import { postApi } from "../apis";
-import { ArrowBigDown, ArrowBigUp, ChevronDown, ChevronUp } from "lucide-react";
+import { ArrowBigDown, ArrowBigUp } from "lucide-react";
 import { useState } from "react";
 
 import { cn } from "@/lib/utils";
@@ -7,15 +6,16 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 import { IPost } from "@/configs/type";
+import { voteApi } from "@/features/vote/apis";
 
 interface PostUpvote {
     post: IPost;
 }
 
 export default function PostUpvote({ post }: PostUpvote) {
-    const { mutate: upvote } = postApi.mutation.useUpvote();
-    const { mutate: downvote } = postApi.mutation.useDownvote();
-    const { mutate: removevote } = postApi.mutation.useRemovevote();
+    const { mutate: upvote } = voteApi.mutation.useUpvote();
+    const { mutate: downvote } = voteApi.mutation.useDownvote();
+    const { mutate: removevote } = voteApi.mutation.useRemovevote();
     const [voteState, setVoteState] = useState<string | null>(post.voteValue);
     const [totalVote, setTotalVote] = useState<number>(post.totalVotes);
     const handleUpvote = () => {

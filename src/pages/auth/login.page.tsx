@@ -46,11 +46,6 @@ export default function LoginPage() {
                         </Button>
                     </Link>
                 </div>
-                <Link to={"/forget-password"}>
-                    <Button variant="link" className="w-full">
-                        Forgot password?
-                    </Button>
-                </Link>
             </CardFooter>
         </Card>
     );

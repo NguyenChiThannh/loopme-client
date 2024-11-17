@@ -3,13 +3,14 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { commentApi } from "@/features/comment/apis";
 
 interface CommentProps {
     postId: string;
 }
 
 export default function PostCommentForm({ postId }: CommentProps) {
-    const { mutate: addComment } = postApi.mutation.useAddComment();
+    const { mutate: addComment } = commentApi.mutation.useAddComment();
     const [newComment, setNewComment] = useState("");
     const handleCommentSubmit = (e: React.FormEvent) => {
         e.preventDefault();

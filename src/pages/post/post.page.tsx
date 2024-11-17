@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useNavigate, useParams } from "react-router";
 
 import { cn } from "@/lib/utils";
@@ -9,28 +9,7 @@ import { postApi } from "@/features/post/apis";
 import PostCard from "@/features/post/components/post-card";
 import PostComment from "@/features/post/components/post-comment";
 import PostCommentForm from "@/features/post/components/post-comment-form";
-import PostReply from "@/features/post/components/post-reply";
-import PostReplyForm from "@/features/post/components/post-reply-form";
 import { useUser } from "@/providers/user-provider";
-
-type Comment = {
-    id: number;
-    author: string;
-    content: string;
-    upvotes: number;
-    replies: Comment[];
-};
-
-type Post = {
-    id: number;
-    title: string;
-    content: string;
-    author: string;
-    imageUrl?: string;
-    upvotes: number;
-    commentCount: number;
-    postedAt: string;
-};
 
 export default function PostPage() {
     const { postId } = useParams();
@@ -57,16 +36,17 @@ export default function PostPage() {
             </div>
         ));
     };
-    console.log(data.data[0]);
+    console.log(data);
+    console.log(data.data);
     return (
         <div className="max-w-2xl md:col-span-2">
             <PostCard
                 commentSectionRef={commentSectionRef}
-                post={data.data[0]}
+                post={data.data}
             />
-            <PostCommentForm postId={data.data[0]._id} />
+            <PostCommentForm postId={data.data._id} />
             <div ref={commentSectionRef}>
-                {renderComments(data.data[0].comments || [])}
+                {renderComments(data.data.comments || [])}
             </div>
         </div>
     );

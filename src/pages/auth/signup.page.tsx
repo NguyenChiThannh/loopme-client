@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
-    CardDescription,
     CardFooter,
     CardHeader,
     CardTitle,
@@ -43,7 +42,6 @@ export default function SignUpPage() {
                         </Button>
                     </Link>
                 </div>
-                <Button variant="link">Forgot password?</Button>
             </CardFooter>
         </Card>
     );

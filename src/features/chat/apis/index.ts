@@ -1,9 +1,10 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
 
 import ChatService from "./service";
-import { chatRequestSchema } from "./type";
+import { Message, chatRequestSchema } from "./type";
 import { GLOBAL_KEYS } from "@/configs/keys";
+import { PaginatedResponse } from "@/configs/type";
 
 export const chatApi = {
     query: {
@@ -27,10 +28,73 @@ export const chatApi = {
         },
     },
     mutation: {
-        useSendMessage(userId: string) {
+        useSendMessage() {
+            const queryClient = useQueryClient();
             return useMutation({
-                mutationFn: (message: string) =>
-                    ChatService.sendMessage(userId, message),
+                mutationFn: ({
+                    message,
+                    receiverId,
+                }: z.infer<typeof chatRequestSchema.sendMessage>) =>
+                    ChatService.sendMessage(receiverId, message),
+                onMutate: async ({ message, senderId, receiverId }) => {
+                    await queryClient.cancelQueries({
+                        queryKey: GLOBAL_KEYS.CHAT.prefix,
+                    });
+                    const previousMessages = queryClient.getQueryData(
+                        GLOBAL_KEYS.CHAT.prefix,
+                    );
+                    queryClient.setQueryData(
+                        GLOBAL_KEYS.CHAT.prefix,
+                        (old: PaginatedResponse<Message[]> | undefined) => {
+                            if (!old?.data?.data) {
+                                return {
+                                    data: {
+                                        data: [
+                                            {
+                                                _id: "temp-id",
+                                                sender: senderId,
+                                                receiver: receiverId,
+                                                message,
+                                                createdAt:
+                                                    new Date().toISOString(),
+                                            },
+                                        ],
+                                    },
+                                };
+                            }
+                            return {
+                                ...old,
+                                data: {
+                                    ...old.data,
+                                    data: [
+                                        ...old.data.data,
+                                        {
+                                            _id: "temp-id",
+                                            sender: senderId,
+                                            receiver: receiverId,
+                                            message,
+                                            createdAt: new Date().toISOString(),
+                                        },
+                                    ],
+                                },
+                            };
+                        },
+                    );
+                    return { previousMessages };
+                },
+                onError: (err, newMessage, context) => {
+                    console.log(err);
+                    queryClient.setQueryData(
+                        GLOBAL_KEYS.CHAT.prefix,
+                        context?.previousMessages,
+                    );
+                },
+                onSuccess: (data, variables, context) => {
+                    console.log(data);
+                    queryClient.invalidateQueries({
+                        queryKey: GLOBAL_KEYS.CHAT.prefix,
+                    });
+                },
             });
         },
         useCreateChannel() {

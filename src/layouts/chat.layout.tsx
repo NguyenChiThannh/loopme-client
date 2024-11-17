@@ -1,3 +1,4 @@
+import { SocketProvider } from "@/providers/socket-provider";
 import { UserProvider } from "@/providers/user-provider";
 
 export default function ChatLayout({
@@ -5,5 +6,9 @@ export default function ChatLayout({
 }: {
     children: React.ReactNode;
 }) {
-    return <UserProvider>{children}</UserProvider>;
+    return (
+        <UserProvider>
+            <SocketProvider>{children}</SocketProvider>
+        </UserProvider>
+    );
 }

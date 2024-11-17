@@ -44,8 +44,6 @@ export default function ChannelList({
     } = friendApi.query.useGetAllFriend(true);
     const { mutate } = chatApi.mutation.useCreateChannel();
 
-    console.log(channels);
-
     useEffect(() => {
         if (!channels?.data?.data || !currentChannelId) return;
 

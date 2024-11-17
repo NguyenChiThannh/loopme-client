@@ -1,6 +1,5 @@
 import { useQueryState } from "nuqs";
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useState } from "react";
 
 import { Channel } from "@/features/chat/apis/type";
 import ChatArea from "@/features/chat/components/chat-area";
@@ -27,8 +26,6 @@ export default function ChatPage() {
         setChannelId(channel._id);
         setSelectedChannel(channel);
     };
-
-    console.log(selectedChannel);
 
     return (
         <div className="flex h-screen bg-gray-100">

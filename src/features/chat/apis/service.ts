@@ -7,7 +7,7 @@ import { ApiResponse, PaginatedResponse } from "@/configs/type";
 
 const chatEndpoints = {
     getMessages: () => `/messages`,
-    sendMessage: (userId: string) => `/messages/${userId}`,
+    sendMessage: (userId: string) => `/messages/send/${userId}`,
     getChannels: () => `/channels`,
     createChannel: () => `/channels`,
     getChannel: (channelId: string) => `/channels/${channelId}`,
@@ -21,6 +21,7 @@ export default class ChatService {
             url: chatEndpoints.getMessages(),
             params: {
                 channelId,
+                size: 1000,
             },
         });
     }

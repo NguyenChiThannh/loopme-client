@@ -6,6 +6,11 @@ export const chatRequestSchema = {
     createChannel: z.object({
         friendId: z.string().min(1, "Friend ID is required"),
     }),
+    sendMessage: z.object({
+        receiverId: z.string().min(1, "Receiver ID is required"),
+        senderId: z.string().min(1, "Sender ID is required"),
+        message: z.string().min(1, "Message is required"),
+    }),
 };
 
 export interface Message {

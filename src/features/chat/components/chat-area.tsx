@@ -1,7 +1,7 @@
 import { chatApi } from "../apis";
 import { Channel, Message } from "../apis/type";
 import { Send } from "lucide-react";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -9,32 +9,60 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 import MessageList from "./message-list";
+import { useUser } from "@/providers/user-provider";
 
 interface ChatAreaProps {
     selectedChannel: Channel;
 }
 
 export default function ChatArea({ selectedChannel }: ChatAreaProps) {
-    const { data, isPending, isError } = chatApi.query.useGetMessages(
+    const { user, isLoading } = useUser();
+    const { data, isPending } = chatApi.query.useGetMessages(
         selectedChannel._id,
     );
+    const { mutate } = chatApi.mutation.useSendMessage();
     const [messages, setMessages] = React.useState<Message[]>(
         data?.data.data || [],
     );
     const [newMessage, setNewMessage] = React.useState("");
-    if (isPending) return <p>Loading messages</p>;
 
-    if (!data || isError) {
-        return (
-            <div className="flex flex-1 items-center justify-center bg-gray-50">
-                <p className="text-xl text-gray-500">Failed to load message</p>
-            </div>
-        );
-    }
+    const receiver = selectedChannel.participants.find(
+        (participant) => participant._id !== user?._id,
+    );
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
+
+    useEffect(() => {
+        if (isPending) return;
+        if (data && data.data.data) {
+            setMessages(data.data.data);
+        }
+    }, [data, isPending]);
+
+    if (isPending || isLoading) return <p>Loading messages</p>;
+    if (!user || !receiver) return null;
+
     const handleSendMessage = () => {
-        if (newMessage.trim() && selectedChannel) {
-            // setMessages([...messages, newMsg]);
-            setNewMessage("");
+        if (selectedChannel && receiver && newMessage.trim().length !== 0) {
+            mutate(
+                {
+                    message: newMessage,
+                    receiverId: receiver._id,
+                    senderId: user._id,
+                },
+                {
+                    onSuccess() {
+                        setNewMessage("");
+                    },
+                },
+            );
         }
     };
 
@@ -60,17 +88,26 @@ export default function ChatArea({ selectedChannel }: ChatAreaProps) {
                 </div>
             </div>
             <ScrollArea className="flex-1 p-4">
-                <MessageList messages={data.data.data} />
+                {data ? (
+                    <>
+                        <MessageList messages={messages} />
+                        <div ref={messagesEndRef} />
+                    </>
+                ) : (
+                    <p>No message</p>
+                )}
             </ScrollArea>
             <div className="border-t bg-white p-4">
                 <div className="flex space-x-2">
                     <Input
                         value={newMessage}
-                        // onChange={(e) => onNewMessageChange(e.target.value)}
+                        onChange={(e) => setNewMessage(e.target.value)}
                         placeholder="Type a message..."
-                        // onKeyPress={(e) => e.key === "Enter" && onSendMessage()}
+                        onKeyDown={(e) =>
+                            e.key === "Enter" && handleSendMessage()
+                        }
                     />
-                    <Button>
+                    <Button onClick={handleSendMessage}>
                         <Send className="h-5 w-5" />
                         <span className="sr-only">Send message</span>
                     </Button>

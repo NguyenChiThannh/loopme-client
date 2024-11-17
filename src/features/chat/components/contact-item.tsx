@@ -19,9 +19,7 @@ export default function ChannelItem({
     onChannelSelect,
     selectedChannel,
 }: ChannelItemProps) {
-    const receiver = channel.participantsDetails.filter(
-        (u) => u._id !== user._id,
-    );
+    const receiver = channel.participants.filter((u) => u._id !== user._id);
     return (
         <div
             key={channel._id}
@@ -51,7 +49,7 @@ export default function ChannelItem({
                 </div>
                 <div className="flex items-start justify-between">
                     <p className="truncate text-sm text-gray-500">
-                        {channel.latestMessage.message}
+                        {channel?.lastMessage?.message}
                     </p>
                 </div>
             </div>

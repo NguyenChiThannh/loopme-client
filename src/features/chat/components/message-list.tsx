@@ -10,7 +10,7 @@ export default function MessageList({ messages }: MessageListProps) {
     return (
         <>
             {messages.map((message) => (
-                <MessageItem message={message} />
+                <MessageItem key={message._id} message={message} />
             ))}
         </>
     );

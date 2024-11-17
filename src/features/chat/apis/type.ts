@@ -10,8 +10,8 @@ export const chatRequestSchema = {
 
 export interface Message {
     _id: string;
-    sender: UserSelect;
-    receiver: UserSelect;
+    sender: string;
+    receiver: string;
     message: string;
     createdAt: string;
     updatedAt: string;
@@ -23,8 +23,8 @@ export interface Channel {
     __v: number;
     createdAt: string;
     isRead: boolean;
-    participantsDetails: UserSelect[];
+    participants: UserSelect[];
     readAt: string;
     updatedAt: string;
-    latestMessage: Message;
+    lastMessage: Message;
 }

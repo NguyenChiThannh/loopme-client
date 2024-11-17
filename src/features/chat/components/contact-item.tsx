@@ -1,10 +1,9 @@
 import { Channel } from "../apis/type";
+import { useNavigate } from "react-router";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 
 import { User } from "@/configs/type";
-import { useUser } from "@/providers/user-provider";
 
 interface ChannelItemProps {
     channel: Channel;
@@ -24,7 +23,9 @@ export default function ChannelItem({
         <div
             key={channel._id}
             className={`flex cursor-pointer items-center space-x-4 rounded-lg p-3 hover:bg-gray-100 ${selectedChannel?._id === channel._id ? "bg-gray-100" : ""}`}
-            onClick={() => onChannelSelect(channel)}
+            onClick={() => {
+                onChannelSelect(channel);
+            }}
         >
             <Avatar>
                 <AvatarImage

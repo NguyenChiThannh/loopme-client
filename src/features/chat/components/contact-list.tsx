@@ -1,7 +1,13 @@
 import { chatApi } from "../apis";
 import { Channel } from "../apis/type";
 import { Loader2, PlusCircle, Search, Undo2 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import {
+    Link,
+    useNavigate,
+    useParams,
+    useSearchParams,
+} from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -27,7 +33,9 @@ export default function ChannelList({
     onSearchChange,
     onChannelSelect,
 }: ChannelListProps) {
-    const { data, isLoading } = chatApi.query.useGetChannels();
+    const [searchParams] = useSearchParams();
+    const currentChannelId = searchParams.get("channelId");
+    const { data: channels, isLoading } = chatApi.query.useGetChannels();
     const { user, isLoading: isUserLoading, isSignedIn } = useUser();
     const {
         data: friends,
@@ -36,20 +44,37 @@ export default function ChannelList({
     } = friendApi.query.useGetAllFriend(true);
     const { mutate } = chatApi.mutation.useCreateChannel();
 
+    console.log(channels);
+
+    useEffect(() => {
+        if (!channels?.data?.data || !currentChannelId) return;
+
+        const foundChannel = channels.data.data.find(
+            (channel) => channel._id === currentChannelId,
+        );
+
+        if (foundChannel) {
+            onChannelSelect(foundChannel);
+        }
+    }, [channels, currentChannelId]);
+
     if (isUserLoading) return null;
     if (!user || !isSignedIn) return <p>Null</p>;
-    if (isLoading || !data) return <Loader2 />;
+    if (isLoading || !channels) return <Loader2 />;
     if (isPending) return null;
     if (isError && !friends) return <p>Cannot load friends</p>;
 
-    // const filteredChannels = data.data.data.filter((channel) =>
-    //     channel.participantDetails..toLowerCase().includes(searchQuery.toLowerCase()),
-    // );
-
     const handleNewChat = (friendId: string) => {
-        mutate({
-            friendId: friendId,
-        });
+        mutate(
+            {
+                friendId: friendId,
+            },
+            {
+                onSuccess: (data) => {
+                    onChannelSelect(data.data);
+                },
+            },
+        );
     };
 
     return (
@@ -64,14 +89,6 @@ export default function ChannelList({
                                 <span className="sr-only">New Chat</span>
                             </Button>
                         </Link>
-                        {/* <Button
-                            variant="outline"
-                            size="icon"
-                            onClick={onNewChat}
-                        >
-                            <PlusCircle className="w-5 h-5" />
-                            <span className="sr-only">New Chat</span>
-                        </Button> */}
                         <NewChatModal>
                             <ChatFriendList
                                 friends={friends.data.data}
@@ -80,7 +97,7 @@ export default function ChannelList({
                         </NewChatModal>
                     </div>
                 </div>
-                {data.data.data.length && (
+                {channels.data.data.length && (
                     <>
                         <div className="relative mb-4">
                             <Search className="absolute left-2 top-1/2 -translate-y-1/2 transform text-gray-400" />
@@ -92,7 +109,7 @@ export default function ChannelList({
                             />
                         </div>
                         <ScrollArea className="flex-grow">
-                            {data.data.data?.map((channel) => (
+                            {channels.data.data?.map((channel) => (
                                 <ChannelItem
                                     user={user}
                                     channel={channel}

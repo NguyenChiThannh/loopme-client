@@ -1,14 +1,11 @@
 import { useQueryState } from "nuqs";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router";
 
-import { chatApi } from "@/features/chat/apis";
 import { Channel } from "@/features/chat/apis/type";
 import ChatArea from "@/features/chat/components/chat-area";
-import ContactList from "@/features/chat/components/contact-list";
 import ChannelList from "@/features/chat/components/contact-list";
-import NewChatModal from "@/features/chat/components/new-chat-model";
 import { friendApi } from "@/features/friends/apis";
-import { ChatFriendList } from "@/features/friends/components/chat-friend-list";
 
 export default function ChatPage() {
     const [selectedChannel, setSelectedChannel] = useState<Channel | null>(
@@ -30,6 +27,8 @@ export default function ChatPage() {
         setChannelId(channel._id);
         setSelectedChannel(channel);
     };
+
+    console.log(selectedChannel);
 
     return (
         <div className="flex h-screen bg-gray-100">

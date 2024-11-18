@@ -1,46 +1,88 @@
-import { PlusCircle, Search, Undo2 } from "lucide-react";
-import React from "react";
-import { Link } from "react-router-dom";
+import { chatApi } from "../apis";
+import { Channel } from "../apis/type";
+import { useQueryClient } from "@tanstack/react-query";
+import { Loader2, PlusCircle, Search, Undo2 } from "lucide-react";
+import { useEffect } from "react";
+import {
+    Link,
+    useNavigate,
+    useParams,
+    useSearchParams,
+} from "react-router-dom";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-import ContactItem from "./contact-item";
-import EmptyState from "./empty-state";
+import ChannelItem from "./contact-item";
+import NewChatModal from "./new-chat-model";
+import { GLOBAL_KEYS } from "@/configs/keys";
+import { friendApi } from "@/features/friends/apis";
+import { ChatFriendList } from "@/features/friends/components/chat-friend-list";
+import { useUser } from "@/providers/user-provider";
 
-export interface Contact {
-    id: string;
-    name: string;
-    avatar: string;
-    lastMessage: string;
-    lastMessageTime: string;
-    unreadCount: number;
-}
-
-interface ContactListProps {
-    contacts: Contact[];
-    selectedContact: Contact | null;
+interface ChannelListProps {
+    selectedChannel: Channel | null;
     searchQuery: string;
     onSearchChange: (query: string) => void;
-    onContactSelect: (contact: Contact) => void;
-    onNewChat: () => void;
+    onChannelSelect: (channel: Channel) => void;
 }
 
-export default function ContactList({
-    contacts,
-    selectedContact,
+export default function ChannelList({
+    selectedChannel,
     searchQuery,
     onSearchChange,
-    onContactSelect,
-    onNewChat,
-}: ContactListProps) {
-    const filteredContacts = contacts.filter((contact) =>
-        contact.name.toLowerCase().includes(searchQuery.toLowerCase()),
-    );
+    onChannelSelect,
+}: ChannelListProps) {
+    const [searchParams] = useSearchParams();
+    const currentChannelId = searchParams.get("channelId");
+    const { data: channels, isLoading } = chatApi.query.useGetChannels();
+    const { user, isLoading: isUserLoading, isSignedIn } = useUser();
+    const {
+        data: friends,
+        isPending,
+        isError,
+    } = friendApi.query.useGetAllFriend(true);
+    const { mutate } = chatApi.mutation.useCreateChannel();
+    const queryClient = useQueryClient();
+
+    useEffect(() => {
+        if (!channels?.data?.data || !currentChannelId) return;
+
+        const foundChannel = channels.data.data.find(
+            (channel) => channel._id === currentChannelId,
+        );
+
+        if (foundChannel) {
+            onChannelSelect(foundChannel);
+            queryClient.invalidateQueries({
+                queryKey: GLOBAL_KEYS.CHAT.prefix,
+            });
+            queryClient.invalidateQueries({
+                queryKey: GLOBAL_KEYS.CHAT.channels,
+            });
+        }
+    }, [channels, currentChannelId]);
+
+    if (isUserLoading) return null;
+    if (!user || !isSignedIn) return <p>Null</p>;
+    if (isLoading || !channels) return <Loader2 />;
+    if (isPending) return null;
+    if (isError && !friends) return <p>Cannot load friends</p>;
+
+    const handleNewChat = (friendId: string) => {
+        mutate(
+            {
+                friendId: friendId,
+            },
+            {
+                onSuccess: (data) => {
+                    onChannelSelect(data.data);
+                },
+            },
+        );
+    };
 
     return (
         <Card className="w-1/3 max-w-sm border-r">
@@ -54,40 +96,37 @@ export default function ContactList({
                                 <span className="sr-only">New Chat</span>
                             </Button>
                         </Link>
-                        <Button
-                            variant="outline"
-                            size="icon"
-                            onClick={onNewChat}
-                        >
-                            <PlusCircle className="h-5 w-5" />
-                            <span className="sr-only">New Chat</span>
-                        </Button>
+                        <NewChatModal>
+                            <ChatFriendList
+                                friends={friends.data.data}
+                                onStartChat={handleNewChat}
+                            />
+                        </NewChatModal>
                     </div>
                 </div>
-                {contacts.length > 0 ? (
+                {channels.data.data.length && (
                     <>
                         <div className="relative mb-4">
                             <Search className="absolute left-2 top-1/2 -translate-y-1/2 transform text-gray-400" />
                             <Input
                                 className="pl-8"
-                                placeholder="Search contacts..."
+                                placeholder="Search channels..."
                                 value={searchQuery}
                                 onChange={(e) => onSearchChange(e.target.value)}
                             />
                         </div>
                         <ScrollArea className="flex-grow">
-                            {filteredContacts.map((contact) => (
-                                <ContactItem
-                                    contact={contact}
-                                    onContactSelect={onContactSelect}
-                                    selectedContact={selectedContact}
-                                    key={contact.id}
+                            {channels.data.data?.map((channel) => (
+                                <ChannelItem
+                                    user={user}
+                                    channel={channel}
+                                    onChannelSelect={onChannelSelect}
+                                    selectedChannel={selectedChannel}
+                                    key={channel._id}
                                 />
                             ))}
                         </ScrollArea>
                     </>
-                ) : (
-                    <EmptyState onNewChat={onNewChat} />
                 )}
             </CardContent>
         </Card>

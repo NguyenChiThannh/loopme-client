@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 import MessageList from "./message-list";
+import { useSocket } from "@/providers/socket-provider";
 import { useUser } from "@/providers/user-provider";
 
 interface ChatAreaProps {
@@ -24,6 +25,7 @@ export default function ChatArea({ selectedChannel }: ChatAreaProps) {
     const [messages, setMessages] = React.useState<Message[]>(
         data?.data.data || [],
     );
+    const { socket } = useSocket();
     const [newMessage, setNewMessage] = React.useState("");
 
     const receiver = selectedChannel.participants.find(
@@ -45,6 +47,24 @@ export default function ChatArea({ selectedChannel }: ChatAreaProps) {
             setMessages(data.data.data);
         }
     }, [data, isPending]);
+
+    useEffect(() => {
+        if (!socket) return;
+
+        socket.on("message", (newMessage: Message) => {
+            // Only update messages if the message belongs to current channel
+            if (
+                newMessage.sender._id === receiver?._id ||
+                newMessage.receiver._id === user?._id
+            ) {
+                setMessages((prev) => [...prev, newMessage]);
+            }
+        });
+
+        return () => {
+            socket.off("message");
+        };
+    }, [socket, selectedChannel._id]);
 
     if (isPending || isLoading) return <p>Loading messages</p>;
     if (!user || !receiver) return null;

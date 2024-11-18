@@ -15,8 +15,8 @@ export const chatRequestSchema = {
 
 export interface Message {
     _id: string;
-    sender: string;
-    receiver: string;
+    sender: UserSelect;
+    receiver: UserSelect;
     message: string;
     createdAt: string;
     updatedAt: string;

@@ -1,5 +1,6 @@
 import { chatApi } from "../apis";
 import { Channel } from "../apis/type";
+import { useQueryClient } from "@tanstack/react-query";
 import { Loader2, PlusCircle, Search, Undo2 } from "lucide-react";
 import { useEffect } from "react";
 import {
@@ -16,6 +17,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 import ChannelItem from "./contact-item";
 import NewChatModal from "./new-chat-model";
+import { GLOBAL_KEYS } from "@/configs/keys";
 import { friendApi } from "@/features/friends/apis";
 import { ChatFriendList } from "@/features/friends/components/chat-friend-list";
 import { useUser } from "@/providers/user-provider";
@@ -43,6 +45,7 @@ export default function ChannelList({
         isError,
     } = friendApi.query.useGetAllFriend(true);
     const { mutate } = chatApi.mutation.useCreateChannel();
+    const queryClient = useQueryClient();
 
     useEffect(() => {
         if (!channels?.data?.data || !currentChannelId) return;
@@ -53,6 +56,12 @@ export default function ChannelList({
 
         if (foundChannel) {
             onChannelSelect(foundChannel);
+            queryClient.invalidateQueries({
+                queryKey: GLOBAL_KEYS.CHAT.prefix,
+            });
+            queryClient.invalidateQueries({
+                queryKey: GLOBAL_KEYS.CHAT.channels,
+            });
         }
     }, [channels, currentChannelId]);
 

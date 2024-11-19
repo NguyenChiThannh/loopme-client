@@ -28,6 +28,7 @@ export function GroupInfoCard({
     if (!user) {
         return <p>Loading</p>;
     }
+
     const onClick = () => {
         handleJoinGroup(groupId);
     };
@@ -67,9 +68,11 @@ export function GroupInfoCard({
                         {isWaiting && (
                             <Button className="mb-2 ml-auto">Pending</Button>
                         )}
-                        <Link to={`/group/${groupId}/members`}>
-                            <Button>Members</Button>
-                        </Link>
+                        {!isJoined && !isWaiting && (
+                            <Link to={`/group/${groupId}/members`}>
+                                <Button>Members</Button>
+                            </Link>
+                        )}
                     </div>
                 </div>
             </div>

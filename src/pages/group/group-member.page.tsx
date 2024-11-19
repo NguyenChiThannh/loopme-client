@@ -33,7 +33,13 @@ export default function GroupMemberPage() {
     if (groupLoading || !groupData) {
         return <div>Loading...</div>;
     }
-    console.log(members?.data.data);
+    const isMember = members?.data.data.some(
+        (member) => member.user._id === user?._id,
+    );
+    if (!isMember) {
+        navigate(ROUTES.HOME_PAGE);
+        return;
+    }
     const tabList = [
         {
             value: "members",

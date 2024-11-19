@@ -12,7 +12,6 @@ export default function GroupLayout() {
         navigate("/");
         return null;
     }
-    console.log(groupId);
     const {
         data: groupData,
         isLoading: groupLoading,
@@ -28,7 +27,7 @@ export default function GroupLayout() {
     }
 
     return (
-        <div className="relative mx-auto grid max-w-6xl grid-cols-1 gap-6 p-4 sm:p-6 md:grid-cols-3 lg:p-8">
+        <div className="relative grid max-w-6xl grid-cols-1 gap-6 p-4 mx-auto sm:p-6 md:grid-cols-3 lg:p-8">
             <Outlet />
             <GroupInfoCard
                 createdAt={groupData.data.createdAt}

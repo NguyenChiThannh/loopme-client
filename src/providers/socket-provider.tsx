@@ -6,13 +6,16 @@ import {
     useState,
 } from "react";
 import { Socket, io } from "socket.io-client";
+import { toast } from "sonner";
 
 import { useUser } from "./user-provider";
+import { Message } from "@/features/chat/apis/type";
+import { Notification } from "@/features/notification/apis/type";
 
 interface SocketContextType {
     socket: Socket | null;
-    messages: unknown[];
-    notifications: unknown[];
+    messages: Message[];
+    notifications: Notification[];
 }
 
 const WatchListContext = createContext<SocketContextType>({
@@ -25,8 +28,8 @@ export const useSocket = () => useContext(WatchListContext);
 
 export const SocketProvider = ({ children }: { children: ReactNode }) => {
     const [socket, setSocket] = useState<Socket | null>(null);
-    const [messages, setMessages] = useState<unknown[]>([]);
-    const [notifications, setNotifications] = useState<unknown[]>([]);
+    const [messages, setMessages] = useState<Message[]>([]);
+    const [notifications, setNotifications] = useState<Notification[]>([]);
     const { user } = useUser();
 
     useEffect(() => {
@@ -50,6 +53,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
 
         newSocket.on("notifications", (data) => {
             console.log("Notification received:", data);
+            toast.info("You have new message !!");
             setNotifications((prev) => [...prev, data]);
         });
 

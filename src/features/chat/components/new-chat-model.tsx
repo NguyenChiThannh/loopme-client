@@ -1,8 +1,7 @@
-import { PlusCircleIcon, PlusIcon } from "lucide-react";
+import { PlusCircleIcon } from "lucide-react";
 import React from "react";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import {
     Dialog,
     DialogContent,
@@ -11,15 +10,17 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+
+import { useContactDialogStore } from "@/stores/contact-dialog-store";
 
 interface NewChatModalProps {
     children?: React.ReactNode;
 }
 
 export default function NewChatModal({ children }: NewChatModalProps) {
+    const { handleOpenChange, isOpen } = useContactDialogStore();
     return (
-        <Dialog>
+        <Dialog onOpenChange={handleOpenChange} open={isOpen}>
             <DialogTrigger>
                 <Button variant={"outline"} size={"icon"}>
                     <PlusCircleIcon />

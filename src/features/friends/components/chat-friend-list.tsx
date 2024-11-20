@@ -4,12 +4,15 @@ import { MessageSquare } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 
+import { useContactDialogStore } from "@/stores/contact-dialog-store";
+
 interface FriendItemProps {
     friend: Friend;
     onStartChat: (friendId: string) => void;
 }
 
 export function FriendItem({ friend, onStartChat }: FriendItemProps) {
+    const { handleOpenChange } = useContactDialogStore();
     return (
         <li className="py-4 transition-colors hover:bg-muted/50">
             <div className="flex items-center justify-between">
@@ -32,7 +35,10 @@ export function FriendItem({ friend, onStartChat }: FriendItemProps) {
                 </div>
                 <Button
                     size="sm"
-                    onClick={() => onStartChat(friend._id)}
+                    onClick={() => {
+                        onStartChat(friend._id);
+                        handleOpenChange(false);
+                    }}
                     aria-label={`Start chat with ${friend.displayName}`}
                 >
                     <MessageSquare className="mr-2 h-4 w-4" />

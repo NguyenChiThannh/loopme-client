@@ -1,10 +1,24 @@
 import { Message } from "../apis/type";
+import { format, isToday, isYesterday } from "date-fns";
 
 import { useUser } from "@/providers/user-provider";
 
 interface MessageProps {
     message: Message;
 }
+const formatMessageTime = (dateString: string) => {
+    const date = new Date(dateString);
+
+    if (isToday(date)) {
+        return format(date, "HH:mm");
+    }
+
+    if (isYesterday(date)) {
+        return "Yesterday " + format(date, "HH:mm");
+    }
+
+    return format(date, "MMM d, HH:mm");
+};
 
 export default function MessageItem({ message }: MessageProps) {
     const { user, isLoading } = useUser();
@@ -27,7 +41,7 @@ export default function MessageItem({ message }: MessageProps) {
                 <p
                     className={`mt-1 text-xs ${message.sender._id === user._id ? "text-blue-100" : "text-gray-500"}`}
                 >
-                    {message.createdAt}
+                    {formatMessageTime(message.createdAt)}
                 </p>
             </div>
         </div>

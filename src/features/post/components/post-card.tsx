@@ -37,8 +37,8 @@ export default function PostCard({ commentSectionRef, post }: PostCardProps) {
             <CardHeader className="flex flex-row items-center gap-4 py-3">
                 <Avatar className="size-12">
                     <AvatarImage
-                        src={post.user.avatar || ""}
-                        alt={post.user.displayName}
+                        src={post.user?.avatar || ""}
+                        alt={post.user?.displayName}
                     />
                     <AvatarFallback>{post.user.displayName[0]}</AvatarFallback>
                 </Avatar>

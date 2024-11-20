@@ -1,5 +1,7 @@
 import { ReactNode, createContext, useContext } from "react";
+import { useNavigate } from "react-router";
 
+import { ROUTES } from "@/configs/route.config";
 import { User } from "@/configs/type";
 import { userApi } from "@/features/user/apis";
 
@@ -13,10 +15,13 @@ interface UserContextType {
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export function UserProvider({ children }: { children: ReactNode }) {
+    const navigate = useNavigate();
     const { data, isLoading, isError, error } =
         userApi.query.useGetUserInformation();
     const isSignedIn = !isError;
-
+    if (isError) {
+        navigate(ROUTES.LOGIN_PAGE);
+    }
     return (
         <UserContext.Provider
             value={{

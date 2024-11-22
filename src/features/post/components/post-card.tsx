@@ -1,27 +1,39 @@
+import { postApi } from "../apis";
+import {
+    Delete,
+    Earth,
+    MoreHorizontal,
+    PencilIcon,
+    UsersRound,
+} from "lucide-react";
 import { useState } from "react";
-import { Navigate, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
     CardFooter,
     CardHeader,
 } from "@/components/ui/card";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 import PostUpvote from "./post-upvote";
+import { UpdatePostDialog } from "./update-post-dialog";
+import { UpdatePostForm } from "./update-post-form";
 import { IPost } from "@/configs/type";
 import HoverUsername from "@/features/post/components/hover-username";
 import PostAction from "@/features/post/components/post-action";
 import PostImage from "@/features/post/components/post-image";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { Delete, Earth, Edit, MoreHorizontal, UsersRound } from "lucide-react";
-import { postApi } from "../apis";
 import { useUser } from "@/providers/user-provider";
-import { CreatePostDialog } from "../layouts/create-post-dialog";
-import PostCreateForm from "./post-create-form";
+import { useUpdatePostDialogStore } from "@/stores/update-post-dialog-store";
 
 interface PostCardProps {
     commentSectionRef?: React.RefObject<HTMLDivElement>;
@@ -31,6 +43,7 @@ interface PostCardProps {
 export default function PostCard({ commentSectionRef, post }: PostCardProps) {
     const { user } = useUser();
     const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+    const { handleOpenChange } = useUpdatePostDialogStore();
     const navigator = useNavigate();
     const isGroupDefined = post.group && Object.keys(post.group).length > 0;
     const { mutate: handleDelete } = postApi.mutation.useDeletePostById();
@@ -42,7 +55,7 @@ export default function PostCard({ commentSectionRef, post }: PostCardProps) {
 
     const handleDeletePost = () => {
         handleDelete(post._id);
-    }
+    };
 
     return (
         <Card>
@@ -68,6 +81,7 @@ export default function PostCard({ commentSectionRef, post }: PostCardProps) {
                                         r/{post.group?.name}
                                     </span>
                                 </Link>
+<<<<<<< HEAD
                                 <span className="text-sm text-muted-foreground">•</span>
                                 <span className="text-sm text-muted-foreground">Post by</span>
                                 <HoverUsername
@@ -75,6 +89,14 @@ export default function PostCard({ commentSectionRef, post }: PostCardProps) {
                                     displayName={post.user.displayName}
                                     avatar={post.user.avatar || ""}
                                 />
+=======
+                                <span className="text-sm text-muted-foreground">
+                                    •
+                                </span>
+                                <span className="text-sm text-muted-foreground">
+                                    Post by
+                                </span>
+>>>>>>> 80bd7f781b35e3165da39ab6735422689926fb96
                             </>
                         ) : (
                             <div className="flex items-center space-x-1 text-sm text-muted-foreground">
@@ -109,6 +131,20 @@ export default function PostCard({ commentSectionRef, post }: PostCardProps) {
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
+                            <DropdownMenuItem
+                                onClick={() => handleOpenChange(true)}
+                                asChild
+                            >
+                                <UpdatePostDialog>
+                                    <UpdatePostForm
+                                        initialValues={{
+                                            content: post.content,
+                                            privacy: post.privacy,
+                                            id: post._id,
+                                        }}
+                                    />
+                                </UpdatePostDialog>
+                            </DropdownMenuItem>
                             <DropdownMenuItem
                                 onClick={() => handleDeletePost()}
                             >

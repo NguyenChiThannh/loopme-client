@@ -64,7 +64,7 @@ export function LoginForm() {
                 />
                 <Button type="submit" className="w-full" disabled={isPending}>
                     {isPending && (
-                        <LoaderCircleIcon className="w-4 h-4 mr-2 animate-spin" />
+                        <LoaderCircleIcon className="mr-2 h-4 w-4 animate-spin" />
                     )}
                     Sign In
                 </Button>

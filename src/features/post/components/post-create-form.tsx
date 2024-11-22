@@ -10,17 +10,13 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-
-import { ImageForm } from "./image-form";
 
 interface PostCreateFormProps {
     isCreateInGroup: boolean;

@@ -14,17 +14,19 @@ export function CreatePostDialog({
     children,
     isOpen,
     setIsOpen,
+    title,
 }: {
     children: React.ReactNode;
     isOpen: boolean;
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    title?: string;
 }) {
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
                 <Button variant="outline" className="flex items-center">
                     <PlusCircle className="h-5 w-5" />
-                    Create Post
+                    {title || "Create Post"}
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[650px]">

@@ -18,7 +18,7 @@ export interface User {
 }
 
 export type VoteValue = "UPVOTE" | "DOWNVOTE" | null; // Added null for voteValue
-type FriendStatus = "accepted";
+type FriendStatus = "accepted" | "pending";
 
 export interface UserSelect {
     _id: string;

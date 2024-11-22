@@ -19,12 +19,18 @@ export function NotificationList({ notifications }: NotificationListProps) {
         if (realtimeNotification) {
             setAllNotifications((prevNotifications) => {
                 // Filter out duplicates by checking notification._id
-                const uniqueNotifications = realtimeNotification.filter(
-                    (newNotif) =>
-                        !prevNotifications.some(
-                            (prevNotif) => prevNotif._id === newNotif._id,
-                        ),
-                );
+                const uniqueNotifications = realtimeNotification
+                    .filter(
+                        (newNotif) =>
+                            !prevNotifications.some(
+                                (prevNotif) => prevNotif._id === newNotif._id,
+                            ),
+                    )
+                    .sort((a, b) => {
+                        const dateA = new Date(a.createdAt);
+                        const dateB = new Date(b.createdAt);
+                        return dateA.getTime() - dateB.getTime();
+                    });
                 return [...uniqueNotifications, ...prevNotifications];
             });
         }

@@ -5,6 +5,7 @@ import {
     useEffect,
     useState,
 } from "react";
+import { useLocation } from "react-router-dom";
 import { Socket, io } from "socket.io-client";
 import { toast } from "sonner";
 
@@ -31,6 +32,8 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [notifications, setNotifications] = useState<Notification[]>([]);
     const { user } = useUser();
+    const location = useLocation();
+    const pathname = location.pathname;
 
     useEffect(() => {
         if (!user) return;
@@ -48,12 +51,15 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
 
         newSocket.on("message", (data) => {
             console.log("Message received:", data);
+            if (!pathname.includes("chat")) {
+                toast.info("You have new message");
+            }
             setMessages((prev) => [...prev, data]);
         });
 
         newSocket.on("notifications", (data) => {
             console.log("Notification received:", data);
-            toast.info("You have new message !!");
+            toast.info("You have new notification");
             setNotifications((prev) => [...prev, data]);
         });
 

@@ -58,7 +58,10 @@ export function Navbar() {
                                         isOpen={isOpen}
                                         setIsOpen={setIsOpen}
                                     >
-                                        <PostCreateForm onSubmit={createPost} />
+                                        <PostCreateForm
+                                            isCreateInGroup={false}
+                                            onSubmit={createPost}
+                                        />
                                     </CreatePostDialog>
                                     <NotificationPopover />
                                     <Link to={"/chat"}>

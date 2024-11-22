@@ -65,6 +65,9 @@ export const postApi = {
                     queryClient.invalidateQueries({
                         queryKey: GLOBAL_KEYS.POST.prefixPost,
                     });
+                    queryClient.invalidateQueries({
+                        queryKey: GLOBAL_KEYS.POST.prefixUserPosts,
+                    });
                 },
                 onError() {
                     toast.error("Something went wrong");

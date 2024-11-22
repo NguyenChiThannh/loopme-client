@@ -41,6 +41,7 @@ const POST = {
     ],
     postById: (postId: string) => ["postById", postId],
     prefixPostById: ["postById"] as string[],
+    prefixUserPosts: ["user_posts"] as string[],
 };
 
 const GROUP = {

@@ -38,7 +38,9 @@ export default function ChatPage() {
             {channelId && selectedChannel ? (
                 <ChatArea selectedChannel={selectedChannel} />
             ) : (
-                <p>Select a contact to start chatting</p>
+                <div className="flex h-full w-full flex-col items-center justify-center">
+                    <p>Select a contact to start chatting</p>
+                </div>
             )}
         </div>
     );

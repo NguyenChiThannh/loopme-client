@@ -25,12 +25,17 @@ export function GroupInfoCard({
 }: GroupInfoCardProps) {
     const { user } = useUser();
     const { mutate: handleJoinGroup } = groupApi.mutation.useSendJoinRequest();
+    const { mutate: handleRemovePending } = groupApi.mutation.useRemovePendingJoinInvitation();
     if (!user) {
         return <p>Loading</p>;
     }
 
     const onClick = () => {
         handleJoinGroup(groupId);
+    };
+
+    const removeClick = () => {
+        handleRemovePending({groupId, userId:user._id});
     };
     return (
         <Card className="sticky top-20 max-h-fit">
@@ -66,7 +71,7 @@ export function GroupInfoCard({
                             </Button>
                         )}
                         {isWaiting && (
-                            <Button className="mb-2 ml-auto">Pending</Button>
+                            <Button className="mb-2 ml-auto" onClick={removeClick}>Pending</Button>
                         )}
                         {isJoined && (
                             <Link to={`/group/${groupId}/members`}>

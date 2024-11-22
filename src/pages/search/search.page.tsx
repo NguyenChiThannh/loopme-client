@@ -1,10 +1,18 @@
-import { PlusIcon } from "lucide-react";
+import {
+    HourglassIcon,
+    PlusIcon,
+    UserCheck2,
+    UserIcon,
+    WatchIcon,
+} from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
 import { friendApi } from "@/features/friends/apis";
+import { groupApi } from "@/features/group/apis";
 import { GroupCard } from "@/features/group/components/group-card";
 import { searchApi } from "@/features/search/apis";
 
@@ -19,7 +27,6 @@ export default function SearchPage() {
     const { data: group } = searchApi.query.useSearchGroup({
         q: q,
     });
-
     console.log(user);
 
     return (
@@ -32,7 +39,7 @@ export default function SearchPage() {
                 {user?.data.data.map((user) => (
                     <Card key={user._id}>
                         <CardContent className="flex items-center justify-between p-4">
-                            <div className="flex items-center">
+                            <div className="flex items-center space-x-4">
                                 <img
                                     src={user.avatar}
                                     alt={user.displayName}
@@ -45,17 +52,53 @@ export default function SearchPage() {
                                         {user.displayName}
                                     </h2>
                                 </div>
+                                <div>
+                                    {(() => {
+                                        switch (user.friendStatus) {
+                                            case "pending":
+                                                return (
+                                                    <Badge variant={"outline"}>
+                                                        <HourglassIcon className="mr-2 size-3" />
+                                                        Pending
+                                                    </Badge>
+                                                );
+                                            default:
+                                                return (
+                                                    <Badge variant={"outline"}>
+                                                        <UserCheck2 className="mr-2 size-3" />
+                                                        Friend
+                                                    </Badge>
+                                                );
+                                        }
+                                    })()}
+                                </div>
                             </div>
-                            {user?.friendStatus !== "accepted" && (
-                                <Button
-                                    onClick={() => {
-                                        handleSendFriendInvitation(user._id);
-                                    }}
-                                >
-                                    <PlusIcon className="size-5" />
-                                    Add friend
-                                </Button>
-                            )}
+
+                            {(() => {
+                                switch (user.friendStatus) {
+                                    case "pending":
+                                        return (
+                                            <Button variant={"outline"}>
+                                                Pending
+                                            </Button>
+                                        );
+                                    case "accepted":
+                                        return null;
+                                    default:
+                                        return (
+                                            <Button
+                                                onClick={() => {
+                                                    handleSendFriendInvitation(
+                                                        user._id,
+                                                    );
+                                                }}
+                                            >
+                                                <PlusIcon className="size-5" />
+                                                Add friend
+                                            </Button>
+                                        );
+                                }
+                            })()}
                         </CardContent>
                     </Card>
                 ))}

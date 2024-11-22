@@ -81,7 +81,7 @@ export default function GroupMemberPage() {
                 setSearchParams({ tab: value });
             }}
         >
-            <TabsList className="w-[40%] justify-between bg-transparent">
+            <TabsList className="w-[40%] bg-transparent">
                 {tabList.map((tab, i) => (
                     <TabsTrigger
                         key={i}

@@ -1,5 +1,7 @@
 import { groupApi } from "../apis";
+import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -24,6 +26,9 @@ export function GroupCard({ group }: GroupCardProps) {
     const { user, isLoading } = useUser();
     const { mutate: handleJoinGroup, isPending } =
         groupApi.mutation.useSendJoinRequest();
+    const groupMutate = groupApi.mutation.useRemovePendingJoinInvitation();
+    const queryClient = useQueryClient();
+
     const navigate = useNavigate();
 
     if (isLoading || isPending) {
@@ -34,9 +39,7 @@ export function GroupCard({ group }: GroupCardProps) {
         return;
     }
     const isOwner = group.owner === user._id;
-    const canJoinGroup =
-        !isOwner &&
-        (group.status === "not_joined" || group.status !== "pending");
+
     console.log('Group" ', group);
     return (
         <Card className="w-full max-w-md">
@@ -51,14 +54,14 @@ export function GroupCard({ group }: GroupCardProps) {
                     </AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col">
-                    <CardTitle className="text-xl">{group.name}</CardTitle>
+                    <Link to={`/group/${group._id}`}>
+                        <CardTitle className="text-xl hover:underline">
+                            {group.name}
+                        </CardTitle>
+                    </Link>
                 </div>
             </CardHeader>
             <CardContent>
-                <p className="text-sm text-muted-foreground">
-                    Join us for workout tips, nutrition advice, and motivation
-                    to reach your fitness goals.
-                </p>
                 <div className="mt-4 flex flex-wrap gap-2">
                     <Badge variant="secondary">
                         {group.isPublic ? "Public" : "Private"}
@@ -66,28 +69,71 @@ export function GroupCard({ group }: GroupCardProps) {
                 </div>
             </CardContent>
             <CardFooter>
-                {!canJoinGroup ? (
-                    <Button className="w-full" disabled>
-                        {(() => {
-                            switch (group.status) {
-                                case "pending":
-                                    return "Pending";
-                                case "joined":
-                                    return "Joined";
-                                default:
-                                    return "Joined";
-                            }
-                        })()}
-                    </Button>
-                ) : (
-                    <Button
-                        className="w-full"
-                        onClick={() => handleJoinGroup(group._id)}
-                        disabled={isPending}
-                    >
-                        Join Group
-                    </Button>
-                )}
+                {(() => {
+                    switch (group.status) {
+                        case "pending":
+                            return (
+                                <Button
+                                    className="w-full"
+                                    onClick={() => {
+                                        groupMutate.mutate(
+                                            {
+                                                groupId: group._id,
+                                                userId: user._id,
+                                            },
+                                            {
+                                                onSuccess: () => {
+                                                    queryClient.invalidateQueries(
+                                                        {
+                                                            queryKey: [
+                                                                "search_group",
+                                                            ],
+                                                        },
+                                                    );
+                                                },
+                                            },
+                                        );
+                                    }}
+                                >
+                                    Remove
+                                </Button>
+                            );
+                        case "joined":
+                            return (
+                                <Button className="w-full" disabled={true}>
+                                    Joined
+                                </Button>
+                            );
+                        case "not_joined":
+                            return !isOwner ? (
+                                <Button
+                                    className="w-full"
+                                    onClick={() =>
+                                        handleJoinGroup(group._id, {
+                                            onSuccess() {
+                                                queryClient.invalidateQueries({
+                                                    queryKey: ["search_group"],
+                                                });
+                                            },
+                                        })
+                                    }
+                                    disabled={isPending}
+                                >
+                                    Join Group
+                                </Button>
+                            ) : (
+                                <Button className="w-full" disabled={true}>
+                                    Joined
+                                </Button>
+                            );
+                        default:
+                            return (
+                                <Button className="w-full" disabled={true}>
+                                    Joined
+                                </Button>
+                            );
+                    }
+                })()}
             </CardFooter>
         </Card>
     );

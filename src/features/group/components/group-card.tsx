@@ -34,6 +34,9 @@ export function GroupCard({ group }: GroupCardProps) {
         return;
     }
     const isOwner = group.owner === user._id;
+    const canJoinGroup =
+        !isOwner &&
+        (group.status === "not_joined" || group.status !== "pending");
     console.log('Group" ', group);
     return (
         <Card className="w-full max-w-md">
@@ -63,9 +66,18 @@ export function GroupCard({ group }: GroupCardProps) {
                 </div>
             </CardContent>
             <CardFooter>
-                {isOwner || group.status === "joined" ? (
+                {!canJoinGroup ? (
                     <Button className="w-full" disabled>
-                        Joined
+                        {(() => {
+                            switch (group.status) {
+                                case "pending":
+                                    return "Pending";
+                                case "joined":
+                                    return "Joined";
+                                default:
+                                    return "Joined";
+                            }
+                        })()}
                     </Button>
                 ) : (
                     <Button

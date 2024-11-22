@@ -2,6 +2,7 @@ import { useSearchParams } from "react-router-dom";
 
 import { Card, CardContent } from "@/components/ui/card";
 
+import { GroupCard } from "@/features/group/components/group-card";
 import { searchApi } from "@/features/search/apis";
 
 export default function SearchPage() {
@@ -19,6 +20,10 @@ export default function SearchPage() {
     return (
         <div className="container mx-auto p-4">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {group &&
+                    group.data.data.map((group) => (
+                        <GroupCard key={group._id} group={group} />
+                    ))}
                 {user?.data.data.map((user) => (
                     <Card key={user._id}>
                         <CardContent className="flex items-center p-4">

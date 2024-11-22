@@ -68,7 +68,7 @@ export function GroupInfoCard({
                         {isWaiting && (
                             <Button className="mb-2 ml-auto">Pending</Button>
                         )}
-                        {!isJoined && !isWaiting && (
+                        {isJoined && (
                             <Link to={`/group/${groupId}/members`}>
                                 <Button>Members</Button>
                             </Link>

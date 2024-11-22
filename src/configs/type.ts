@@ -85,6 +85,18 @@ export interface Group {
     status: GROUP_STATUS;
 }
 
+export interface GroupNoOwnerAndMembers {
+    _id: string;
+    name: string;
+    owner: string;
+    background_cover: string;
+    isPublic: boolean;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+    status: GROUP_STATUS;
+}
+
 export interface PendingInvitation {
     user: string;
     joinAt: string;

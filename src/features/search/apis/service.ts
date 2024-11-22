@@ -2,7 +2,11 @@ import { z } from "zod";
 
 import { searchParams } from "./type";
 import axiosRequest from "@/configs/request";
-import { Group, PaginatedResponse, UserSelect } from "@/configs/type";
+import {
+    GroupNoOwnerAndMembers,
+    PaginatedResponse,
+    UserSelect,
+} from "@/configs/type";
 
 const searchEndpoints = {
     search: (params: z.infer<typeof searchParams>) => {
@@ -29,7 +33,7 @@ export default class SearchService {
     }
     public static searchGroup(
         params: z.infer<typeof searchParams>,
-    ): Promise<PaginatedResponse<Group[]>> {
+    ): Promise<PaginatedResponse<GroupNoOwnerAndMembers[]>> {
         return axiosRequest({
             url: searchEndpoints.searchGroup(params).url,
             params: searchEndpoints.searchGroup(params).params,

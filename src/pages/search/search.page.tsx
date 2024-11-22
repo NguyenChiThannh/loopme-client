@@ -89,7 +89,10 @@ export default function SearchPage() {
                                             </Button>
                                         );
                                     case "accepted":
-                                        return null;
+                                        return <Button variant={"outline"} className="px-6">
+                                            <UserCheck2 className="mr-2 size-3" />
+                                            Friend
+                                        </Button>
                                     default:
                                         return (
                                             <Button

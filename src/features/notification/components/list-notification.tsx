@@ -37,7 +37,7 @@ export function NotificationList({ notifications }: NotificationListProps) {
     }, [realtimeNotification]);
     console.log("All notifications:", allNotifications);
     return (
-        <ScrollArea className="h-[300px]">
+        <ScrollArea className="h-[400px]">
             {allNotifications.map((notification) => (
                 <NotificationItem
                     key={notification._id}

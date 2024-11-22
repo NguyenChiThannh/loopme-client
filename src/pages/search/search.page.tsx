@@ -3,6 +3,7 @@ import {
     PlusIcon,
     UserCheck2,
     UserIcon,
+    UserRoundPlus,
     WatchIcon,
 } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
@@ -65,7 +66,7 @@ export default function SearchPage() {
                                                             Pending
                                                         </Badge>
                                                     );
-                                                default:
+                                                case "accepted":
                                                     return (
                                                         <Badge
                                                             variant={"outline"}
@@ -74,7 +75,26 @@ export default function SearchPage() {
                                                             Friend
                                                         </Badge>
                                                     );
+                                                default:
+                                                    return (
+                                                        <Badge
+                                                            variant={"outline"}
+                                                        >
+                                                            <UserRoundPlus className="mr-2 size-3" />
+                                                            Add friend
+                                                        </Badge>
+                                                    );
                                             }
+                                        }
+                                        else {
+                                            return (
+                                                <Badge
+                                                    variant={"outline"}
+                                                >
+                                                    <UserRoundPlus className="mr-2 size-3" />
+                                                    Add friend
+                                                </Badge>
+                                            );
                                         }
                                     })()}
                                 </div>
@@ -84,15 +104,17 @@ export default function SearchPage() {
                                 switch (user.friendStatus) {
                                     case "pending":
                                         return (
-                                            <Button variant={"outline"}>
+                                            <Button variant={"outline"} className="px-5">
+                                                <HourglassIcon className="mr-2 size-3" />
                                                 Pending
                                             </Button>
                                         );
                                     case "accepted":
-                                        return <Button variant={"outline"} className="px-6">
-                                            <UserCheck2 className="mr-2 size-3" />
-                                            Friend
-                                        </Button>
+                                        return null
+                                    // <Button variant={"outline"} className="px-6">
+                                    //     <UserCheck2 className="mr-2 size-3" />
+                                    //     Friend
+                                    // </Button>
                                     default:
                                         return (
                                             <Button

@@ -1,3 +1,4 @@
+import { useQueryClient } from "@tanstack/react-query";
 import {
     HourglassIcon,
     PlusIcon,
@@ -7,6 +8,7 @@ import {
     WatchIcon,
 } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
+import { toast } from "sonner";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -18,10 +20,13 @@ import { GroupCard } from "@/features/group/components/group-card";
 import { searchApi } from "@/features/search/apis";
 
 export default function SearchPage() {
+    const queryClient = useQueryClient();
     const [searchParams] = useSearchParams();
     const q = searchParams.get("q");
     const { mutate: handleSendFriendInvitation } =
         friendApi.mutation.useAddPendingFriendInvitation();
+    const { mutate: handleRemoveFriendInvitation } =
+        friendApi.mutation.useRemovePendingFriendInvitation();
     const { data: user } = searchApi.query.useSearchUser({
         q: q,
     });
@@ -85,12 +90,9 @@ export default function SearchPage() {
                                                         </Badge>
                                                     );
                                             }
-                                        }
-                                        else {
+                                        } else {
                                             return (
-                                                <Badge
-                                                    variant={"outline"}
-                                                >
+                                                <Badge variant={"outline"}>
                                                     <UserRoundPlus className="mr-2 size-3" />
                                                     Add friend
                                                 </Badge>
@@ -104,17 +106,37 @@ export default function SearchPage() {
                                 switch (user.friendStatus) {
                                     case "pending":
                                         return (
-                                            <Button variant={"outline"} className="px-5">
+                                            <Button
+                                                variant={"outline"}
+                                                className="px-5"
+                                                onClick={() =>
+                                                    handleRemoveFriendInvitation(
+                                                        user._id,
+                                                        {
+                                                            onSuccess() {
+                                                                toast.success(
+                                                                    "Friend invitation removed",
+                                                                );
+                                                                queryClient.invalidateQueries(
+                                                                    {
+                                                                        queryKey:
+                                                                            [
+                                                                                "search_user",
+                                                                            ],
+                                                                    },
+                                                                );
+                                                            },
+                                                        },
+                                                    )
+                                                }
+                                            >
                                                 <HourglassIcon className="mr-2 size-3" />
-                                                Pending
+                                                Remove
                                             </Button>
                                         );
                                     case "accepted":
-                                        return null
-                                    // <Button variant={"outline"} className="px-6">
-                                    //     <UserCheck2 className="mr-2 size-3" />
-                                    //     Friend
-                                    // </Button>
+                                        return null;
+
                                     default:
                                         return (
                                             <Button
@@ -134,28 +156,6 @@ export default function SearchPage() {
                     </Card>
                 ))}
             </div>
-
-            {/* <div className="flex items-center justify-center mt-4">
-                <Button
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className="mr-2"
-                    aria-label="Previous page"
-                >
-                    <ChevronLeft className="w-4 h-4" aria-hidden="true" />
-                </Button>
-                <span className="mx-2">
-                    Page {currentPage} of {totalPages}
-                </span>
-                <Button
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                    className="ml-2"
-                    aria-label="Next page"
-                >
-                    <ChevronRight className="w-4 h-4" aria-hidden="true" />
-                </Button>
-            </div> */}
         </div>
     );
 }

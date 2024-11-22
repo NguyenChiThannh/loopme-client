@@ -15,6 +15,7 @@ import {
 import { ROUTES } from "@/configs/route.config";
 import { GroupNoOwnerAndMembers } from "@/configs/type";
 import { useUser } from "@/providers/user-provider";
+import { Link } from "react-router-dom";
 
 interface GroupCardProps {
     group: GroupNoOwnerAndMembers;
@@ -54,7 +55,9 @@ export function GroupCard({ group }: GroupCardProps) {
                     </AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col">
-                    <CardTitle className="text-xl">{group.name}</CardTitle>
+                    <Link to={`/group/${group._id}`}>
+                        <CardTitle className="text-xl hover:underline">{group.name}</CardTitle>
+                    </Link>
                 </div>
             </CardHeader>
             <CardContent>

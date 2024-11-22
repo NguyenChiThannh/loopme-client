@@ -82,6 +82,9 @@ export const groupApi = {
                     queryClient.invalidateQueries({
                         queryKey: GLOBAL_KEYS.GROUP.members,
                     });
+                    queryClient.invalidateQueries({
+                        queryKey: GLOBAL_KEYS.GROUP.groupPrefix,
+                    });
                 },
                 onError() {
                     toast.error(
@@ -108,7 +111,7 @@ export const groupApi = {
                 },
                 onError() {
                     toast.error(
-                        "Something went wrong when accepting join request",
+                        "Something went wrong when remove join request",
                     );
                 },
             });
@@ -128,11 +131,36 @@ export const groupApi = {
                     queryClient.invalidateQueries({
                         queryKey: GLOBAL_KEYS.GROUP.members,
                     });
+                    queryClient.invalidateQueries({
+                        queryKey: GLOBAL_KEYS.GROUP.groupPrefix,
+                    });
                 },
                 onError() {
-                    toast.error(
-                        "Something went wrong when accepting join request",
-                    );
+                    toast.error("Something went wrong when remove member");
+                },
+            });
+        },
+        useAddMemberToGroup() {
+            const queryClient = useQueryClient();
+            return useMutation({
+                mutationFn: ({
+                    groupId,
+                    userId,
+                }: {
+                    groupId: string;
+                    userId: string;
+                }) => GroupService.addMemberToGroup(groupId, userId),
+                onSuccess(data) {
+                    toast.success(data.message);
+                    queryClient.invalidateQueries({
+                        queryKey: GLOBAL_KEYS.GROUP.members,
+                    });
+                    queryClient.invalidateQueries({
+                        queryKey: GLOBAL_KEYS.GROUP.groupPrefix,
+                    });
+                },
+                onError() {
+                    toast.error("Something went wrong when add member");
                 },
             });
         },

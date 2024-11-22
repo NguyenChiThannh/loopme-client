@@ -59,18 +59,23 @@ export default function GroupMemberList({
                         </p>
                     ) : (
                         <ul className="space-y-4">
-                            {member?.map((member) => (
-                                <GroupMemberItem
-                                    member={member.user}
-                                    key={member.user._id}
-                                    isAdmin={isAdmin}
-                                    groupId={groupId}
-                                />
-                            ))}
+                            {member?.map((member) => {
+                                if (member.user) {
+                                    return (
+                                        <GroupMemberItem
+                                            member={member.user}
+                                            key={member.user._id}
+                                            isAdmin={isAdmin}
+                                            groupId={groupId}
+                                        />
+                                    );
+                                }
+                            })}
                         </ul>
                     )}
                 </div>
             </div>
         </div>
     );
+
 }

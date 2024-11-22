@@ -35,7 +35,7 @@ export default function GroupMemberPage() {
         return;
     }
     const isMember = members?.data.data.some(
-        (member) => member.user._id === user?._id,
+        (member) => member.user && member.user._id === user?._id,
     );
     const isOwner = groupData.data.owner._id === user?._id;
     if (!isMember && !isOwner) {

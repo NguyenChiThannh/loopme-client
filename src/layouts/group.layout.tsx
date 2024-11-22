@@ -42,7 +42,7 @@ export default function GroupLayout() {
                 )}
                 isJoined={
                     groupData.data.members.some(
-                        (member) => member.user._id === user._id,
+                        (member) => member.user && member.user._id === user._id,
                     ) || groupData.data.owner._id === user._id
                 }
             />

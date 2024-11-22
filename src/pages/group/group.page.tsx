@@ -63,7 +63,7 @@ export default function GroupHomePage() {
                         <div className="flex flex-row space-x-2">
                             {(groupData.data.owner._id === user?._id ||
                                 groupData.data.members.some(
-                                    (member) => member.user._id === user?._id,
+                                    (member) => member.user && member.user._id === user?._id,
                                 )) && (
                                 <CreatePostDialog
                                     isOpen={isOpen}

@@ -16,7 +16,6 @@ export interface Notification {
     type: keyof typeof NotificationType;
     read: boolean;
     createdAt: string;
-    targetName?: string;
     postId?: string;
     groupId?: string;
     receiver: string;

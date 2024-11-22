@@ -40,10 +40,7 @@ export default function PostPage() {
     console.log(data.data);
     return (
         <div className="max-w-2xl md:col-span-2">
-            <PostCard
-                commentSectionRef={commentSectionRef}
-                post={data.data}
-            />
+            <PostCard commentSectionRef={commentSectionRef} post={data.data} />
             <PostCommentForm postId={data.data._id} />
             <div ref={commentSectionRef}>
                 {renderComments(data.data.comments || [])}

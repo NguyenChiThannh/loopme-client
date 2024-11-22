@@ -5,8 +5,7 @@ import PostService from "./service";
 import { GLOBAL_KEYS } from "@/configs/keys";
 
 export const commentApi = {
-    query: {
-    },
+    query: {},
     mutation: {
         useAddComment() {
             const queryClient = useQueryClient();
@@ -32,11 +31,8 @@ export const commentApi = {
         useRemoveComment() {
             const queryClient = useQueryClient();
             return useMutation({
-                mutationFn: ({
-                    commentId,
-                }: {
-                    commentId: string;
-                }) => PostService.removeComment(commentId),
+                mutationFn: ({ commentId }: { commentId: string }) =>
+                    PostService.removeComment(commentId),
                 onSuccess(data) {
                     toast.success(data.message);
                     queryClient.invalidateQueries({

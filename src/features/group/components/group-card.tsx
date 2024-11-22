@@ -38,7 +38,7 @@ export function GroupCard({ group }: GroupCardProps) {
     return (
         <Card className="w-full max-w-md">
             <CardHeader className="flex flex-row items-center gap-4">
-                <Avatar className="w-16 h-16">
+                <Avatar className="h-16 w-16">
                     <AvatarImage
                         src={group.background_cover}
                         alt={group.name}
@@ -56,7 +56,7 @@ export function GroupCard({ group }: GroupCardProps) {
                     Join us for workout tips, nutrition advice, and motivation
                     to reach your fitness goals.
                 </p>
-                <div className="flex flex-wrap gap-2 mt-4">
+                <div className="mt-4 flex flex-wrap gap-2">
                     <Badge variant="secondary">
                         {group.isPublic ? "Public" : "Private"}
                     </Badge>

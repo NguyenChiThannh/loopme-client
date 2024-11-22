@@ -22,5 +22,6 @@ export const postRequestSchema = {
             message: "Content must be at least 10 characters.",
         }),
         image: z.any().optional(),
+        privacy: z.enum(["public", "private", "friends"]).default("public"),
     }),
 };

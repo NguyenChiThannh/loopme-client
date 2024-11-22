@@ -16,7 +16,10 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
+
+import { useUpdatePostDialogStore } from "@/stores/update-post-dialog-store";
 
 interface UpdatePostFormProps {
     initialValues: z.infer<typeof postRequestSchema.update>;
@@ -24,17 +27,28 @@ interface UpdatePostFormProps {
 
 export function UpdatePostForm({ initialValues }: UpdatePostFormProps) {
     const postMutation = postApi.mutation.useUpdatePost();
+    const { handleOpenChange } = useUpdatePostDialogStore();
     const form = useForm<z.infer<typeof postRequestSchema.update>>({
         resolver: zodResolver(postRequestSchema.create),
         defaultValues: initialValues,
     });
 
     const handleSubmit = form.handleSubmit((values) => {
-        postMutation.mutate(values);
+        postMutation.mutate(
+            {
+                ...values,
+                id: initialValues.id,
+            },
+            {
+                onSuccess() {
+                    handleOpenChange(false);
+                },
+            },
+        );
     });
 
     return (
-        <Card className="w-full max-w-2xl py-2 mx-auto">
+        <Card className="mx-auto w-full max-w-2xl py-2">
             <CardContent>
                 <Form {...form}>
                     <form onSubmit={handleSubmit} className="space-y-6">
@@ -57,8 +71,44 @@ export function UpdatePostForm({ initialValues }: UpdatePostFormProps) {
                                 </FormItem>
                             )}
                         />
+                        <FormField
+                            control={form.control}
+                            name="privacy"
+                            render={({ field }) => (
+                                <FormItem className="space-y-3">
+                                    <FormLabel className="text-lg">
+                                        Privacy
+                                    </FormLabel>
+                                    <FormControl>
+                                        <RadioGroup
+                                            onValueChange={field.onChange}
+                                            defaultValue={field.value}
+                                            className="flex flex-col space-y-1"
+                                        >
+                                            <FormItem className="flex items-center space-x-3 space-y-0">
+                                                <FormControl>
+                                                    <RadioGroupItem value="public" />
+                                                </FormControl>
+                                                <FormLabel className="font-normal">
+                                                    Public
+                                                </FormLabel>
+                                            </FormItem>
+                                            <FormItem className="flex items-center space-x-3 space-y-0">
+                                                <FormControl>
+                                                    <RadioGroupItem value="friends" />
+                                                </FormControl>
+                                                <FormLabel className="font-normal">
+                                                    Friends
+                                                </FormLabel>
+                                            </FormItem>
+                                        </RadioGroup>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                         <Button type="submit" size="lg" className="text-lg">
-                            Create Post
+                            Update Post
                         </Button>
                     </form>
                 </Form>
@@ -67,7 +117,7 @@ export function UpdatePostForm({ initialValues }: UpdatePostFormProps) {
                 {form.formState.errors.root && (
                     <CardFooter>
                         <Alert variant="destructive" className="w-full">
-                            <AlertCircle className="w-5 h-5" />
+                            <AlertCircle className="h-5 w-5" />
                             <AlertTitle>Error</AlertTitle>
                             <AlertDescription>
                                 {form.formState.errors.root.message}

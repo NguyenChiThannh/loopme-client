@@ -15,6 +15,7 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 
 interface PostCreateFormProps {

@@ -29,7 +29,7 @@ export function NotificationList({ notifications }: NotificationListProps) {
                     .sort((a, b) => {
                         const dateA = new Date(a.createdAt);
                         const dateB = new Date(b.createdAt);
-                        return dateA.getTime() - dateB.getTime();
+                        return dateB.getTime() - dateA.getTime();
                     });
                 return [...uniqueNotifications, ...prevNotifications];
             });

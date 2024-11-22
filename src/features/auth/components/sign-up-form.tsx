@@ -42,7 +42,7 @@ export function SignUpForm() {
 
     return (
         <>
-            {isSuccess && (
+            {/* {isSuccess && (
                 <Alert variant="default" className="border-green-400">
                     <VerifiedIcon className="size-6" />
                     <AlertTitle>
@@ -54,7 +54,7 @@ export function SignUpForm() {
                         This is your OTP Code: {data.data.otp}
                     </AlertDescription>
                 </Alert>
-            )}
+            )} */}
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(onSubmit)}

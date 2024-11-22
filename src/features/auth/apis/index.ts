@@ -18,8 +18,13 @@ export const authApi = {
                 mutationFn: (data: z.infer<typeof authRequestSchema.login>) =>
                     AuthService.login(data),
                 onSuccess(data) {
-                    navigation(ROUTES.HOME_PAGE);
-                    toast.success(data.message);
+                    if (data.data.isActive) {
+                        toast.success(data.message);
+                        navigation(ROUTES.HOME_PAGE);
+                    } else {
+                        toast.info("Please verify your email");
+                        navigation(ROUTES.OTP_PAGE);
+                    }
                     queryClient.invalidateQueries();
                 },
                 onError() {
@@ -28,11 +33,14 @@ export const authApi = {
             });
         },
         useRegister() {
+            const navigation = useNavigate();
+
             return useMutation({
                 mutationFn: (
                     data: z.infer<typeof authRequestSchema.register>,
                 ) => AuthService.register(data),
                 onSuccess(data) {
+                    navigation(ROUTES.OTP_PAGE);
                     toast.success(data.message);
                 },
                 onError() {
@@ -56,7 +64,6 @@ export const authApi = {
         useLogout() {
             const navigation = useNavigate();
             const queryClient = useQueryClient();
-
             return useMutation({
                 mutationFn: () => AuthService.logout(),
                 onSuccess(data) {

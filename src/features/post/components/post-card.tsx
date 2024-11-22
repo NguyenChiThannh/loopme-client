@@ -17,7 +17,7 @@ import PostAction from "@/features/post/components/post-action";
 import PostImage from "@/features/post/components/post-image";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Delete, Edit, MoreHorizontal } from "lucide-react";
+import { Delete, Earth, Edit, MoreHorizontal, UsersRound } from "lucide-react";
 import { postApi } from "../apis";
 import { useUser } from "@/providers/user-provider";
 import { CreatePostDialog } from "../layouts/create-post-dialog";
@@ -29,11 +29,11 @@ interface PostCardProps {
 }
 
 export default function PostCard({ commentSectionRef, post }: PostCardProps) {
-    const {user} = useUser();
+    const { user } = useUser();
     const [isImageModalOpen, setIsImageModalOpen] = useState(false);
     const navigator = useNavigate();
     const isGroupDefined = post.group && Object.keys(post.group).length > 0;
-    const {mutate: handleDelete} = postApi.mutation.useDeletePostById();
+    const { mutate: handleDelete } = postApi.mutation.useDeletePostById();
     const scrollToComments = () => {
         if (commentSectionRef)
             commentSectionRef?.current?.scrollIntoView({ behavior: "smooth" });
@@ -58,7 +58,7 @@ export default function PostCard({ commentSectionRef, post }: PostCardProps) {
                 </Avatar>
                 <div className="flex-1">
                     <div className="flex items-center space-x-2">
-                        {isGroupDefined && (
+                        {isGroupDefined ? (
                             <>
                                 <Link
                                     to={`/group/${post.group?._id}`}
@@ -68,21 +68,24 @@ export default function PostCard({ commentSectionRef, post }: PostCardProps) {
                                         r/{post.group?.name}
                                     </span>
                                 </Link>
-                                <span className="text-sm text-muted-foreground">
-                                    •
-                                </span>
-                                <span className="text-sm text-muted-foreground">
-                                    Post by
-                                </span>
+                                <span className="text-sm text-muted-foreground">•</span>
+                                <span className="text-sm text-muted-foreground">Post by</span>
                             </>
+                        ) : (
+                            <div className="flex items-center space-x-1 text-sm text-muted-foreground">
+                                <HoverUsername
+                                    _id={post.user._id}
+                                    displayName={post.user.displayName}
+                                    avatar={post.user.avatar || ""}
+                                />
+                                {post.privacy === "public" && (
+                                    <Earth className="h-3 w-3 text-muted-foreground" />
+                                )}
+                                {post.privacy === "friends" && (
+                                    <UsersRound className="h-3 w-3 text-muted-foreground" />
+                                )}
+                            </div>
                         )}
-                        <span className="text-sm text-muted-foreground">
-                            <HoverUsername
-                                _id={post.user._id}
-                                displayName={post.user.displayName}
-                                avatar={post.user.avatar || ""}
-                            />
-                        </span>
                     </div>
                     <span className="text-sm text-muted-foreground">
                         {new Date(post.createdAt).toLocaleDateString("en-GB", {

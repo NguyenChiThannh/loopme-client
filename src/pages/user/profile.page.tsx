@@ -16,6 +16,11 @@ import { userApi } from "@/features/user/apis";
 import UserUpdateForm from "@/features/user/components/user-update-form";
 import { UserUpdateDialog } from "@/features/user/layouts/user-update-dialog";
 import { useUser } from "@/providers/user-provider";
+import { CreatePostDialog } from "@/features/post/layouts/create-post-dialog";
+import PostCreateForm from "@/features/post/components/post-create-form";
+import { useState } from "react";
+import { postRequestSchema } from "@/features/post/apis/type";
+import { z } from "zod";
 
 type Params = {
     userId: string;
@@ -89,21 +94,6 @@ export function ProfileBody() {
             ),
         },
         {
-            value: "comment",
-            label: "Comment",
-            content: <div>Commnet</div>,
-        },
-        {
-            value: "upvote",
-            label: "Upvote",
-            content: <div>Upvote</div>,
-        },
-        {
-            value: "downvote",
-            label: "Downvote",
-            content: <div>Downvote</div>,
-        },
-        {
             value: "group",
             label: "Group",
             content: (
@@ -147,6 +137,12 @@ export function ProfileBody() {
 
 export function ProfileActions() {
     const { user, isLoading } = useUser();
+    const { mutate: handleCreatePost } = postApi.mutation.useCreatePost();
+    const createPost = (values: z.infer<typeof postRequestSchema.create>) => {
+        handleCreatePost(values);
+        setIsOpen(false);
+    };
+    const [isOpen, setIsOpen] = useState(false);
     if (isLoading) {
         return <p>Loading</p>;
     }
@@ -154,12 +150,9 @@ export function ProfileActions() {
 
     return (
         <div className="flex items-center space-x-3">
-            <Link to={"/create-post"}>
-                <Button variant={"outline"}>
-                    <PlusCircleIcon />
-                    Create post
-                </Button>
-            </Link>
+            <CreatePostDialog isOpen={isOpen} setIsOpen={setIsOpen}>
+                <PostCreateForm isCreateInGroup={false} onSubmit={createPost} />
+            </CreatePostDialog>
             <UserUpdateDialog>
                 <UserUpdateForm initialValues={user} />
             </UserUpdateDialog>

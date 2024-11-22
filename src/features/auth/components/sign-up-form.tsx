@@ -24,10 +24,10 @@ export function SignUpForm() {
     const form = useForm<z.infer<typeof authRequestSchema.register>>({
         resolver: zodResolver(authRequestSchema.register),
         defaultValues: {
-            email: "user@gmail.com",
-            password: "An.123456",
-            displayName: "Ha Do Thai An",
-            repeatPassword: "An.123456",
+            email: "",
+            password: "",
+            displayName: "",
+            repeatPassword: "",
         },
     });
 

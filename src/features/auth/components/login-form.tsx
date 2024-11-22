@@ -21,8 +21,8 @@ export function LoginForm() {
     const form = useForm<z.infer<typeof authRequestSchema.login>>({
         resolver: zodResolver(authRequestSchema.login),
         defaultValues: {
-            email: "anacelol1234@gmail.com",
-            password: "An.123456",
+            email: "",
+            password: "",
         },
     });
 
@@ -64,7 +64,7 @@ export function LoginForm() {
                 />
                 <Button type="submit" className="w-full" disabled={isPending}>
                     {isPending && (
-                        <LoaderCircleIcon className="mr-2 h-4 w-4 animate-spin" />
+                        <LoaderCircleIcon className="w-4 h-4 mr-2 animate-spin" />
                     )}
                     Sign In
                 </Button>

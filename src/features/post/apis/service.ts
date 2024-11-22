@@ -3,7 +3,12 @@ import { z } from "zod";
 import { postRequestSchema } from "./type";
 import { AxiosMethod } from "@/configs/axios";
 import axiosRequest from "@/configs/request";
-import { ApiResponse, IPost, PaginatedResponse } from "@/configs/type";
+import {
+    ApiResponse,
+    BaseResponse,
+    IPost,
+    PaginatedResponse,
+} from "@/configs/type";
 
 export const PostEndpoints = {
     getPosts: () => "/posts",
@@ -15,6 +20,7 @@ export const PostEndpoints = {
     getPostsByGroupId: (groupId: string) => `/posts/group/${groupId}`,
     getPostById: (postId: string) => `/posts/${postId}`,
     updatePostById: (postId: string) => `/posts/${postId}`,
+    deletePostById: (postId: string) => `/posts/${postId}`,
 };
 
 export default class PostService {
@@ -97,6 +103,12 @@ export default class PostService {
             url: PostEndpoints.updatePostById(id),
             method: AxiosMethod.PATCH,
             data: values,
+        });
+    }
+    public static deletePostById(postId: string): Promise<BaseResponse> {
+        return axiosRequest({
+            url: PostEndpoints.deletePostById(postId),
+            method: AxiosMethod.DELETE,
         });
     }
 }

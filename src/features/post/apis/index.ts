@@ -88,6 +88,22 @@ export const postApi = {
                 },
             });
         },
+        useDeletePostById() {
+            const queryClient = useQueryClient();
+            return useMutation({
+                mutationFn: (postId: string) =>
+                    PostService.deletePostById(postId),
+                onSuccess(data) {
+                    toast.message(data.message);
+                    queryClient.invalidateQueries({
+                        queryKey: GLOBAL_KEYS.POST.prefixPost,
+                    });
+                },
+                onError() {
+                    toast.error("Cannot delete post");
+                },
+            });
+        },
         useUpdatePost() {
             const queryClient = useQueryClient();
             return useMutation({
@@ -100,7 +116,7 @@ export const postApi = {
                     });
                 },
                 onError() {
-                    toast.error("Something went wrong");
+                    toast.error("Failed to update post");
                 },
             });
         },

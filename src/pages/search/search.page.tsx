@@ -1,11 +1,14 @@
+import { useQueryClient } from "@tanstack/react-query";
 import {
     HourglassIcon,
     PlusIcon,
     UserCheck2,
     UserIcon,
+    UserRoundPlus,
     WatchIcon,
 } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
+import { toast } from "sonner";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -17,10 +20,13 @@ import { GroupCard } from "@/features/group/components/group-card";
 import { searchApi } from "@/features/search/apis";
 
 export default function SearchPage() {
+    const queryClient = useQueryClient();
     const [searchParams] = useSearchParams();
     const q = searchParams.get("q");
     const { mutate: handleSendFriendInvitation } =
         friendApi.mutation.useAddPendingFriendInvitation();
+    const { mutate: handleRemoveFriendInvitation } =
+        friendApi.mutation.useRemovePendingFriendInvitation();
     const { data: user } = searchApi.query.useSearchUser({
         q: q,
     });
@@ -54,21 +60,43 @@ export default function SearchPage() {
                                 </div>
                                 <div>
                                     {(() => {
-                                        switch (user.friendStatus) {
-                                            case "pending":
-                                                return (
-                                                    <Badge variant={"outline"}>
-                                                        <HourglassIcon className="mr-2 size-3" />
-                                                        Pending
-                                                    </Badge>
-                                                );
-                                            default:
-                                                return (
-                                                    <Badge variant={"outline"}>
-                                                        <UserCheck2 className="mr-2 size-3" />
-                                                        Friend
-                                                    </Badge>
-                                                );
+                                        if (user.friendStatus) {
+                                            switch (user.friendStatus) {
+                                                case "pending":
+                                                    return (
+                                                        <Badge
+                                                            variant={"outline"}
+                                                        >
+                                                            <HourglassIcon className="mr-2 size-3" />
+                                                            Pending
+                                                        </Badge>
+                                                    );
+                                                case "accepted":
+                                                    return (
+                                                        <Badge
+                                                            variant={"outline"}
+                                                        >
+                                                            <UserCheck2 className="mr-2 size-3" />
+                                                            Friend
+                                                        </Badge>
+                                                    );
+                                                default:
+                                                    return (
+                                                        <Badge
+                                                            variant={"outline"}
+                                                        >
+                                                            <UserRoundPlus className="mr-2 size-3" />
+                                                            Add friend
+                                                        </Badge>
+                                                    );
+                                            }
+                                        } else {
+                                            return (
+                                                <Badge variant={"outline"}>
+                                                    <UserRoundPlus className="mr-2 size-3" />
+                                                    Add friend
+                                                </Badge>
+                                            );
                                         }
                                     })()}
                                 </div>
@@ -78,12 +106,37 @@ export default function SearchPage() {
                                 switch (user.friendStatus) {
                                     case "pending":
                                         return (
-                                            <Button variant={"outline"}>
-                                                Pending
+                                            <Button
+                                                variant={"outline"}
+                                                className="px-5"
+                                                onClick={() =>
+                                                    handleRemoveFriendInvitation(
+                                                        user._id,
+                                                        {
+                                                            onSuccess() {
+                                                                toast.success(
+                                                                    "Friend invitation removed",
+                                                                );
+                                                                queryClient.invalidateQueries(
+                                                                    {
+                                                                        queryKey:
+                                                                            [
+                                                                                "search_user",
+                                                                            ],
+                                                                    },
+                                                                );
+                                                            },
+                                                        },
+                                                    )
+                                                }
+                                            >
+                                                <HourglassIcon className="mr-2 size-3" />
+                                                Remove
                                             </Button>
                                         );
                                     case "accepted":
                                         return null;
+
                                     default:
                                         return (
                                             <Button
@@ -103,28 +156,6 @@ export default function SearchPage() {
                     </Card>
                 ))}
             </div>
-
-            {/* <div className="flex items-center justify-center mt-4">
-                <Button
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className="mr-2"
-                    aria-label="Previous page"
-                >
-                    <ChevronLeft className="w-4 h-4" aria-hidden="true" />
-                </Button>
-                <span className="mx-2">
-                    Page {currentPage} of {totalPages}
-                </span>
-                <Button
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                    className="ml-2"
-                    aria-label="Next page"
-                >
-                    <ChevronRight className="w-4 h-4" aria-hidden="true" />
-                </Button>
-            </div> */}
         </div>
     );
 }

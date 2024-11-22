@@ -68,6 +68,9 @@ export const friendApi = {
                     queryClient.invalidateQueries({
                         queryKey: GLOBAL_KEYS.FRIEND.suggestedFriend,
                     });
+                    queryClient.invalidateQueries({
+                        queryKey: GLOBAL_KEYS.SEARCH.searchUserPrefix,
+                    });
                 },
                 onError: () => {
                     toast.error("Send requested invitation failed");

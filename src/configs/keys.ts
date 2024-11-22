@@ -60,6 +60,7 @@ const SEARCH = {
     search: ["search"] as string[],
     searchUser: (params: SearchParams) => ["search_user", params] as string[],
     searchGroup: (params: SearchParams) => ["search_group", params] as string[],
+    searchUserPrefix: ["search_user"] as string[],
 };
 
 const CHAT = {

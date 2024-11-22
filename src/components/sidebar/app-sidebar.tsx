@@ -35,11 +35,11 @@ const DEFAULT_ITEMS: MenuItemType[] = [
         title: "Home",
         url: "/",
     },
-    {
-        icon: AlignEndHorizontalIcon,
-        title: "All",
-        url: "/all",
-    },
+    // {
+    //     icon: AlignEndHorizontalIcon,
+    //     title: "All",
+    //     url: "/all",
+    // },
 ];
 
 // Menu items.
@@ -51,24 +51,24 @@ const items: MenuItemType[] = [
     },
     {
         title: "Inbox",
-        url: "#",
+        url: "/chat",
         icon: Inbox,
     },
-    {
-        title: "Calendar",
-        url: "#",
-        icon: Calendar,
-    },
-    {
-        title: "Search",
-        url: "#",
-        icon: Search,
-    },
-    {
-        title: "Settings",
-        url: "#",
-        icon: Settings,
-    },
+    // {
+    //     title: "Calendar",
+    //     url: "#",
+    //     icon: Calendar,
+    // },
+    // {
+    //     title: "Search",
+    //     url: "#",
+    //     icon: Search,
+    // },
+    // {
+    //     title: "Settings",
+    //     url: "#",
+    //     icon: Settings,
+    // },
 ];
 
 export function AppSidebar() {

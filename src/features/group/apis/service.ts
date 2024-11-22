@@ -25,6 +25,7 @@ export const GroupEndpoints = {
     removeMember: (groupId: string, userId: string) =>
         `/groups/${groupId}/members/${userId}`,
     getJoinedGroup: () => "/groups",
+    addMemberToGroup: (groupId: string, userId: string) => `/groups/${groupId}/members/${userId}`
 };
 
 export default class GroupService {
@@ -99,5 +100,11 @@ export default class GroupService {
             url: GroupEndpoints.getJoinedGroup(),
             method: AxiosMethod.GET,
         });
+    }
+    public static async addMemberToGroup(groupId: string, userId: string): Promise<BaseResponse> {
+        return axiosRequest({
+            url: GroupEndpoints.addMemberToGroup(groupId, userId),
+            method: AxiosMethod.POST
+        })
     }
 }

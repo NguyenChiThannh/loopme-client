@@ -18,11 +18,13 @@ export interface User {
 }
 
 export type VoteValue = "UPVOTE" | "DOWNVOTE" | null; // Added null for voteValue
+type FriendStatus = "accepted";
 
 export interface UserSelect {
     _id: string;
     displayName: string;
     avatar: string;
+    friendStatus?: FriendStatus;
 }
 
 export interface IVote {
@@ -69,6 +71,8 @@ export interface PaginatedResponse<T> extends BaseResponse {
     totalElement?: number;
 }
 
+type GROUP_STATUS = "not_joined" | "pending" | "joined";
+
 export interface Group {
     _id: string;
     name: string;
@@ -80,6 +84,19 @@ export interface Group {
     createdAt: string;
     updatedAt: string;
     __v: number;
+    status: GROUP_STATUS;
+}
+
+export interface GroupNoOwnerAndMembers {
+    _id: string;
+    name: string;
+    owner: string;
+    background_cover: string;
+    isPublic: boolean;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+    status: GROUP_STATUS;
 }
 
 export interface PendingInvitation {

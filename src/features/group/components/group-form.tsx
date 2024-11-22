@@ -35,7 +35,7 @@ export default function GroupForm(
         defaultValues: {
             name: "",
             background_cover: null,
-            isPublic: true,
+            isPublic: false,
         },
     });
     const { mutate: createGroup } = groupApi.mutation.useCreateGroup();
@@ -78,53 +78,6 @@ export default function GroupForm(
                         </FormItem>
                     )}
                 />
-
-                <FormItem>
-                    <FormLabel htmlFor="backgroundCover">
-                        Background Cover (optional)
-                    </FormLabel>
-                    <FormControl>
-                        <Input
-                            id="backgroundCover"
-                            type="file"
-                            accept="image/*"
-                            onChange={handleBackgroundCoverChange}
-                        />
-                    </FormControl>
-                    {previewUrl && (
-                        <div className="mt-2">
-                            <img
-                                src={previewUrl}
-                                alt="Background cover preview"
-                                className="h-auto max-w-full rounded"
-                            />
-                        </div>
-                    )}
-                </FormItem>
-
-                <FormField
-                    control={form.control}
-                    name="isPublic"
-                    render={({ field }) => (
-                        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                            <div className="space-y-0.5">
-                                <FormLabel className="text-base">
-                                    Public Group
-                                </FormLabel>
-                                <FormDescription>
-                                    Make this group visible to everyone
-                                </FormDescription>
-                            </div>
-                            <FormControl>
-                                <Switch
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
-                                />
-                            </FormControl>
-                        </FormItem>
-                    )}
-                />
-
                 <Button type="submit" className="w-full">
                     {initialData ? "Update Group" : "Create Group"}
                 </Button>

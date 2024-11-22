@@ -12,6 +12,12 @@ export const searchApi = {
                 queryFn: () => SearchService.search(params),
             });
         },
+        useSearchGroup(params: SearchParams) {
+            return useQuery({
+                queryKey: GLOBAL_KEYS.SEARCH.searchGroup(params),
+                queryFn: () => SearchService.searchGroup(params),
+            });
+        },
     },
     mutation: {},
 };

@@ -24,10 +24,10 @@ export function SignUpForm() {
     const form = useForm<z.infer<typeof authRequestSchema.register>>({
         resolver: zodResolver(authRequestSchema.register),
         defaultValues: {
-            email: "user@gmail.com",
-            password: "An.123456",
-            displayName: "Ha Do Thai An",
-            repeatPassword: "An.123456",
+            email: "",
+            password: "",
+            displayName: "",
+            repeatPassword: "",
         },
     });
 
@@ -42,7 +42,7 @@ export function SignUpForm() {
 
     return (
         <>
-            {isSuccess && (
+            {/* {isSuccess && (
                 <Alert variant="default" className="border-green-400">
                     <VerifiedIcon className="size-6" />
                     <AlertTitle>
@@ -54,7 +54,7 @@ export function SignUpForm() {
                         This is your OTP Code: {data.data.otp}
                     </AlertDescription>
                 </Alert>
-            )}
+            )} */}
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(onSubmit)}

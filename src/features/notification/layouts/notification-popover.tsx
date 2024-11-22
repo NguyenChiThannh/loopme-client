@@ -17,6 +17,11 @@ export function NotificationPopover() {
     const [unreadCount, setUnreadCount] = useState(true);
     const { data, isPending } =
         notificationApi.query.useGetNotifications(isOpen);
+    const sortedMessages = data?.data.sort((a, b) => {
+        const dateA = new Date(a.createdAt);
+        const dateB = new Date(b.createdAt);
+        return dateB.getTime() - dateA.getTime();
+    });
 
     return (
         <Popover open={isOpen} onOpenChange={handleOpenChange}>
@@ -33,7 +38,9 @@ export function NotificationPopover() {
                 <div className="border-b p-4 text-sm font-medium">
                     Notifications {data?.data.length || 0}
                 </div>
-                {data?.data && <NotificationList notifications={data.data} />}
+                {sortedMessages && (
+                    <NotificationList notifications={sortedMessages} />
+                )}
             </PopoverContent>
         </Popover>
     );

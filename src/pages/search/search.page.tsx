@@ -1,33 +1,61 @@
+import { PlusIcon } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
+import { friendApi } from "@/features/friends/apis";
+import { GroupCard } from "@/features/group/components/group-card";
 import { searchApi } from "@/features/search/apis";
 
 export default function SearchPage() {
     const [searchParams] = useSearchParams();
     const q = searchParams.get("q");
-    const { data } = searchApi.query.useSearchUser({
+    const { mutate: handleSendFriendInvitation } =
+        friendApi.mutation.useAddPendingFriendInvitation();
+    const { data: user } = searchApi.query.useSearchUser({
         q: q,
     });
+    const { data: group } = searchApi.query.useSearchGroup({
+        q: q,
+    });
+
+    console.log(user);
+
     return (
         <div className="container mx-auto p-4">
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {data?.data.data.map((user) => (
+            <div className="flex flex-col gap-4">
+                {group &&
+                    group.data.data.map((group) => (
+                        <GroupCard key={group._id} group={group} />
+                    ))}
+                {user?.data.data.map((user) => (
                     <Card key={user._id}>
-                        <CardContent className="flex items-center p-4">
-                            <img
-                                src={user.avatar}
-                                alt={user.displayName}
-                                width={50}
-                                height={50}
-                                className="mr-4 rounded-full"
-                            />
-                            <div>
-                                <h2 className="font-semibold">
-                                    {user.displayName}
-                                </h2>
+                        <CardContent className="flex items-center justify-between p-4">
+                            <div className="flex items-center">
+                                <img
+                                    src={user.avatar}
+                                    alt={user.displayName}
+                                    width={50}
+                                    height={50}
+                                    className="mr-4 rounded-full"
+                                />
+                                <div>
+                                    <h2 className="font-semibold">
+                                        {user.displayName}
+                                    </h2>
+                                </div>
                             </div>
+                            {user?.friendStatus !== "accepted" && (
+                                <Button
+                                    onClick={() => {
+                                        handleSendFriendInvitation(user._id);
+                                    }}
+                                >
+                                    <PlusIcon className="size-5" />
+                                    Add friend
+                                </Button>
+                            )}
                         </CardContent>
                     </Card>
                 ))}

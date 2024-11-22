@@ -10,38 +10,39 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import {
     Form,
     FormControl,
+    FormDescription,
     FormField,
     FormItem,
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 
 import { ImageForm } from "./image-form";
 
 interface PostCreateFormProps {
+    isCreateInGroup: boolean;
     onSubmit: (values: z.infer<typeof postRequestSchema.create>) => void;
 }
 
-export default function PostCreateForm({ onSubmit }: PostCreateFormProps) {
+export default function PostCreateForm({
+    isCreateInGroup,
+    onSubmit,
+}: PostCreateFormProps) {
     const form = useForm<z.infer<typeof postRequestSchema.create>>({
         resolver: zodResolver(postRequestSchema.create),
         defaultValues: {
             content: "",
             image: null,
+            privacy: "public",
         },
     });
 
-    // const [title, setTitle] = useState("");
-    // const [content, setContent] = useState("");
-    // const [image, setImage] = useState<FileWithPreview | null>(null);
-    // const [error, setError] = useState("");
-
-    // const handleImageSelect = (selectedFile: FileWithPreview | null) => {
-    //     setImage(selectedFile);
-    // };
-
     const handleSubmit = form.handleSubmit((values) => {
+        if (isCreateInGroup) values.privacy = "private";
+        console.log(values)
         onSubmit(values);
     });
 
@@ -63,26 +64,6 @@ export default function PostCreateForm({ onSubmit }: PostCreateFormProps) {
                                             placeholder="Write your post content here"
                                             className="min-h-[200px] py-3 text-lg"
                                             {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="image"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel className="text-lg">
-                                        Upload Image (optional)
-                                    </FormLabel>
-                                    <FormControl>
-                                        <ImageForm
-                                            onImageSelect={(file) =>
-                                                field.onChange(file)
-                                            }
-                                            selectedImage={field.value}
                                         />
                                     </FormControl>
                                     <FormMessage />

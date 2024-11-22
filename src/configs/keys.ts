@@ -7,6 +7,7 @@ const AUTH = {
 
 const USER = {
     user: ["user"] as string[],
+    userById: (userId: string) => ["user_by_id", userId] as string[],
 };
 
 const FRIEND = {
@@ -57,6 +58,7 @@ const NOTIFICATION = {
 const SEARCH = {
     search: ["search"] as string[],
     searchUser: (params: SearchParams) => ["search_user", params] as string[],
+    searchGroup: (params: SearchParams) => ["search_group", params] as string[],
 };
 
 const CHAT = {

@@ -69,7 +69,10 @@ export default function GroupHomePage() {
                                     isOpen={isOpen}
                                     setIsOpen={setIsOpen}
                                 >
-                                    <PostCreateForm onSubmit={createPost} />
+                                    <PostCreateForm
+                                        isCreateInGroup={true}
+                                        onSubmit={createPost}
+                                    />
                                 </CreatePostDialog>
                             )}
                         </div>

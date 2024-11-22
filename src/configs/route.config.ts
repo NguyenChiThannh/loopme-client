@@ -5,4 +5,5 @@ export const ROUTES = {
     CREATE_POST_PAGE: "/create-post",
     USER_PAGE: (userId: string) => `/user/${userId}`,
     GROUP_PAGE: "/group/:groupName",
+    OTP_PAGE: "/verify",
 };

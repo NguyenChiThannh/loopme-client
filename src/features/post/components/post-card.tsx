@@ -40,7 +40,9 @@ export default function PostCard({ commentSectionRef, post }: PostCardProps) {
                         src={post.user?.avatar || ""}
                         alt={post.user?.displayName}
                     />
-                    <AvatarFallback>{post.user.displayName[0]}</AvatarFallback>
+                    <AvatarFallback>
+                        {post.user?.displayName || ""}
+                    </AvatarFallback>
                 </Avatar>
                 <div className="flex-1">
                     <div className="flex items-center space-x-2">

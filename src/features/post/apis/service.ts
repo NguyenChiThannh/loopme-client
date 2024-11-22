@@ -19,6 +19,7 @@ export const PostEndpoints = {
     removevote: (postId: string) => `/posts/${postId}/removevote`,
     getPostsByGroupId: (groupId: string) => `/posts/group/${groupId}`,
     getPostById: (postId: string) => `/posts/${postId}`,
+    updatePostById: (postId: string) => `/posts/${postId}`,
     deletePostById: (postId: string) => `/posts/${postId}`,
 };
 
@@ -94,10 +95,20 @@ export default class PostService {
             method: AxiosMethod.GET,
         });
     }
+    public static updatePostById(
+        data: z.infer<typeof postRequestSchema.update>,
+    ): Promise<ApiResponse<IPost>> {
+        const { id, ...values } = data;
+        return axiosRequest({
+            url: PostEndpoints.updatePostById(id),
+            method: AxiosMethod.PATCH,
+            data: values,
+        });
+    }
     public static deletePostById(postId: string): Promise<BaseResponse> {
         return axiosRequest({
             url: PostEndpoints.deletePostById(postId),
-            method: AxiosMethod.DELETE
-        })
+            method: AxiosMethod.DELETE,
+        });
     }
 }

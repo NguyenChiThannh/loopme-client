@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+
 import PostService from "./service";
 import { GLOBAL_KEYS } from "@/configs/keys";
 
 export const voteApi = {
-    query: {
-    },
+    query: {},
     mutation: {
         useUpvote() {
             const queryClient = useQueryClient();

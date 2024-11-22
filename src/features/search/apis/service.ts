@@ -11,6 +11,12 @@ const searchEndpoints = {
             params,
         };
     },
+    searchGroup(params: z.infer<typeof searchParams>) {
+        return {
+            url: "group/search",
+            params,
+        };
+    },
 };
 export default class SearchService {
     public static search(
@@ -19,6 +25,14 @@ export default class SearchService {
         return axiosRequest({
             url: searchEndpoints.search(params).url,
             params: searchEndpoints.search(params).params,
+        });
+    }
+    public static searchGroup(
+        params: z.infer<typeof searchParams>,
+    ): Promise<PaginatedResponse<UserSelect[]>> {
+        return axiosRequest({
+            url: searchEndpoints.searchGroup(params).url,
+            params: searchEndpoints.searchGroup(params).params,
         });
     }
 }

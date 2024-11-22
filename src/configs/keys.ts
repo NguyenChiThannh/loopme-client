@@ -57,6 +57,7 @@ const NOTIFICATION = {
 const SEARCH = {
     search: ["search"] as string[],
     searchUser: (params: SearchParams) => ["search_user", params] as string[],
+    searchGroup: (params: SearchParams) => ["search_group", params] as string[],
 };
 
 const CHAT = {

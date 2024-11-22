@@ -11,7 +11,7 @@ export const postApi = {
         useGetPost: (
             page: number = 1,
             size: number = 10,
-            sort: string = "asc",
+            sort: string = "desc",
         ) => {
             return useQuery({
                 queryKey: GLOBAL_KEYS.POST.posts(page, size, sort),

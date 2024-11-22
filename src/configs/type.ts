@@ -69,6 +69,8 @@ export interface PaginatedResponse<T> extends BaseResponse {
     totalElement?: number;
 }
 
+type GROUP_STATUS = "not_joined" | "is_pending" | "joined";
+
 export interface Group {
     _id: string;
     name: string;
@@ -80,6 +82,7 @@ export interface Group {
     createdAt: string;
     updatedAt: string;
     __v: number;
+    status: GROUP_STATUS;
 }
 
 export interface PendingInvitation {

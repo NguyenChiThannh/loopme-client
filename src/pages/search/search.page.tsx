@@ -7,13 +7,19 @@ import { searchApi } from "@/features/search/apis";
 export default function SearchPage() {
     const [searchParams] = useSearchParams();
     const q = searchParams.get("q");
-    const { data } = searchApi.query.useSearchUser({
+    const { data: user } = searchApi.query.useSearchUser({
         q: q,
     });
+    const { data: group } = searchApi.query.useSearchGroup({
+        q: q,
+    });
+
+    console.log("My gr: ", group);
+
     return (
         <div className="container mx-auto p-4">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {data?.data.data.map((user) => (
+                {user?.data.data.map((user) => (
                     <Card key={user._id}>
                         <CardContent className="flex items-center p-4">
                             <img

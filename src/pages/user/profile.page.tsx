@@ -89,21 +89,6 @@ export function ProfileBody() {
             ),
         },
         {
-            value: "comment",
-            label: "Comment",
-            content: <div>Commnet</div>,
-        },
-        {
-            value: "upvote",
-            label: "Upvote",
-            content: <div>Upvote</div>,
-        },
-        {
-            value: "downvote",
-            label: "Downvote",
-            content: <div>Downvote</div>,
-        },
-        {
             value: "group",
             label: "Group",
             content: (

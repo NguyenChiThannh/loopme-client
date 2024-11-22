@@ -1,5 +1,4 @@
 import { groupApi } from "../apis";
-import { Users } from "lucide-react";
 import { useNavigate } from "react-router";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -35,11 +34,11 @@ export function GroupCard({ group }: GroupCardProps) {
         return;
     }
     const isOwner = group.owner === user._id;
-
+    console.log('Group" ', group);
     return (
         <Card className="w-full max-w-md">
             <CardHeader className="flex flex-row items-center gap-4">
-                <Avatar className="h-16 w-16">
+                <Avatar className="w-16 h-16">
                     <AvatarImage
                         src={group.background_cover}
                         alt={group.name}
@@ -57,7 +56,7 @@ export function GroupCard({ group }: GroupCardProps) {
                     Join us for workout tips, nutrition advice, and motivation
                     to reach your fitness goals.
                 </p>
-                <div className="mt-4 flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 mt-4">
                     <Badge variant="secondary">
                         {group.isPublic ? "Public" : "Private"}
                     </Badge>

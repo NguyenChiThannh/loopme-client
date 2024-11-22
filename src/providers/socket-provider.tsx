@@ -59,7 +59,9 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
 
         newSocket.on("notifications", (data) => {
             console.log("Notification received:", data);
-            toast.info("You have new notification");
+            if (data.actor._id !== user._id) {
+                toast.info("You have new notification");
+            }
             setNotifications((prev) => [...prev, data]);
         });
 

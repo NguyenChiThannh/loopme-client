@@ -104,6 +104,11 @@ export default function ChannelList({
                         </NewChatModal>
                     </div>
                 </div>
+                {!channels.data.data.length && (
+                    <div className="flex h-full flex-col items-center justify-center">
+                        <p className="text-gray-500">No channels found</p>
+                    </div>
+                )}
                 {channels.data.data.length && (
                     <>
                         <div className="relative mb-4">

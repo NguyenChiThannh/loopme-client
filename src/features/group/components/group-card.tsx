@@ -55,10 +55,6 @@ export function GroupCard({ group }: GroupCardProps) {
                 </div>
             </CardHeader>
             <CardContent>
-                <p className="text-sm text-muted-foreground">
-                    Join us for workout tips, nutrition advice, and motivation
-                    to reach your fitness goals.
-                </p>
                 <div className="mt-4 flex flex-wrap gap-2">
                     <Badge variant="secondary">
                         {group.isPublic ? "Public" : "Private"}

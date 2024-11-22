@@ -32,69 +32,92 @@ export function NotificationItem({ notification }: NotificationItemProps) {
         switch (notification.type) {
             case "like":
                 return (
-                    <>
-                        <Link to={`/post/${notification.postId}`}>
-                            <ThumbsUp className="mr-2 h-4 w-4 text-blue-500" />
-                            <span>{notification.actor.displayName} liked your post</span>
-                        </Link>
-                    </>
+                    <Link
+                        to={`/post/${notification.postId}`}
+                        className="flex items-center"
+                    >
+                        <ThumbsUp className="mr-2 h-4 w-4 text-blue-500" />
+                        <span className="line-clamp-2">
+                            {notification.actor.displayName} liked your post
+                        </span>
+                    </Link>
                 );
             case "dislike":
                 return (
-                    <>
-                        <Link to={`/post/${notification.postId}`}>
-                            <ThumbsDown className="mr-2 h-4 w-4 text-red-500" />
-                            <span>{notification.actor.displayName} disliked your post</span>
-                        </Link>
-                    </>
+                    <Link
+                        to={`/post/${notification.postId}`}
+                        className="flex items-center"
+                    >
+                        <ThumbsDown className="mr-2 h-4 w-4 text-red-500" />
+                        <span className="line-clamp-2">
+                            {notification.actor.displayName} disliked your post
+                        </span>
+                    </Link>
                 );
             case "comment":
                 return (
-                    <>
-                        <Link to={`/post/${notification.postId}`}>
-                            <MessageSquare className="mr-2 h-4 w-4 text-green-500" />
-                            <span>{notification.actor.displayName} commented on your post</span>
-                        </Link>
-                    </>
+                    <Link
+                        to={`/post/${notification.postId}`}
+                        className="flex items-center"
+                    >
+                        <MessageSquare className="mr-2 h-4 w-4 text-green-500" />
+                        <span className="line-clamp-2">
+                            {notification.actor.displayName} commented on your
+                            post
+                        </span>
+                    </Link>
                 );
             case "friend_request":
                 return (
-                    <>
-                        <Link to={`/user/${notification.receiver}/?tab=friend`}>
-                            <UserPlus className="mr-2 h-4 w-4 text-purple-500" />
-                            <span>{notification.actor.displayName} sent you a friend request</span>
-                        </Link>
-                    </>
+                    <Link
+                        to={`/user/${notification.receiver}/?tab=friend`}
+                        className="flex items-center"
+                    >
+                        <UserPlus className="mr-2 h-4 w-4 text-purple-500" />
+                        <span className="line-clamp-2">
+                            {notification.actor.displayName} sent you a friend
+                            request
+                        </span>
+                    </Link>
                 );
             case "accept_friend":
                 return (
                     <>
                         <UserPlus className="mr-2 h-4 w-4 text-purple-500" />
-                        <span>{notification.actor.displayName} accepted your friend request</span>
+                        <span className="line-clamp-2">
+                            {notification.actor.displayName} accepted your
+                            friend request
+                        </span>
                     </>
                 );
             case "request_to_join_group":
                 return (
-                    <>
-                        <Link
-                            to={`/group/${notification.groupId}/members?tab=waitings`}
-                        >
-                            <Users className="mr-2 h-4 w-4 text-orange-500" />
-                            <span>{notification.actor.displayName} requested to join group </span>
-                        </Link>
-                    </>
+                    <Link
+                        to={`/group/${notification.groupId}/members?tab=waitings`}
+                        className="line-clamp-2 flex w-full items-center"
+                    >
+                        <Users className="mr-2 h-4 w-4 text-orange-500" />
+                        <span className="truncate">
+                            {notification.actor.displayName} requested to join
+                            group
+                        </span>
+                    </Link>
                 );
             case "accept_join_group":
                 return (
-                    <>
-                        <Link to={`/group/${notification.groupId}`}>
-                            <Users className="mr-2 h-4 w-4 text-orange-500" />
-                            <span>{notification.actor.displayName} accepted your request to join group</span>
-                        </Link>
-                    </>
+                    <Link
+                        to={`/group/${notification.groupId}`}
+                        className="line-clamp-2 flex items-center"
+                    >
+                        <Users className="mr-2 h-4 w-4 text-orange-500" />
+                        <span className="line-clamp-2">
+                            {notification.actor.displayName} accepted your
+                            request to join group
+                        </span>
+                    </Link>
                 );
             default:
-                return <span>New notification</span>;
+                return <span className="line-clamp-2">New notification</span>;
         }
     };
 

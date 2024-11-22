@@ -54,21 +54,27 @@ export default function SearchPage() {
                                 </div>
                                 <div>
                                     {(() => {
-                                        switch (user.friendStatus) {
-                                            case "pending":
-                                                return (
-                                                    <Badge variant={"outline"}>
-                                                        <HourglassIcon className="mr-2 size-3" />
-                                                        Pending
-                                                    </Badge>
-                                                );
-                                            default:
-                                                return (
-                                                    <Badge variant={"outline"}>
-                                                        <UserCheck2 className="mr-2 size-3" />
-                                                        Friend
-                                                    </Badge>
-                                                );
+                                        if (user.friendStatus) {
+                                            switch (user.friendStatus) {
+                                                case "pending":
+                                                    return (
+                                                        <Badge
+                                                            variant={"outline"}
+                                                        >
+                                                            <HourglassIcon className="mr-2 size-3" />
+                                                            Pending
+                                                        </Badge>
+                                                    );
+                                                default:
+                                                    return (
+                                                        <Badge
+                                                            variant={"outline"}
+                                                        >
+                                                            <UserCheck2 className="mr-2 size-3" />
+                                                            Friend
+                                                        </Badge>
+                                                    );
+                                            }
                                         }
                                     })()}
                                 </div>

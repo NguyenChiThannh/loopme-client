@@ -14,29 +14,31 @@ export default function GroupMemberPage() {
     const { groupId } = useParams();
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
-    if (!groupId) {
-        navigate(ROUTES.HOME_PAGE);
-        return;
-    }
+
     const {
         data: groupData,
         isLoading: groupLoading,
         error: groupError,
-    } = groupApi.query.useGetGroupById(groupId);
+    } = groupApi.query.useGetGroupById(groupId || "");
     const { data: members, isPending: isPendingMembers } =
-        groupApi.query.useGetAllMembers(groupId);
+        groupApi.query.useGetAllMembers(groupId || "");
     const { data: waitings, isPending: isPendingWaitings } =
         groupApi.query.useGetAllWaitings(
-            groupId,
+            groupId || "",
             searchParams.get("tab") === "waitings",
         );
     if (groupLoading || !groupData) {
         return <div>Loading...</div>;
     }
+    if (!groupId) {
+        navigate(ROUTES.HOME_PAGE);
+        return;
+    }
     const isMember = members?.data.data.some(
         (member) => member.user._id === user?._id,
     );
-    if (!isMember) {
+    const isOwner = groupData.data.owner._id === user?._id;
+    if (!isMember && !isOwner) {
         navigate(ROUTES.HOME_PAGE);
         return;
     }

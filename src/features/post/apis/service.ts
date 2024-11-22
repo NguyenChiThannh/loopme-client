@@ -19,6 +19,7 @@ export const PostEndpoints = {
     removevote: (postId: string) => `/posts/${postId}/removevote`,
     getPostsByGroupId: (groupId: string) => `/posts/group/${groupId}`,
     getPostById: (postId: string) => `/posts/${postId}`,
+    deletePostById: (postId: string) => `/posts/${postId}`,
 };
 
 export default class PostService {
@@ -92,5 +93,11 @@ export default class PostService {
             url: PostEndpoints.getPostById(postId),
             method: AxiosMethod.GET,
         });
+    }
+    public static deletePostById(postId: string): Promise<BaseResponse> {
+        return axiosRequest({
+            url: PostEndpoints.deletePostById(postId),
+            method: AxiosMethod.DELETE
+        })
     }
 }

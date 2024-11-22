@@ -88,5 +88,21 @@ export const postApi = {
                 },
             });
         },
+        useDeletePostById() {
+            const queryClient = useQueryClient();
+            return useMutation({
+                mutationFn: (postId: string) =>
+                    PostService.deletePostById(postId),
+                onSuccess(data) {
+                    toast.message(data.message);
+                    queryClient.invalidateQueries({
+                        queryKey: GLOBAL_KEYS.POST.prefixPost,
+                    });
+                },
+                onError(data) {
+                    toast.error("Something went wrong");
+                },
+            });
+        },
     },
 };

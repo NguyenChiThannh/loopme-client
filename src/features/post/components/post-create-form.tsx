@@ -42,7 +42,7 @@ export default function PostCreateForm({
 
     const handleSubmit = form.handleSubmit((values) => {
         if (isCreateInGroup) values.privacy = "private";
-        console.log(values)
+        console.log(values);
         onSubmit(values);
     });
 
@@ -70,6 +70,44 @@ export default function PostCreateForm({
                                 </FormItem>
                             )}
                         />
+                        {!isCreateInGroup && (
+                            <FormField
+                                control={form.control}
+                                name="privacy"
+                                render={({ field }) => (
+                                    <FormItem className="space-y-3">
+                                        <FormLabel className="text-lg">
+                                            Privacy
+                                        </FormLabel>
+                                        <FormControl>
+                                            <RadioGroup
+                                                onValueChange={field.onChange}
+                                                defaultValue={field.value}
+                                                className="flex flex-col space-y-1"
+                                            >
+                                                <FormItem className="flex items-center space-x-3 space-y-0">
+                                                    <FormControl>
+                                                        <RadioGroupItem value="public" />
+                                                    </FormControl>
+                                                    <FormLabel className="font-normal">
+                                                        Public
+                                                    </FormLabel>
+                                                </FormItem>
+                                                <FormItem className="flex items-center space-x-3 space-y-0">
+                                                    <FormControl>
+                                                        <RadioGroupItem value="friends" />
+                                                    </FormControl>
+                                                    <FormLabel className="font-normal">
+                                                        Friends
+                                                    </FormLabel>
+                                                </FormItem>
+                                            </RadioGroup>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        )}
                         <Button type="submit" size="lg" className="text-lg">
                             Create Post
                         </Button>

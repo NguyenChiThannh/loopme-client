@@ -17,4 +17,7 @@ export interface Notification {
     read: boolean;
     createdAt: string;
     targetName?: string;
+    postId?: string;
+    groupId?: string;
+    receiver: string;
 }

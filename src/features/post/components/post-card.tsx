@@ -70,6 +70,11 @@ export default function PostCard({ commentSectionRef, post }: PostCardProps) {
                                 </Link>
                                 <span className="text-sm text-muted-foreground">•</span>
                                 <span className="text-sm text-muted-foreground">Post by</span>
+                                <HoverUsername
+                                    _id={post.user._id}
+                                    displayName={post.user.displayName}
+                                    avatar={post.user.avatar || ""}
+                                />
                             </>
                         ) : (
                             <div className="flex items-center space-x-1 text-sm text-muted-foreground">

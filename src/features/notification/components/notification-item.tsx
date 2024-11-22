@@ -6,6 +6,7 @@ import {
     UserPlus,
     Users,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -32,29 +33,37 @@ export function NotificationItem({ notification }: NotificationItemProps) {
             case "like":
                 return (
                     <>
-                        <ThumbsUp className="mr-2 h-4 w-4 text-blue-500" />
-                        <span>liked your post</span>
+                        <Link to={`/post/${notification.postId}`}>
+                            <ThumbsUp className="mr-2 h-4 w-4 text-blue-500" />
+                            <span>liked your post</span>
+                        </Link>
                     </>
                 );
             case "dislike":
                 return (
                     <>
-                        <ThumbsDown className="mr-2 h-4 w-4 text-red-500" />
-                        <span>disliked your post</span>
+                        <Link to={`/post/${notification.postId}`}>
+                            <ThumbsDown className="mr-2 h-4 w-4 text-red-500" />
+                            <span>disliked your post</span>
+                        </Link>
                     </>
                 );
             case "comment":
                 return (
                     <>
-                        <MessageSquare className="mr-2 h-4 w-4 text-green-500" />
-                        <span>commented on your post</span>
+                        <Link to={`/post/${notification.postId}`}>
+                            <MessageSquare className="mr-2 h-4 w-4 text-green-500" />
+                            <span>commented on your post</span>
+                        </Link>
                     </>
                 );
             case "friend_request":
                 return (
                     <>
-                        <UserPlus className="mr-2 h-4 w-4 text-purple-500" />
-                        <span>sent you a friend request</span>
+                        <Link to={`/user/${notification.receiver}/?tab=friend`}>
+                            <UserPlus className="mr-2 h-4 w-4 text-purple-500" />
+                            <span>sent you a friend request</span>
+                        </Link>
                     </>
                 );
             case "accept_friend":
@@ -67,18 +76,26 @@ export function NotificationItem({ notification }: NotificationItemProps) {
             case "request_to_join_group":
                 return (
                     <>
-                        <Users className="mr-2 h-4 w-4 text-orange-500" />
-                        <span>requested to join {notification.targetName}</span>
+                        <Link
+                            to={`/group/${notification.groupId}/members?tab=waitings`}
+                        >
+                            <Users className="mr-2 h-4 w-4 text-orange-500" />
+                            <span>
+                                requested to join {notification.targetName}
+                            </span>
+                        </Link>
                     </>
                 );
             case "accept_join_group":
                 return (
                     <>
-                        <Users className="mr-2 h-4 w-4 text-orange-500" />
-                        <span>
-                            accepted your request to join{" "}
-                            {notification.targetName}
-                        </span>
+                        <Link to={`/group/${notification.groupId}`}>
+                            <Users className="mr-2 h-4 w-4 text-orange-500" />
+                            <span>
+                                accepted your request to join{" "}
+                                {notification.targetName}
+                            </span>
+                        </Link>
                     </>
                 );
             default:

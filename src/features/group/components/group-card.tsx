@@ -1,5 +1,7 @@
 import { groupApi } from "../apis";
+import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -15,7 +17,6 @@ import {
 import { ROUTES } from "@/configs/route.config";
 import { GroupNoOwnerAndMembers } from "@/configs/type";
 import { useUser } from "@/providers/user-provider";
-import { Link } from "react-router-dom";
 
 interface GroupCardProps {
     group: GroupNoOwnerAndMembers;
@@ -26,6 +27,7 @@ export function GroupCard({ group }: GroupCardProps) {
     const { mutate: handleJoinGroup, isPending } =
         groupApi.mutation.useSendJoinRequest();
     const groupMutate = groupApi.mutation.useRemovePendingJoinInvitation();
+    const queryClient = useQueryClient();
 
     const navigate = useNavigate();
 
@@ -37,9 +39,6 @@ export function GroupCard({ group }: GroupCardProps) {
         return;
     }
     const isOwner = group.owner === user._id;
-    const canJoinGroup =
-        !isOwner &&
-        (group.status === "not_joined" || group.status !== "pending");
 
     console.log('Group" ', group);
     return (
@@ -56,7 +55,9 @@ export function GroupCard({ group }: GroupCardProps) {
                 </Avatar>
                 <div className="flex flex-col">
                     <Link to={`/group/${group._id}`}>
-                        <CardTitle className="text-xl hover:underline">{group.name}</CardTitle>
+                        <CardTitle className="text-xl hover:underline">
+                            {group.name}
+                        </CardTitle>
                     </Link>
                 </div>
             </CardHeader>
@@ -68,28 +69,6 @@ export function GroupCard({ group }: GroupCardProps) {
                 </div>
             </CardContent>
             <CardFooter>
-                {/* {!canJoinGroup ? (
-                    <Button className="w-full" disabled>
-                        {(() => {
-                            switch (group.status) {
-                                case "pending":
-                                    return "Pending";
-                                case "joined":
-                                    return "Joined";
-                                default:
-                                    return "Joined";
-                            }
-                        })()}
-                    </Button>
-                ) : (
-                    <Button
-                        className="w-full"
-                        onClick={() => handleJoinGroup(group._id)}
-                        disabled={isPending}
-                    >
-                        Join Group
-                    </Button>
-                )} */}
                 {(() => {
                     switch (group.status) {
                         case "pending":
@@ -97,10 +76,23 @@ export function GroupCard({ group }: GroupCardProps) {
                                 <Button
                                     className="w-full"
                                     onClick={() => {
-                                        groupMutate.mutate({
-                                            groupId: group._id,
-                                            userId: user._id,
-                                        });
+                                        groupMutate.mutate(
+                                            {
+                                                groupId: group._id,
+                                                userId: user._id,
+                                            },
+                                            {
+                                                onSuccess: () => {
+                                                    queryClient.invalidateQueries(
+                                                        {
+                                                            queryKey: [
+                                                                "search_group",
+                                                            ],
+                                                        },
+                                                    );
+                                                },
+                                            },
+                                        );
                                     }}
                                 >
                                     Remove
@@ -116,7 +108,15 @@ export function GroupCard({ group }: GroupCardProps) {
                             return !isOwner ? (
                                 <Button
                                     className="w-full"
-                                    onClick={() => handleJoinGroup(group._id)}
+                                    onClick={() =>
+                                        handleJoinGroup(group._id, {
+                                            onSuccess() {
+                                                queryClient.invalidateQueries({
+                                                    queryKey: ["search_group"],
+                                                });
+                                            },
+                                        })
+                                    }
                                     disabled={isPending}
                                 >
                                     Join Group

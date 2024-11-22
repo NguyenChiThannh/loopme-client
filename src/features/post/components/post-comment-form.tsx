@@ -17,6 +17,7 @@ export default function PostCommentForm({ postId }: CommentProps) {
         e.preventDefault();
         if (!newComment || newComment.trim().length === 0) return;
         addComment({ postId, content: newComment });
+        setNewComment("");
     };
 
     return (

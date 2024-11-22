@@ -88,5 +88,21 @@ export const postApi = {
                 },
             });
         },
+        useUpdatePost() {
+            const queryClient = useQueryClient();
+            return useMutation({
+                mutationFn: (data: z.infer<typeof postRequestSchema.update>) =>
+                    PostService.updatePostById(data),
+                onSuccess(data) {
+                    toast.success(data.message);
+                    queryClient.invalidateQueries({
+                        queryKey: GLOBAL_KEYS.POST.prefixPost,
+                    });
+                },
+                onError() {
+                    toast.error("Something went wrong");
+                },
+            });
+        },
     },
 };

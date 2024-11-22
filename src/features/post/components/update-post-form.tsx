@@ -1,3 +1,4 @@
+import { postApi } from "../apis";
 import { postRequestSchema } from "../apis/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircle } from "lucide-react";
@@ -17,32 +18,23 @@ import {
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 
-interface PostCreateFormProps {
-    isCreateInGroup: boolean;
-    onSubmit: (values: z.infer<typeof postRequestSchema.create>) => void;
+interface UpdatePostFormProps {
+    initialValues: z.infer<typeof postRequestSchema.update>;
 }
 
-export default function PostCreateForm({
-    isCreateInGroup,
-    onSubmit,
-}: PostCreateFormProps) {
-    const form = useForm<z.infer<typeof postRequestSchema.create>>({
+export function UpdatePostForm({ initialValues }: UpdatePostFormProps) {
+    const postMutation = postApi.mutation.useUpdatePost();
+    const form = useForm<z.infer<typeof postRequestSchema.update>>({
         resolver: zodResolver(postRequestSchema.create),
-        defaultValues: {
-            content: "",
-            image: null,
-            privacy: "public",
-        },
+        defaultValues: initialValues,
     });
 
     const handleSubmit = form.handleSubmit((values) => {
-        if (isCreateInGroup) values.privacy = "private";
-        console.log(values);
-        onSubmit(values);
+        postMutation.mutate(values);
     });
 
     return (
-        <Card className="mx-auto w-full max-w-2xl py-2">
+        <Card className="w-full max-w-2xl py-2 mx-auto">
             <CardContent>
                 <Form {...form}>
                     <form onSubmit={handleSubmit} className="space-y-6">
@@ -75,7 +67,7 @@ export default function PostCreateForm({
                 {form.formState.errors.root && (
                     <CardFooter>
                         <Alert variant="destructive" className="w-full">
-                            <AlertCircle className="h-5 w-5" />
+                            <AlertCircle className="w-5 h-5" />
                             <AlertTitle>Error</AlertTitle>
                             <AlertDescription>
                                 {form.formState.errors.root.message}

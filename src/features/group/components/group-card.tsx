@@ -15,6 +15,7 @@ import {
 import { ROUTES } from "@/configs/route.config";
 import { GroupNoOwnerAndMembers } from "@/configs/type";
 import { useUser } from "@/providers/user-provider";
+import { Link } from "react-router-dom";
 
 interface GroupCardProps {
     group: GroupNoOwnerAndMembers;
@@ -24,6 +25,8 @@ export function GroupCard({ group }: GroupCardProps) {
     const { user, isLoading } = useUser();
     const { mutate: handleJoinGroup, isPending } =
         groupApi.mutation.useSendJoinRequest();
+    const groupMutate = groupApi.mutation.useRemovePendingJoinInvitation();
+
     const navigate = useNavigate();
 
     if (isLoading || isPending) {
@@ -37,6 +40,7 @@ export function GroupCard({ group }: GroupCardProps) {
     const canJoinGroup =
         !isOwner &&
         (group.status === "not_joined" || group.status !== "pending");
+
     console.log('Group" ', group);
     return (
         <Card className="w-full max-w-md">
@@ -51,7 +55,9 @@ export function GroupCard({ group }: GroupCardProps) {
                     </AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col">
-                    <CardTitle className="text-xl">{group.name}</CardTitle>
+                    <Link to={`/group/${group._id}`}>
+                        <CardTitle className="text-xl hover:underline">{group.name}</CardTitle>
+                    </Link>
                 </div>
             </CardHeader>
             <CardContent>
@@ -62,7 +68,7 @@ export function GroupCard({ group }: GroupCardProps) {
                 </div>
             </CardContent>
             <CardFooter>
-                {!canJoinGroup ? (
+                {/* {!canJoinGroup ? (
                     <Button className="w-full" disabled>
                         {(() => {
                             switch (group.status) {
@@ -83,7 +89,51 @@ export function GroupCard({ group }: GroupCardProps) {
                     >
                         Join Group
                     </Button>
-                )}
+                )} */}
+                {(() => {
+                    switch (group.status) {
+                        case "pending":
+                            return (
+                                <Button
+                                    className="w-full"
+                                    onClick={() => {
+                                        groupMutate.mutate({
+                                            groupId: group._id,
+                                            userId: user._id,
+                                        });
+                                    }}
+                                >
+                                    Remove
+                                </Button>
+                            );
+                        case "joined":
+                            return (
+                                <Button className="w-full" disabled={true}>
+                                    Joined
+                                </Button>
+                            );
+                        case "not_joined":
+                            return !isOwner ? (
+                                <Button
+                                    className="w-full"
+                                    onClick={() => handleJoinGroup(group._id)}
+                                    disabled={isPending}
+                                >
+                                    Join Group
+                                </Button>
+                            ) : (
+                                <Button className="w-full" disabled={true}>
+                                    Joined
+                                </Button>
+                            );
+                        default:
+                            return (
+                                <Button className="w-full" disabled={true}>
+                                    Joined
+                                </Button>
+                            );
+                    }
+                })()}
             </CardFooter>
         </Card>
     );

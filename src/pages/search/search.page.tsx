@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
 import { friendApi } from "@/features/friends/apis";
+import { groupApi } from "@/features/group/apis";
 import { GroupCard } from "@/features/group/components/group-card";
 import { searchApi } from "@/features/search/apis";
 
@@ -77,10 +78,7 @@ export default function SearchPage() {
                                 switch (user.friendStatus) {
                                     case "pending":
                                         return (
-                                            <Button
-                                                variant={"outline"}
-                                                disabled
-                                            >
+                                            <Button variant={"outline"}>
                                                 Pending
                                             </Button>
                                         );

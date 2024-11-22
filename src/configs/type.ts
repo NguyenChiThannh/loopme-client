@@ -18,11 +18,13 @@ export interface User {
 }
 
 export type VoteValue = "UPVOTE" | "DOWNVOTE" | null; // Added null for voteValue
+type FriendStatus = "accepted";
 
 export interface UserSelect {
     _id: string;
     displayName: string;
     avatar: string;
+    friendStatus?: FriendStatus;
 }
 
 export interface IVote {

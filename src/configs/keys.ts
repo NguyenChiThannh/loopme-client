@@ -7,6 +7,7 @@ const AUTH = {
 
 const USER = {
     user: ["user"] as string[],
+    userById: (userId: string) => ["user_by_id", userId] as string[],
 };
 
 const FRIEND = {

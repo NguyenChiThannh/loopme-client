@@ -78,29 +78,6 @@ export default function GroupForm(
                         </FormItem>
                     )}
                 />
-
-                <FormItem>
-                    <FormLabel htmlFor="backgroundCover">
-                        Background Cover (optional)
-                    </FormLabel>
-                    <FormControl>
-                        <Input
-                            id="backgroundCover"
-                            type="file"
-                            accept="image/*"
-                            onChange={handleBackgroundCoverChange}
-                        />
-                    </FormControl>
-                    {previewUrl && (
-                        <div className="mt-2">
-                            <img
-                                src={previewUrl}
-                                alt="Background cover preview"
-                                className="h-auto max-w-full rounded"
-                            />
-                        </div>
-                    )}
-                </FormItem>
                 <Button type="submit" className="w-full">
                     {initialData ? "Update Group" : "Create Group"}
                 </Button>

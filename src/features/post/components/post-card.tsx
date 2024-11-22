@@ -15,6 +15,13 @@ import { IPost } from "@/configs/type";
 import HoverUsername from "@/features/post/components/hover-username";
 import PostAction from "@/features/post/components/post-action";
 import PostImage from "@/features/post/components/post-image";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { Delete, Edit, MoreHorizontal } from "lucide-react";
+import { postApi } from "../apis";
+import { useUser } from "@/providers/user-provider";
+import { CreatePostDialog } from "../layouts/create-post-dialog";
+import PostCreateForm from "./post-create-form";
 
 interface PostCardProps {
     commentSectionRef?: React.RefObject<HTMLDivElement>;
@@ -22,15 +29,20 @@ interface PostCardProps {
 }
 
 export default function PostCard({ commentSectionRef, post }: PostCardProps) {
+    const {user} = useUser();
     const [isImageModalOpen, setIsImageModalOpen] = useState(false);
     const navigator = useNavigate();
     const isGroupDefined = post.group && Object.keys(post.group).length > 0;
-
+    const {mutate: handleDelete} = postApi.mutation.useDeletePostById();
     const scrollToComments = () => {
         if (commentSectionRef)
             commentSectionRef?.current?.scrollIntoView({ behavior: "smooth" });
         else navigator(`/post/${post._id}`);
     };
+
+    const handleDeletePost = () => {
+        handleDelete(post._id);
+    }
 
     return (
         <Card>
@@ -80,6 +92,24 @@ export default function PostCard({ commentSectionRef, post }: PostCardProps) {
                         })}
                     </span>
                 </div>
+                {user?._id === post.user._id && (
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                <span className="sr-only">Open menu</span>
+                                <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuItem
+                                onClick={() => handleDeletePost()}
+                            >
+                                <Delete className="mr-2 h-4 w-4" />
+                                <span>Delete post</span>
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                )}
             </CardHeader>
             <CardContent className="py-3">
                 <p className="mb-4 text-sm">{post.content}</p>
